@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "MovMent"
 include(":app")
- 
+include(":core")

@@ -1,27 +1,19 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("kotlin-parcelize")
-    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
-    namespace = "com.arfdevs.myproject.movment"
+    namespace = "com.arfdevs.myproject.core"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.arfdevs.myproject.movment"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildFeatures {
-        viewBinding = true
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -39,41 +31,36 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
 }
 
 dependencies {
 
-    api(project(":core"))
-
     //main
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
-    //viewmodel
-    implementation("androidx.lifecycle:lifecycle-viewmodel:2.7.0")
+    //paging
+    api("androidx.paging:paging-runtime-ktx:3.2.1")
+    api("androidx.paging:paging-common-ktx:3.2.1")
 
-    //livedata
-    implementation("androidx.lifecycle:lifecycle-livedata:2.7.0")
+    //coroutines
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
-    //lifecycle
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    //Retrofit
+    api("com.squareup.retrofit2:retrofit:2.9.0")
+    api("com.squareup.retrofit2:converter-gson:2.9.0")
+    api("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    api ("com.squareup.okhttp3:okhttp:4.12.0")
 
-    //viewpager2
-    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    //koin di
+    api("io.insert-koin:koin-core:3.5.3")
+    api("io.insert-koin:koin-android:3.5.3")
 
-    //navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-
-    //coil
-    implementation("io.coil-kt:coil:2.5.0")
-
-    //lottie
-    implementation("com.airbnb.android:lottie:6.3.0")
+    //chucker
+    debugImplementation("com.github.chuckerteam.chucker:library:4.0.0")
 
     //test
     testImplementation("junit:junit:4.13.2")
