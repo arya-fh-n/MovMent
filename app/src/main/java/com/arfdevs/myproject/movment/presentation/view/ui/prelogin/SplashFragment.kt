@@ -1,60 +1,96 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.prelogin
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import com.arfdevs.myproject.movment.R
+import com.arfdevs.myproject.movment.databinding.FragmentSplashBinding
+import com.arfdevs.myproject.movment.presentation.helper.Constants.ALPHA_ANIMATION
+import com.arfdevs.myproject.movment.presentation.helper.Constants.ROTATE_ANIMATION
+import com.arfdevs.myproject.movment.presentation.helper.Constants.SCALE_X
+import com.arfdevs.myproject.movment.presentation.helper.Constants.SCALE_Y
+import com.arfdevs.myproject.movment.presentation.helper.Constants.TRANSLATION_X
+import com.arfdevs.myproject.movment.presentation.helper.Constants.TRANSLATION_Y
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SplashFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SplashFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentSplashBinding? = null
+    private val binding
+        get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_splash, container, false)
+        _binding = FragmentSplashBinding.inflate(layoutInflater)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SplashFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SplashFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        with(binding) {
+            animate(ivSplash, TRANSLATION_X, 0f, -20f)
+        }
+
+
+    }
+
+    private fun animate(
+        view: View,
+        propertyName: String,
+        startVal: Float,
+        endVal: Float,
+        duration: Long = 2000
+    ) {
+        view.run {
+            when {
+                propertyName.equals(TRANSLATION_X, true) -> {
+                    ObjectAnimator.ofFloat(view, View.TRANSLATION_X, startVal, endVal).apply {
+                        this.duration = duration
+                    }.start()
+                }
+
+                propertyName.equals(TRANSLATION_Y, true) -> {
+                    ObjectAnimator.ofFloat(view, View.TRANSLATION_Y, startVal, endVal).apply {
+                        this.duration = duration
+                    }.start()
+                }
+
+                propertyName.equals(SCALE_X, true) -> {
+                    ObjectAnimator.ofFloat(view, View.SCALE_X, startVal, endVal).apply {
+                        this.duration = duration
+                    }.start()
+                }
+
+                propertyName.equals(SCALE_Y, true) -> {
+                    ObjectAnimator.ofFloat(view, View.SCALE_Y, startVal, endVal).apply {
+                        this.duration = duration
+                    }.start()
+                }
+
+                propertyName.equals(ROTATE_ANIMATION, true) -> {
+                    ObjectAnimator.ofFloat(view, View.ROTATION, startVal, endVal).apply {
+                        this.duration = duration
+                    }.start()
+                }
+
+                propertyName.equals(ALPHA_ANIMATION, true) -> {
+                    ObjectAnimator.ofFloat(view, View.ALPHA, startVal, endVal).apply {
+                        this.duration = duration
+                    }.start()
+                }
+
+                else -> {
+                    val marginParams = view.layoutParams as LinearLayout.LayoutParams
+                    marginParams.setMargins(0, 0, 0, 60)
                 }
             }
+        }
     }
+
 }
