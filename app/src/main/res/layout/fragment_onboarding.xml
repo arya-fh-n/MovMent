@@ -44,7 +44,7 @@
         app:tabPaddingEnd="12dp"
         app:tabPaddingStart="12dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_ob_gabung"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
