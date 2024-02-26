@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    tools:context=".presentation.view.ui.dashboard.home.HomeFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardview_balance"
+                android:layout_width="270dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="?colorTertiary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tv_username"
+                        style="@style/TextAppearance.Material3.TitleMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="?colorOnTertiary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Hello, Jondo!" />
+
+                    <TextView
+                        android:id="@+id/tv_balance_is"
+                        style="@style/TextAppearance.Material3.LabelSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:textColor="?colorOnTertiary"
+                        app:layout_constraintStart_toStartOf="@id/tv_username"
+                        app:layout_constraintTop_toBottomOf="@id/tv_username"
+                        tools:text="Your account's balance is:" />
+
+                    <ImageView
+                        android:id="@+id/iv_balance"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/tv_username"
+                        app:layout_constraintTop_toBottomOf="@id/tv_username"
+                        tools:src="@drawable/ic_balance"
+                        tools:tint="?colorOnTertiary" />
+
+                    <TextView
+                        android:id="@+id/tv_balance"
+                        style="@style/TextAppearance.Material3.TitleMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:textColor="?colorOnTertiary"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_balance"
+                        app:layout_constraintStart_toEndOf="@id/iv_balance"
+                        app:layout_constraintTop_toTopOf="@id/iv_balance"
+                        tools:text="10 TOKEN" />
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        app:icon="@drawable/ic_navigate_next"
+                        app:iconSize="24dp"
+                        app:iconTint="?colorOnTertiary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/tv_section_popular"
+                style="@style/TextAppearance.Material3.HeadlineMedium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardview_balance"
+                tools:text="Popular" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_popular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_section_popular"
+                app:layout_constraintTop_toBottomOf="@id/tv_section_popular"
+                tools:itemCount="10"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_popular"
+                tools:orientation="horizontal" />
+
+            <TextView
+                android:id="@+id/tv_section_now_playing"
+                style="@style/TextAppearance.Material3.HeadlineMedium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="29dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_popular"
+                tools:text="Now Playing" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_now_playing"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_section_now_playing"
+                app:layout_constraintTop_toBottomOf="@id/tv_section_now_playing"
+                app:spanCount="2"
+                tools:itemCount="10"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_now_playing" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</FrameLayout>

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MovMent</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bottom_nav_home">Home</string>
+    <string name="bottom_nav_search">Search</string>
+    <string name="bottom_nav_favorite">Favorite</string>
+    <string name="bottom_nav_transaction">Transaction</string>
 </resources>

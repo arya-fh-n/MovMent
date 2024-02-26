@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.view.ui.prelogin.OnboardingFragment">
+
+    <Button
+        android:id="@+id/btn_ob_lewati"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        android:textColor="@color/purple"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Skip" />
+
+    <!-- size is 500 to see how VP2 fits in the layout design tool, TODO change size back to wrap_content -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_onboarding"
+        android:layout_width="0dp"
+        android:layout_height="500dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_ob_lewati" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/vp_onboarding"
+        app:layout_constraintEnd_toEndOf="@id/vp_onboarding"
+        app:layout_constraintStart_toStartOf="@id/vp_onboarding"
+        app:tabBackground="@drawable/selector_tab_dot"
+        app:tabGravity="center"
+        app:tabIndicator="@null"
+        app:tabPaddingEnd="12dp"
+        app:tabPaddingStart="12dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_ob_gabung"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="@id/vp_onboarding"
+        app:layout_constraintStart_toStartOf="@id/vp_onboarding"
+        app:layout_constraintTop_toBottomOf="@id/vp_onboarding"
+        tools:text="Join Button" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
