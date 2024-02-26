@@ -100,6 +100,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:clickable="true"
+        android:focusable="true"
         android:textColor="?attr/colorTertiary"
         app:layout_constraintBottom_toBottomOf="@id/tv_new_to_movment"
         app:layout_constraintStart_toEndOf="@id/tv_new_to_movment"

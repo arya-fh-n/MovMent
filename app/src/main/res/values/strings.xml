@@ -6,4 +6,18 @@
     <string name="bottom_nav_search">Search</string>
     <string name="bottom_nav_favorite">Favorite</string>
     <string name="bottom_nav_transaction">Transaction</string>
+    <string name="app_name_movment">MovMent</string>
+    <string name="tv_login_title">Sign In</string>
+    <string name="ti_email_hint">Email</string>
+    <string name="ti_password_hint">Password</string>
+    <string name="btn_login">Sign In</string>
+    <string name="tv_to_register">Sign up now!</string>
+    <string name="tv_new_to_movment">New to MovMent?</string>
+    <string name="tv_tnc"><![CDATA[By signing up, you have agreed to MovMent\'s \n Terms and Conditions & Privacy Policy.]]></string>
+    <string name="tv_not_new_to_movment">Already have an account?</string>
+    <string name="tv_to_login">Sign in here!</string>
+    <string name="btn_register">Sign Up</string>
+    <string name="tv_register_title">Sign Up</string>
+    <string name="btn_join">Join MovMent</string>
+    <string name="btn_skip">Skip</string>
 </resources>

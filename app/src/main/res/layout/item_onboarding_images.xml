@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_onboarding_titles"
+        style="@style/TextAppearance.Material3.TitleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Welcome to MovMent!" />
 
     <ImageView
         android:id="@+id/iv_onboarding_pages"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="500dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:scaleType="centerInside"
-        android:src="@drawable/splash_icon"/>
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="24dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@id/tv_onboarding_titles"
+        app:layout_constraintStart_toStartOf="@id/tv_onboarding_titles"
+        app:layout_constraintTop_toBottomOf="@id/tv_onboarding_titles"
+        tools:src="@drawable/splash_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

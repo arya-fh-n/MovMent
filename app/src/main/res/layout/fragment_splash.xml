@@ -5,11 +5,21 @@
     android:layout_height="match_parent"
     tools:context=".presentation.view.ui.prelogin.SplashFragment">
 
+    <TextView
+        android:id="@+id/tv_splash_title"
+        style="@style/TextAppearance.Material3.DisplaySmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:textStyle="bold"
+        tools:text="MovMent" />
+
     <ImageView
         android:id="@+id/iv_splash"
         android:layout_width="250dp"
         android:layout_height="150dp"
         android:layout_gravity="center"
-        tools:src="@drawable/splash_icon"/>
+        tools:src="@drawable/splash_icon" />
 
 </FrameLayout>

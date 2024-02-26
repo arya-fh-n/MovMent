@@ -1,4 +1,10 @@
 package com.arfdevs.myproject.movment
 
-class Application {
+import android.app.Application
+
+class Application: Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+    }
 }

@@ -1,96 +1,67 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.prelogin
 
+import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
+import android.os.Handler
+import android.os.Looper
 import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
+import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
+import coil.load
+import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentSplashBinding
-import com.arfdevs.myproject.movment.presentation.helper.Constants.ALPHA_ANIMATION
-import com.arfdevs.myproject.movment.presentation.helper.Constants.ROTATE_ANIMATION
-import com.arfdevs.myproject.movment.presentation.helper.Constants.SCALE_X
-import com.arfdevs.myproject.movment.presentation.helper.Constants.SCALE_Y
-import com.arfdevs.myproject.movment.presentation.helper.Constants.TRANSLATION_X
-import com.arfdevs.myproject.movment.presentation.helper.Constants.TRANSLATION_Y
 
-class SplashFragment : Fragment() {
+class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding::inflate) {
 
-    private var _binding: FragmentSplashBinding? = null
-    private val binding
-        get() = _binding!!
+    override fun initListener() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentSplashBinding.inflate(layoutInflater)
-        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun initView() {
         with(binding) {
-            animate(ivSplash, TRANSLATION_X, 0f, -20f)
+            ivSplash.load(R.drawable.splash_icon)
+            tvSplashTitle.text = getString(R.string.app_name)
+            splashAnim()
+
+            val navController =
+                activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
+                    ?.findNavController()
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                navController?.navigate(R.id.action_splashFragment_to_onboardingFragment)
+            }, 3000L)
         }
-
-
     }
 
-    private fun animate(
-        view: View,
-        propertyName: String,
-        startVal: Float,
-        endVal: Float,
-        duration: Long = 2000
-    ) {
-        view.run {
-            when {
-                propertyName.equals(TRANSLATION_X, true) -> {
-                    ObjectAnimator.ofFloat(view, View.TRANSLATION_X, startVal, endVal).apply {
-                        this.duration = duration
-                    }.start()
-                }
-
-                propertyName.equals(TRANSLATION_Y, true) -> {
-                    ObjectAnimator.ofFloat(view, View.TRANSLATION_Y, startVal, endVal).apply {
-                        this.duration = duration
-                    }.start()
-                }
-
-                propertyName.equals(SCALE_X, true) -> {
-                    ObjectAnimator.ofFloat(view, View.SCALE_X, startVal, endVal).apply {
-                        this.duration = duration
-                    }.start()
-                }
-
-                propertyName.equals(SCALE_Y, true) -> {
-                    ObjectAnimator.ofFloat(view, View.SCALE_Y, startVal, endVal).apply {
-                        this.duration = duration
-                    }.start()
-                }
-
-                propertyName.equals(ROTATE_ANIMATION, true) -> {
-                    ObjectAnimator.ofFloat(view, View.ROTATION, startVal, endVal).apply {
-                        this.duration = duration
-                    }.start()
-                }
-
-                propertyName.equals(ALPHA_ANIMATION, true) -> {
-                    ObjectAnimator.ofFloat(view, View.ALPHA, startVal, endVal).apply {
-                        this.duration = duration
-                    }.start()
-                }
-
-                else -> {
-                    val marginParams = view.layoutParams as LinearLayout.LayoutParams
-                    marginParams.setMargins(0, 0, 0, 60)
-                }
-            }
+    private fun splashAnim() = with(binding) {
+        val logoFade = ObjectAnimator.ofFloat(ivSplash, View.ALPHA, 0f, 1f).apply {
+            this.duration = 700
         }
+
+        val logoYSlide = ObjectAnimator.ofFloat(ivSplash, View.TRANSLATION_Y, -75f, 25f).apply {
+            this.duration = 1200
+        }
+
+        val titleFade = ObjectAnimator.ofFloat(tvSplashTitle, View.ALPHA, 0f, 10f).apply {
+            tvSplashTitle.isVisible = true
+            this.duration = 1000
+        }
+
+        val titleYSLide =
+            ObjectAnimator.ofFloat(tvSplashTitle, View.TRANSLATION_Y, 50f, -250f).apply {
+                this.duration = 1400
+            }
+
+        val titleAnimator = AnimatorSet().apply {
+            play(titleFade).with(titleYSLide)
+        }
+
+        AnimatorSet().apply {
+            play(logoYSlide).with(logoFade).before(titleAnimator)
+            start()
+        }
+
     }
 
 }

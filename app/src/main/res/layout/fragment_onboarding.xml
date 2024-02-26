@@ -7,7 +7,7 @@
     tools:context=".presentation.view.ui.prelogin.OnboardingFragment">
 
     <Button
-        android:id="@+id/btn_ob_lewati"
+        android:id="@+id/btn_ob_skip"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
@@ -19,15 +19,14 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Skip" />
 
-    <!-- size is 500 to see how VP2 fits in the layout design tool, TODO change size back to wrap_content -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp_onboarding"
         android:layout_width="0dp"
-        android:layout_height="500dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_ob_lewati" />
+        app:layout_constraintTop_toBottomOf="@id/btn_ob_skip" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
@@ -45,10 +44,10 @@
         app:tabPaddingStart="12dp" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_ob_gabung"
+        android:id="@+id/btn_ob_join"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="35dp"
         app:layout_constraintEnd_toEndOf="@id/vp_onboarding"
         app:layout_constraintStart_toStartOf="@id/vp_onboarding"
         app:layout_constraintTop_toBottomOf="@id/vp_onboarding"
