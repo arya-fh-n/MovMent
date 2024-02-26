@@ -31,6 +31,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     override fun initListener() = with(binding) {
         btnLogin.setOnClickListener {
             Snackbar.make(root, "Login click!", Snackbar.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
         }
 
         tvToRegister.setOnClickListener {

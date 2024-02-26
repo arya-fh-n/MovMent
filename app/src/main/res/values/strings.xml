@@ -20,4 +20,9 @@
     <string name="tv_register_title">Sign Up</string>
     <string name="btn_join">Join MovMent</string>
     <string name="btn_skip">Skip</string>
+    <string name="tv_username_ph">USERNAME</string>
+    <string name="tv_balance_is">Your account\'s balance is:</string>
+    <string name="tv_balance">10 Token</string>
+    <string name="tv_section_popular">Popular</string>
+    <string name="tv_section_now_playing">Now Playing</string>
 </resources>
