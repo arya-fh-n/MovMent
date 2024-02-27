@@ -31,4 +31,5 @@
     <string name="btn_profile_finish">Selesai</string>
     <string name="err_username_empty">Username tidak boleh kosong</string>
     <string name="err_username_short">Username setidaknya terdiri dari 3 karakter</string>
+    <string name="btn_add_to_cart">+ Keranjang</string>
 </resources>

@@ -37,4 +37,6 @@
     <string name="btn_profile_finish">Finish</string>
     <string name="err_username_empty">Username cannot be empty</string>
     <string name="err_username_short">Username should at least be 3 characters long</string>
+    <string name="tv_movie_price" translatable="false">%1$d Token</string>
+    <string name="btn_add_to_cart">+ Cart</string>
 </resources>

@@ -1,10 +1,12 @@
 package com.arfdevs.myproject.core.domain.usecase
 
+import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
 import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.core.domain.repository.MovieRepository
 import com.arfdevs.myproject.core.domain.repository.UserRepository
-import com.arfdevs.myproject.core.helper.DataMapper.toListData
+import com.arfdevs.myproject.core.helper.DataMapper.toNowPlayingList
+import com.arfdevs.myproject.core.helper.DataMapper.toPopularList
 import com.arfdevs.myproject.core.helper.SourceResult
 import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.core.helper.safeDataCall
@@ -15,6 +17,8 @@ import kotlinx.coroutines.flow.map
 interface AppUseCase {
 
     suspend fun getPopular(page: Int): List<PopularModel>
+
+    suspend fun getNowPlaying(page: Int): List<NowPlayingModel>
 
     suspend fun createUser(user: User): Flow<UiState<Boolean>>
 
@@ -32,7 +36,11 @@ class AppInteractor(
 ) : AppUseCase {
 
     override suspend fun getPopular(page: Int): List<PopularModel> = safeDataCall {
-        movieRepository.fetchPopular(page).results.toListData()
+        movieRepository.fetchPopular(page).results.toPopularList()
+    }
+
+    override suspend fun getNowPlaying(page: Int): List<NowPlayingModel> = safeDataCall {
+        movieRepository.fetchNowPlaying(page).results.toNowPlayingList()
     }
 
     override suspend fun createUser(user: User): Flow<UiState<Boolean>> = safeDataCall {

@@ -14,7 +14,7 @@ interface ApiEndpoint {
     ): PopularResponse
 
     @GET("movie/now_playing")
-    fun fetchNowPlayingMovies(
+    suspend fun fetchNowPlayingMovies(
         @Query("page") page: Int? = null,
         @Query("region") region: String? = "ID"
     ): NowPlayingResponse
