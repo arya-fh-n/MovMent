@@ -1,14 +1,13 @@
 <resources>
     <string name="app_name">MovMent</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="bottom_nav_home">Home</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="bottom_nav_home" translatable="false">Home</string>
     <string name="bottom_nav_search">Search</string>
     <string name="bottom_nav_favorite">Favorite</string>
     <string name="bottom_nav_transaction">Transaction</string>
-    <string name="app_name_movment">MovMent</string>
+    <string name="app_name_movment" translatable="false">MovMent</string>
     <string name="tv_login_title">Sign In</string>
-    <string name="ti_email_hint">Email</string>
+    <string name="ti_email_hint" translatable="false">Email</string>
     <string name="ti_password_hint">Password</string>
     <string name="btn_login">Sign In</string>
     <string name="tv_to_register">Sign up now!</string>
@@ -20,9 +19,15 @@
     <string name="tv_register_title">Sign Up</string>
     <string name="btn_join">Join MovMent</string>
     <string name="btn_skip">Skip</string>
-    <string name="tv_username_ph">USERNAME</string>
+    <string name="tv_username_ph">Hello, %1$s!</string>
     <string name="tv_balance_is">Your account\'s balance is:</string>
-    <string name="tv_balance">10 Token</string>
+    <string name="tv_balance" translatable="false">10 Token</string>
     <string name="tv_section_popular">Popular</string>
     <string name="tv_section_now_playing">Now Playing</string>
+    <string name="err_email_empty">Email cannot be empty</string>
+    <string name="err_email_invalid">Email is invalid</string>
+    <string name="err_password_empty">Password cannot be empty</string>
+    <string name="err_password_invalid">Password is invalid</string>
+    <string name="tv_tnc_link">https://www.google.com</string>
+    <string name="tv_pp_link" translatable="false">https://www.bing.com</string>
 </resources>

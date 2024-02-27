@@ -14,9 +14,7 @@ import com.arfdevs.myproject.movment.databinding.FragmentSplashBinding
 
 class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding::inflate) {
 
-    override fun initListener() {
-
-    }
+    override fun initListener() {}
 
     override fun initView() {
         with(binding) {

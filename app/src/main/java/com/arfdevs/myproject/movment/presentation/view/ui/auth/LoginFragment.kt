@@ -30,12 +30,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     override fun initListener() = with(binding) {
         btnLogin.setOnClickListener {
-            Snackbar.make(root, "Login click!", Snackbar.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
         }
 
         tvToRegister.setOnClickListener {
-            Snackbar.make(root, "To register click!", Snackbar.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
     }
@@ -95,7 +93,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 isEmailBlank -> {
                     tiEmail.apply {
                         isHelperTextEnabled = false
-                        error = "Email cannot be empty"
+                        error = context.getString(R.string.err_email_empty)
                         isErrorEnabled = true
                     }
                     btnLogin.isEnabled = false
@@ -104,7 +102,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 !isEmailValid -> {
                     tiEmail.apply {
                         isHelperTextEnabled = false
-                        error = "Email is invalid"
+                        error = context.getString(R.string.err_email_invalid)
                         isErrorEnabled = true
                     }
                     btnLogin.isEnabled = false
@@ -113,7 +111,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 isPasswordBlank -> {
                     tiPassword.apply {
                         isHelperTextEnabled = false
-                        error = "Password cannot be empty"
+                        error = context.getString(R.string.err_password_empty)
                         isErrorEnabled = true
                     }
                     btnLogin.isEnabled = false
@@ -122,7 +120,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 !isPasswordValid -> {
                     tiPassword.apply {
                         isHelperTextEnabled = false
-                        error = "Password is invalid"
+                        error = context.getString(R.string.err_password_invalid)
                         isErrorEnabled = true
                     }
                     btnLogin.isEnabled = false

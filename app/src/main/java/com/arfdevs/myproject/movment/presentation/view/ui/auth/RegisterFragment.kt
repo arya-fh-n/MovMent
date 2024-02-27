@@ -23,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
 
     override fun initView() = with(binding) {
+        btnRegister.isEnabled = false
         val locale = resources.configuration.locales[0].language
 
         ivLogo.load(R.drawable.splash_icon)
@@ -45,12 +46,10 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
     override fun initListener() = with(binding) {
         btnRegister.setOnClickListener {
-            Snackbar.make(root, "Register click!", Snackbar.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_registerFragment_to_dashboardFragment)
         }
 
         tvToLogin.setOnClickListener {
-            Snackbar.make(root, "To login click!", Snackbar.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
     }
@@ -110,7 +109,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                 isEmailBlank -> {
                     tiEmail.apply {
                         isHelperTextEnabled = false
-                        error = "Email cannot be empty"
+                        error = context.getString(R.string.err_email_empty)
                         isErrorEnabled = true
                     }
                     btnRegister.isEnabled = false
@@ -119,7 +118,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                 !isEmailValid -> {
                     tiEmail.apply {
                         isHelperTextEnabled = false
-                        error = "Email is invalid"
+                        error = context.getString(R.string.err_email_invalid)
                         isErrorEnabled = true
                     }
                     btnRegister.isEnabled = false
@@ -128,7 +127,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                 isPasswordBlank -> {
                     tiPassword.apply {
                         isHelperTextEnabled = false
-                        error = "Password cannot be empty"
+                        error = context.getString(R.string.err_password_empty)
                         isErrorEnabled = true
                     }
                     btnRegister.isEnabled = false
@@ -137,7 +136,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                 !isPasswordValid -> {
                     tiPassword.apply {
                         isHelperTextEnabled = false
-                        error = "Password is invalid"
+                        error = context.getString(R.string.err_password_invalid)
                         isErrorEnabled = true
                     }
                     btnRegister.isEnabled = false
@@ -170,13 +169,13 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
         val tncClickable = object : ClickableSpan() {
             override fun onClick(view: View) {
-                openWebPage(context, "https://www.google.com")
+                openWebPage(context, getString(R.string.tv_tnc_link))
             }
         }
 
         val privacyClickable = object : ClickableSpan() {
             override fun onClick(view: View) {
-                openWebPage(context, "https://www.bing.com")
+                openWebPage(context, getString(R.string.tv_pp_link))
             }
         }
 
