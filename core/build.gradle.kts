@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -14,6 +16,19 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+    }
+
+    flavorDimensions += "env"
+    productFlavors {
+        create("development") {
+            buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
+            buildConfigField("String", "API_KEY", "\"1a513d843961f39b2b18d9a6e03c3e3a\"")
+            buildConfigField("String", "Bearer", "\"eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxYTUxM2Q4NDM5NjFmMzliMmIxOGQ5YTZlMDNjM2UzYSIsInN1YiI6IjY1ZDgwNGU4MTQ5NTY1MDE3YmY1NDM0OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fsMhSnXga0toLwtJltLRLok0DEmNq1TQtAOfv8nvUV0\"")
+        }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -54,6 +69,21 @@ dependencies {
     api("com.squareup.retrofit2:converter-gson:2.9.0")
     api("com.squareup.okhttp3:logging-interceptor:4.12.0")
     api ("com.squareup.okhttp3:okhttp:4.12.0")
+
+    //room db
+    api("androidx.room:room-runtime:2.6.1")
+    api("androidx.room:room-ktx:2.6.1")
+    api("androidx.room:room-paging:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
+
+    //firebase
+    api("com.google.firebase:firebase-bom:32.7.2")
+    api("com.google.firebase:firebase-crashlytics")
+    api("com.google.firebase:firebase-analytics")
+    api("com.google.firebase:firebase-auth-ktx")
+    api("com.google.firebase:firebase-auth")
+    api("com.google.firebase:firebase-database-ktx")
+
 
     //koin di
     api("io.insert-koin:koin-core:3.5.3")

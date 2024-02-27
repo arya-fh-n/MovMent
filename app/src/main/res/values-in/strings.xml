@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MovMent</string>
+    <string name="bottom_nav_search">Cari</string>
+    <string name="bottom_nav_favorite">Favorit</string>
+    <string name="bottom_nav_transaction">Transaksi</string>
+    <string name="tv_login_title">Masuk</string>
+    <string name="ti_password_hint">Kata Sandi</string>
+    <string name="btn_login">Masuk</string>
+    <string name="tv_to_register">Daftar sekarang!</string>
+    <string name="tv_new_to_movment">Baru di MovMent?</string>
+    <string name="tv_tnc"><![CDATA[Dengan mendaftar disini, Anda menyetujui Syarat dan Ketentuan serta Kebijakan Privasi MovMent.]]></string>
+    <string name="tv_not_new_to_movment">Sudah punya akun?</string>
+    <string name="tv_to_login">Masuk disini!</string>
+    <string name="btn_register">Daftar</string>
+    <string name="tv_register_title">Daftar</string>
+    <string name="btn_join">Ikuti MovMent</string>
+    <string name="btn_skip">Lewati</string>
+    <string name="tv_username_ph">Halo, %1$s!</string>
+    <string name="tv_balance_is">Saldo akun kamu:</string>
+    <string name="tv_section_popular">Populer</string>
+    <string name="tv_section_now_playing">Sedang Tayang</string>
+    <string name="err_email_empty">Email tidak boleh kosong</string>
+    <string name="err_email_invalid">Email tidak valid</string>
+    <string name="err_password_empty">Kata sandi tidak boleh kosong</string>
+    <string name="err_password_invalid">Kata sandi tidak valid</string>
+    <string name="tv_tnc_link">https://www.google.co.id</string>
+</resources>

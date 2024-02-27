@@ -29,7 +29,7 @@ abstract class BaseFragment<B: ViewBinding>(
         return binding.root
     }
 
-    abstract fun initListener()
-
     abstract fun initView()
+
+    abstract fun initListener()
 }
