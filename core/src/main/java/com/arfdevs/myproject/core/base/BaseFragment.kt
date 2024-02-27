@@ -18,6 +18,7 @@ abstract class BaseFragment<B: ViewBinding>(
 
         initView()
         initListener()
+        initObserver()
     }
 
     override fun onCreateView(
@@ -32,4 +33,6 @@ abstract class BaseFragment<B: ViewBinding>(
     abstract fun initView()
 
     abstract fun initListener()
+
+    abstract fun initObserver()
 }

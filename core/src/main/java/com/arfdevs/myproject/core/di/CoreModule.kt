@@ -6,18 +6,34 @@ import com.arfdevs.myproject.core.data.remote.ApiEndpoint
 import com.arfdevs.myproject.core.data.remote.datasource.RemoteDataSource
 import com.arfdevs.myproject.core.domain.repository.MovieRepository
 import com.arfdevs.myproject.core.domain.repository.MovieRepositoryImpl
+import com.arfdevs.myproject.core.domain.repository.UserRepository
+import com.arfdevs.myproject.core.domain.repository.UserRepositoryImpl
 import com.arfdevs.myproject.core.domain.usecase.AppInteractor
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
 object CoreModule : BaseModule {
 
+    private val firebaseModule = module {
+        single {
+            Firebase.auth
+        }
+
+        single {
+            Firebase.crashlytics
+        }
+    }
+
     private val dataSourceModule = module {
         single {
-            RemoteDataSource(get())
+            RemoteDataSource(get(), get())
         }
     }
 
@@ -25,11 +41,15 @@ object CoreModule : BaseModule {
         single<MovieRepository> {
             MovieRepositoryImpl(get())
         }
+
+        single<UserRepository> {
+            UserRepositoryImpl(get())
+        }
     }
 
     private val useCaseModule = module {
         single<AppUseCase> {
-            AppInteractor(get())
+            AppInteractor(get(), get())
         }
     }
 
@@ -48,6 +68,7 @@ object CoreModule : BaseModule {
     }
 
     override fun getModules(): List<Module> = listOf(
+        firebaseModule,
         dataSourceModule,
         repositoryModule,
         useCaseModule,

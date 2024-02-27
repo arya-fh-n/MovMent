@@ -16,11 +16,21 @@ import android.view.View
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
+import com.arfdevs.myproject.core.domain.model.User
+import com.arfdevs.myproject.core.helper.launchAndCollectIn
+import com.arfdevs.myproject.core.helper.onError
+import com.arfdevs.myproject.core.helper.onLoading
+import com.arfdevs.myproject.core.helper.onSuccess
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentRegisterBinding
-import com.google.android.material.snackbar.Snackbar
+import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
+import com.arfdevs.myproject.movment.presentation.viewmodel.AuthViewModel
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
+
+    private val viewModel: AuthViewModel by viewModel()
 
     override fun initView() = with(binding) {
         btnRegister.isEnabled = false
@@ -46,12 +56,40 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
     override fun initListener() = with(binding) {
         btnRegister.setOnClickListener {
-            findNavController().navigate(R.id.action_registerFragment_to_dashboardFragment)
+            val user = User(
+                email = etEmail.text.toString().trim(),
+                password = etPassword.text.toString().trim()
+            )
+            viewModel.registerUser(user).launchAndCollectIn(viewLifecycleOwner) { state ->
+                Log.d("Fragment", "initListener createUser UiState: $state")
+                this.launch {
+                    state.onSuccess {
+                        Log.d("Fragment", "initListener createUser UiState: $it")
+                        findNavController().navigate(R.id.action_registerFragment_to_dashboardFragment)
+                    }.onError { e ->
+                        context?.let {
+                            CustomSnackbar.show(
+                                it, binding.root,
+                                getString(R.string.err_title_login_failed),
+                                e.cause.toString()
+                            )
+                        }
+                    }.onLoading {
+
+                    }
+                }
+
+            }
+
         }
 
         tvToLogin.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
+    }
+
+    override fun initObserver() {
+
     }
 
     private fun emailValidation() {

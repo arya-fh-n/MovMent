@@ -6,6 +6,7 @@ import android.util.Patterns
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
+import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentLoginBinding
 import com.google.android.material.snackbar.Snackbar
@@ -36,6 +37,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         tvToRegister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
+    }
+
+    override fun initObserver() {
+        TODO("Not yet implemented")
     }
 
     private fun emailValidation() {

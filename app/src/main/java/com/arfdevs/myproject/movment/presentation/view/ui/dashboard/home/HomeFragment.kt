@@ -33,14 +33,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
 
         viewModel.getPopularMovies(1)
-        initObserver()
     }
 
     override fun initListener() {
 
     }
 
-    private fun initObserver() {
+    override fun initObserver() {
         with(viewModel) {
             responsePopular.observe(viewLifecycleOwner) { list ->
                 popularAdapter.submitList(list)

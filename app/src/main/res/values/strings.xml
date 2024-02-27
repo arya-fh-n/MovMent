@@ -30,4 +30,6 @@
     <string name="err_password_invalid">Password is invalid</string>
     <string name="tv_tnc_link">https://www.google.com</string>
     <string name="tv_pp_link" translatable="false">https://www.bing.com</string>
+    <string name="err_title_login_failed">Login Failed</string>
+    <string name="err_msg_login_failed">Please try again</string>
 </resources>

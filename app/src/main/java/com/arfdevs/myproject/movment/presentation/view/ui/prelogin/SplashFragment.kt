@@ -15,7 +15,6 @@ import com.arfdevs.myproject.movment.databinding.FragmentSplashBinding
 class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding::inflate) {
 
     override fun initListener() {}
-
     override fun initView() {
         with(binding) {
             ivSplash.load(R.drawable.splash_icon)
@@ -31,6 +30,8 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
             }, 3000L)
         }
     }
+
+    override fun initObserver() {}
 
     private fun splashAnim() = with(binding) {
         val logoFade = ObjectAnimator.ofFloat(ivSplash, View.ALPHA, 0f, 1f).apply {
