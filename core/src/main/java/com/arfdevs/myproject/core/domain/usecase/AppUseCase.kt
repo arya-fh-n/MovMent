@@ -20,6 +20,8 @@ interface AppUseCase {
 
     suspend fun signInUser(user: User): Flow<UiState<Boolean>>
 
+    suspend fun updateUsername(username: String): Flow<UiState<Boolean>>
+
     suspend fun getCurrentUser(): FirebaseUser
 
 }
@@ -53,6 +55,24 @@ class AppInteractor(
 
     override suspend fun signInUser(user: User): Flow<UiState<Boolean>> = safeDataCall {
         userRepository.signInUser(user).map {
+            when (it) {
+                is SourceResult.Success -> {
+                    UiState.Success(it.data)
+                }
+
+                is SourceResult.Error -> {
+                    UiState.Error(it.throwable)
+                }
+
+                is SourceResult.Loading -> {
+                    UiState.Loading
+                }
+            }
+        }
+    }
+
+    override suspend fun updateUsername(username: String): Flow<UiState<Boolean>> = safeDataCall {
+        userRepository.updateUsername(username).map {
             when (it) {
                 is SourceResult.Success -> {
                     UiState.Success(it.data)

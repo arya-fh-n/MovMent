@@ -1,60 +1,114 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.auth
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
+import androidx.navigation.fragment.findNavController
+import com.arfdevs.myproject.core.base.BaseFragment
+import com.arfdevs.myproject.core.helper.launchAndCollectIn
+import com.arfdevs.myproject.core.helper.onError
+import com.arfdevs.myproject.core.helper.onLoading
+import com.arfdevs.myproject.core.helper.onSuccess
+import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
+import com.arfdevs.myproject.movment.databinding.FragmentProfileBinding
+import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
+import com.arfdevs.myproject.movment.presentation.viewmodel.AuthViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private val viewModel: AuthViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun initView() = with(binding) {
+        btnProfileFinish.isEnabled = false
+
+        tvProfileTitle.text = getString(R.string.tv_profile_title)
+        tiUsername.hint = getString(R.string.ti_username_hint)
+
+        etUsername.doAfterTextChanged {
+            validateName()
+        }
+
+        btnProfileFinish.text = getString(R.string.btn_profile_finish)
+        tvProfileTNC.text = getString(R.string.tv_tnc)
+    }
+
+    override fun initListener() = with(binding) {
+        btnProfileFinish.setOnClickListener {
+            val username = etUsername.text.toString().trim()
+
+            collectProfile(username)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+    override fun initObserver() {}
+
+    private fun collectProfile(username: String) = with(binding) {
+        viewModel.updateUsername(username).launchAndCollectIn(viewLifecycleOwner) { state ->
+            state.onSuccess {
+                loadingOverlay.visible(false)
+                loadingAnim.visible(false)
+
+                context?.let {
+                    CustomSnackbar.show(
+                        it,
+                        root,
+                        "Register complete!",
+                        "Welcome to MovMent!"
+                    ) {
+                        findNavController().navigate(R.id.action_profileFragment_to_dashboardFragment)
+                    }
+                }
+            }.onError { e ->
+                loadingOverlay.visible(false)
+                loadingAnim.visible(false)
+
+                context?.let {
+                    CustomSnackbar.show(
+                        it,
+                        root,
+                        "Register failed",
+                        "${e.message}"
+                    )
+                }
+
+            }.onLoading {
+                loadingOverlay.visible(true)
+                loadingAnim.visible(true)
+            }
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun validateName() = with(binding) {
+        val username = etUsername.text.toString()
+
+        val isBlank = username.isBlank()
+        val isShort = username.length < 3
+
+        when {
+            isBlank -> {
+                tiUsername.apply {
+                    error = context.getString(R.string.err_username_empty)
+                    isErrorEnabled = true
                 }
+                btnProfileFinish.isEnabled = false
             }
+
+            isShort -> {
+                tiUsername.apply {
+                    error = context.getString(R.string.err_username_short)
+                    isErrorEnabled = true
+                }
+                btnProfileFinish.isEnabled = false
+            }
+
+            else -> {
+                tiUsername.apply {
+                    isErrorEnabled = false
+                }
+                btnProfileFinish.isEnabled = true
+            }
+
+        }
     }
+
 }

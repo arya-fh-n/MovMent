@@ -17,7 +17,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private var popularAdapter = PopularAdapter()
 
     override fun initView() = with(binding) {
-        tvUsername.text = getString(R.string.tv_username_ph)
+        tvUsername.text = getString(R.string.tv_username_ph, "Username")
         tvBalanceIs.text = getString(R.string.tv_balance_is)
         ivBalance.load(R.drawable.ic_balance)
         tvBalance.text = getString(R.string.tv_balance)
@@ -33,6 +33,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
 
         viewModel.getPopularMovies(1)
+        viewModel.getCurrentUser()
     }
 
     override fun initListener() {
@@ -43,6 +44,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         with(viewModel) {
             responsePopular.observe(viewLifecycleOwner) { list ->
                 popularAdapter.submitList(list)
+            }
+
+            currentUser.observe(viewLifecycleOwner) { user ->
+                with(binding) {
+                    tvUsername.text = getString(R.string.tv_username_ph, user.displayName)
+                }
             }
         }
     }

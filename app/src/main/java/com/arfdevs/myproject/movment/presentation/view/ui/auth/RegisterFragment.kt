@@ -74,7 +74,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
             state.onSuccess {
                 loadingOverlay.visible(false)
                 loadingAnim.visible(false)
-                findNavController().navigate(R.id.action_registerFragment_to_dashboardFragment)
+                findNavController().navigate(R.id.action_registerFragment_to_profileFragment)
             }.onError { e ->
                 loadingOverlay.visible(false)
                 loadingAnim.visible(false)

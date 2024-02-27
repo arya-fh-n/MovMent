@@ -5,8 +5,10 @@ import com.arfdevs.myproject.core.data.remote.responses.PopularResponse
 import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.core.helper.SourceResult
 import com.arfdevs.myproject.core.helper.safeApiCall
+import com.arfdevs.myproject.core.helper.safeDataCall
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -41,6 +43,22 @@ class RemoteDataSource(private val endpoint: ApiEndpoint, private val auth: Fire
             }.addOnFailureListener { e ->
                 trySend(SourceResult.Error(e))
             }
+
+        awaitClose()
+    }
+
+    suspend fun updateUsername(username: String): Flow<SourceResult<Boolean>> = callbackFlow {
+        trySend(SourceResult.Loading(false))
+
+        val updates = userProfileChangeRequest {
+            displayName = username
+        }
+
+        auth.currentUser?.updateProfile(updates)?.addOnCompleteListener { task ->
+            trySend(SourceResult.Success(task.isSuccessful))
+        }?.addOnFailureListener { e ->
+            trySend(SourceResult.Error(e))
+        }
 
         awaitClose()
     }

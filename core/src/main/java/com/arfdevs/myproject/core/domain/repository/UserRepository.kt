@@ -13,6 +13,8 @@ interface UserRepository {
 
     suspend fun signInUser(user: User): Flow<SourceResult<Boolean>>
 
+    suspend fun updateUsername(username: String): Flow<SourceResult<Boolean>>
+
     suspend fun fetchCurrentUser(): FirebaseUser
 
 }
@@ -25,6 +27,10 @@ class UserRepositoryImpl(private val remote: RemoteDataSource) : UserRepository 
 
     override suspend fun signInUser(user: User): Flow<SourceResult<Boolean>> = safeDataCall {
         remote.signInUser(user)
+    }
+
+    override suspend fun updateUsername(username: String): Flow<SourceResult<Boolean>> = safeDataCall {
+        remote.updateUsername(username)
     }
 
     override suspend fun fetchCurrentUser(): FirebaseUser = safeDataCall {

@@ -12,9 +12,6 @@ import kotlinx.coroutines.runBlocking
 
 class AuthViewModel(private val useCase: AppUseCase) : ViewModel() {
 
-    private val _currentUser = MutableLiveData<FirebaseUser>()
-    val currentUser: LiveData<FirebaseUser> = _currentUser
-
     fun registerUser(user: User) = runBlocking {
         useCase.createUser(user)
     }
@@ -23,11 +20,8 @@ class AuthViewModel(private val useCase: AppUseCase) : ViewModel() {
         useCase.signInUser(user)
     }
 
-    fun getCurrentUser() {
-        viewModelScope.launch {
-            _currentUser.value = useCase.getCurrentUser()
-        }
+    fun updateUsername(username: String) = runBlocking {
+        useCase.updateUsername(username)
     }
-
 
 }

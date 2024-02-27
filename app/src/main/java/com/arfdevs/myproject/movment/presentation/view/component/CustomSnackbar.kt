@@ -15,6 +15,7 @@ import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.CustomSnackbarBinding
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.Snackbar.SnackbarLayout
 
 object CustomSnackbar {
 
@@ -30,7 +31,7 @@ object CustomSnackbar {
         val binding = CustomSnackbarBinding.inflate(inflater)
         val snackBar = Snackbar.make(root, "", Snackbar.LENGTH_INDEFINITE)
 
-        val snackbarLayout = snackBar.view as Snackbar.SnackbarLayout
+        val snackbarLayout = snackBar.view as SnackbarLayout
 
         if (title.isNotEmpty()) {
             binding.tvSnackbarTitle.text = title
