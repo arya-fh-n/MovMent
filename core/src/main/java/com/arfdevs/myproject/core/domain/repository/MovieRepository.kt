@@ -16,9 +16,7 @@ class MovieRepositoryImpl(
 ): MovieRepository {
 
     override suspend fun fetchPopular(page: Int): PopularResponse = safeDataCall {
-        val response = remote.fetchPopular(page)
-        Log.d("Retrofit REPOSITORY", "fetchPopular: $response")
-        response
+        remote.fetchPopular(page)
     }
 
 }

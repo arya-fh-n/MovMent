@@ -9,9 +9,7 @@ class RemoteDataSource(private val endpoint: ApiEndpoint) {
 
     suspend fun fetchPopular(page: Int): PopularResponse {
         return safeApiCall {
-            val response = endpoint.fetchPopularMovies(page = page)
-            Log.d("Retrofit REMOTEDATASOURCE", "fetchPopular: $response")
-            response
+            endpoint.fetchPopularMovies(page = page)
         }
     }
 

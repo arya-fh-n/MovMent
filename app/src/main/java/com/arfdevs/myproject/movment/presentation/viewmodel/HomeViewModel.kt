@@ -17,7 +17,6 @@ class HomeViewModel(private val useCase: AppUseCase): ViewModel() {
     fun getPopularMovies(page: Int) {
         viewModelScope.launch {
             _responsePopular.value = useCase.getPopular(page)
-            Log.d("Retrofit VIEWMODEL", "getPopular: ${responsePopular.value}")
         }
     }
 

@@ -15,9 +15,7 @@ interface AppUseCase {
 class AppInteractor(private val repository: MovieRepository) : AppUseCase {
 
     override suspend fun getPopular(page: Int): List<PopularModel> = safeDataCall {
-        val data = repository.fetchPopular(page).results.toListData()
-        Log.d("Retrofit INTERACTOR", "getPopular: $data")
-        data
+        repository.fetchPopular(page).results.toListData()
     }
 
 }
