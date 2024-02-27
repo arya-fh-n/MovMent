@@ -1,6 +1,5 @@
 package com.arfdevs.myproject.movment.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,16 +16,12 @@ class AuthViewModel(private val useCase: AppUseCase) : ViewModel() {
     val currentUser: LiveData<FirebaseUser> = _currentUser
 
     fun registerUser(user: User) = runBlocking {
-        val state = useCase.createUser(user)
-        Log.d("ViewModel", "createUser: $state")
-        state
+        useCase.createUser(user)
     }
 
-//    fun loginUser(user: User) {
-//        viewModelScope.launch {
-//            _loginResult.value = useCase.signInUser(user).value
-//        }
-//    }
+    fun loginUser(user: User) = runBlocking {
+        useCase.signInUser(user)
+    }
 
     fun getCurrentUser() {
         viewModelScope.launch {

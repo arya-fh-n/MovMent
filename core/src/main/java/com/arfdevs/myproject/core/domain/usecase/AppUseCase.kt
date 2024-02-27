@@ -1,7 +1,5 @@
 package com.arfdevs.myproject.core.domain.usecase
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import com.arfdevs.myproject.core.domain.model.PopularModel
 import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.core.domain.repository.MovieRepository
@@ -20,7 +18,7 @@ interface AppUseCase {
 
     suspend fun createUser(user: User): Flow<UiState<Boolean>>
 
-    suspend fun signInUser(user: User): LiveData<Boolean>
+    suspend fun signInUser(user: User): Flow<UiState<Boolean>>
 
     suspend fun getCurrentUser(): FirebaseUser
 
@@ -37,7 +35,6 @@ class AppInteractor(
 
     override suspend fun createUser(user: User): Flow<UiState<Boolean>> = safeDataCall {
         userRepository.createUser(user).map {
-            Log.d("Use Case", "createUser: $it")
             when (it) {
                 is SourceResult.Success -> {
                     UiState.Success(it.data)
@@ -46,12 +43,30 @@ class AppInteractor(
                 is SourceResult.Error -> {
                     UiState.Error(it.throwable)
                 }
+
+                is SourceResult.Loading -> {
+                    UiState.Loading
+                }
             }
         }
     }
 
-    override suspend fun signInUser(user: User): LiveData<Boolean> = safeDataCall {
-        userRepository.signInUser(user)
+    override suspend fun signInUser(user: User): Flow<UiState<Boolean>> = safeDataCall {
+        userRepository.signInUser(user).map {
+            when (it) {
+                is SourceResult.Success -> {
+                    UiState.Success(it.data)
+                }
+
+                is SourceResult.Error -> {
+                    UiState.Error(it.throwable)
+                }
+
+                is SourceResult.Loading -> {
+                    UiState.Loading
+                }
+            }
+        }
     }
 
     override suspend fun getCurrentUser(): FirebaseUser = safeDataCall {

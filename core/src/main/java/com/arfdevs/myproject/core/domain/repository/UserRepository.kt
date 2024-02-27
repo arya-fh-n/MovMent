@@ -1,7 +1,5 @@
 package com.arfdevs.myproject.core.domain.repository
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import com.arfdevs.myproject.core.data.remote.datasource.RemoteDataSource
 import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.core.helper.SourceResult
@@ -13,7 +11,7 @@ interface UserRepository {
 
     suspend fun createUser(user: User): Flow<SourceResult<Boolean>>
 
-    suspend fun signInUser(user: User): LiveData<Boolean>
+    suspend fun signInUser(user: User): Flow<SourceResult<Boolean>>
 
     suspend fun fetchCurrentUser(): FirebaseUser
 
@@ -22,12 +20,10 @@ interface UserRepository {
 class UserRepositoryImpl(private val remote: RemoteDataSource) : UserRepository {
 
     override suspend fun createUser(user: User): Flow<SourceResult<Boolean>> = safeDataCall {
-        val state = remote.createUser(user)
-        Log.d("Repository", "createUser: $state")
-        state
+        remote.createUser(user)
     }
 
-    override suspend fun signInUser(user: User): LiveData<Boolean> = safeDataCall {
+    override suspend fun signInUser(user: User): Flow<SourceResult<Boolean>> = safeDataCall {
         remote.signInUser(user)
     }
 

@@ -7,11 +7,20 @@ import androidx.navigation.fragment.findNavController
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.User
+import com.arfdevs.myproject.core.helper.launchAndCollectIn
+import com.arfdevs.myproject.core.helper.onError
+import com.arfdevs.myproject.core.helper.onLoading
+import com.arfdevs.myproject.core.helper.onSuccess
+import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentLoginBinding
-import com.google.android.material.snackbar.Snackbar
+import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
+import com.arfdevs.myproject.movment.presentation.viewmodel.AuthViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
+
+    private val viewModel: AuthViewModel by viewModel()
 
     override fun initView() = with(binding) {
         btnLogin.isEnabled = false
@@ -31,7 +40,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     override fun initListener() = with(binding) {
         btnLogin.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+            val user = User(
+                email = etEmail.text.toString().trim(),
+                password = etPassword.text.toString().trim()
+            )
+            collectLogin(user)
         }
 
         tvToRegister.setOnClickListener {
@@ -39,8 +52,29 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
     }
 
-    override fun initObserver() {
-        TODO("Not yet implemented")
+    override fun initObserver() {}
+
+    private fun collectLogin(user: User) = with(binding) {
+        viewModel.loginUser(user).launchAndCollectIn(viewLifecycleOwner) { state ->
+            state.onSuccess {
+                loadingOverlay.visible(false)
+                loadingAnim.visible(false)
+                findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+            }.onError { e ->
+                loadingOverlay.visible(false)
+                loadingAnim.visible(false)
+                context?.let {
+                    CustomSnackbar.show(
+                        it, binding.root,
+                        getString(R.string.err_title_login_failed),
+                        e.cause.toString()
+                    )
+                }
+            }.onLoading {
+                loadingOverlay.visible(true)
+                loadingAnim.visible(true)
+            }
+        }
     }
 
     private fun emailValidation() {

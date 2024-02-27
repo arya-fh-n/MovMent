@@ -10,7 +10,6 @@ import android.text.Spanned
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import androidx.navigation.fragment.findNavController
@@ -21,11 +20,11 @@ import com.arfdevs.myproject.core.helper.launchAndCollectIn
 import com.arfdevs.myproject.core.helper.onError
 import com.arfdevs.myproject.core.helper.onLoading
 import com.arfdevs.myproject.core.helper.onSuccess
+import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentRegisterBinding
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.AuthViewModel
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
@@ -60,27 +59,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                 email = etEmail.text.toString().trim(),
                 password = etPassword.text.toString().trim()
             )
-            viewModel.registerUser(user).launchAndCollectIn(viewLifecycleOwner) { state ->
-                Log.d("Fragment", "initListener createUser UiState: $state")
-                this.launch {
-                    state.onSuccess {
-                        Log.d("Fragment", "initListener createUser UiState: $it")
-                        findNavController().navigate(R.id.action_registerFragment_to_dashboardFragment)
-                    }.onError { e ->
-                        context?.let {
-                            CustomSnackbar.show(
-                                it, binding.root,
-                                getString(R.string.err_title_login_failed),
-                                e.cause.toString()
-                            )
-                        }
-                    }.onLoading {
-
-                    }
-                }
-
-            }
-
+            collectRegister(user)
         }
 
         tvToLogin.setOnClickListener {
@@ -88,8 +67,29 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         }
     }
 
-    override fun initObserver() {
+    override fun initObserver() {}
 
+    private fun collectRegister(user: User) = with(binding) {
+        viewModel.registerUser(user).launchAndCollectIn(viewLifecycleOwner) { state ->
+            state.onSuccess {
+                loadingOverlay.visible(false)
+                loadingAnim.visible(false)
+                findNavController().navigate(R.id.action_registerFragment_to_dashboardFragment)
+            }.onError { e ->
+                loadingOverlay.visible(false)
+                loadingAnim.visible(false)
+                context?.let {
+                    CustomSnackbar.show(
+                        it, binding.root,
+                        getString(R.string.err_title_login_failed),
+                        e.cause.toString()
+                    )
+                }
+            }.onLoading {
+                loadingOverlay.visible(true)
+                loadingAnim.visible(true)
+            }
+        }
     }
 
     private fun emailValidation() {

@@ -1,14 +1,10 @@
 package com.arfdevs.myproject.core.data.remote.datasource
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.arfdevs.myproject.core.data.remote.ApiEndpoint
 import com.arfdevs.myproject.core.data.remote.responses.PopularResponse
 import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.core.helper.SourceResult
 import com.arfdevs.myproject.core.helper.safeApiCall
-import com.arfdevs.myproject.core.helper.safeDataCall
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.channels.awaitClose
@@ -24,24 +20,29 @@ class RemoteDataSource(private val endpoint: ApiEndpoint, private val auth: Fire
     }
 
     suspend fun createUser(user: User): Flow<SourceResult<Boolean>> = callbackFlow {
-        auth.createUserWithEmailAndPassword(user.email, user.password).addOnCompleteListener { task ->
-            Log.d("RemoteDataSource", "createUser: $task")
-            trySend(SourceResult.Success(task.isSuccessful))
-        }.addOnFailureListener { e ->
-            trySend(SourceResult.Error(e))
-        }
-        awaitClose()
+        trySend(SourceResult.Loading(false))
 
+        auth.createUserWithEmailAndPassword(user.email, user.password)
+            .addOnCompleteListener { task ->
+                trySend(SourceResult.Success(task.isSuccessful))
+            }.addOnFailureListener { e ->
+                trySend(SourceResult.Error(e))
+            }
+
+        awaitClose()
     }
 
-    suspend fun signInUser(user: User): LiveData<Boolean> = safeDataCall {
-        val result = MutableLiveData<Boolean>()
+    suspend fun signInUser(user: User): Flow<SourceResult<Boolean>> = callbackFlow {
+        trySend(SourceResult.Loading(false))
 
-        auth.signInWithEmailAndPassword(user.email, user.password).addOnCompleteListener { task ->
-            result.value = task.isSuccessful
-        }
+        auth.signInWithEmailAndPassword(user.email, user.password)
+            .addOnCompleteListener { task ->
+                trySend(SourceResult.Success(task.isSuccessful))
+            }.addOnFailureListener { e ->
+                trySend(SourceResult.Error(e))
+            }
 
-        return@safeDataCall result
+        awaitClose()
     }
 
     suspend fun fetchCurrentUser(): FirebaseUser = safeApiCall {
