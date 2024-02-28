@@ -1,60 +1,107 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.dashboard.wishlist
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
+import android.graphics.Rect
 import android.view.View
-import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.arfdevs.myproject.core.base.BaseFragment
+import com.arfdevs.myproject.core.domain.model.WishlistModel
+import com.arfdevs.myproject.core.helper.Constants.USER_ID
+import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
+import com.arfdevs.myproject.movment.databinding.FragmentWishlistBinding
+import com.arfdevs.myproject.movment.presentation.view.adapter.WishlistAdapter
+import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
+import com.arfdevs.myproject.movment.presentation.viewmodel.MovieViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class WishlistFragment : BaseFragment<FragmentWishlistBinding>(FragmentWishlistBinding::inflate) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [WishlistFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class WishlistFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private val viewModel: MovieViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var wishlistAdapter = WishlistAdapter(
+        onItemClickListener = { wishlist ->
+            navigateToDetailFromWishlist(wishlist)
+        },
+        onAddToCartClickListener = { wishlist ->
+            context?.let {
+                CustomSnackbar.show(
+                    it,
+                    binding.root,
+                    "Added to Cart",
+                    "Wishlist item successfully added to cart!"
+                )
+            }
+        },
+        onRemoveFavoriteListener = { wishlist ->
+            viewModel.deleteWishlist(wishlist)
+            context?.let {
+                CustomSnackbar.show(
+                    it,
+                    binding.root,
+                    "Favorite Removed",
+                    "Movie successfully removed from wishlist!"
+                )
+            }
+        }
+    )
+
+    override fun initView() = with(binding) {
+        val space = resources.getDimensionPixelSize(R.dimen.list_spacing)
+
+        rvWishlist.run {
+            layoutManager = GridLayoutManager(context, 2)
+            adapter = wishlistAdapter
+
+            addItemDecoration(object : RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: RecyclerView.State
+                ) {
+                    super.getItemOffsets(outRect, view, parent, state)
+
+                    val itemSize = state.itemCount
+
+                    when {
+                        itemSize % 2 == 0 -> {
+                            outRect.right = space
+                        }
+                    }
+                    outRect.bottom = space
+                }
+            })
+
+            setHasFixedSize(true)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_wishlist, container, false)
+    override fun initListener() {}
+
+    override fun initObserver() = with(viewModel) {
+        getWishlist(USER_ID).observe(viewLifecycleOwner) { list ->
+            showError(list.isEmpty())
+            wishlistAdapter.submitList(list)
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment WishlistFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            WishlistFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun showError(state: Boolean) = with(binding) {
+        rvWishlist.visible(!state)
+        errorView.visible(state)
+        errorView.setMessage(
+            getString(R.string.ev_wishlist_empty_title),
+            getString(R.string.ev_wishlist_empty_desc)
+        )
     }
+
+    private fun navigateToDetailFromWishlist(wishlist: WishlistModel) {
+        val bundle = bundleOf("movieId" to wishlist.movieId)
+        activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
+            ?.findNavController()
+            ?.navigate(R.id.action_dashboardFragment_to_detailFragment, bundle)
+    }
+
 }

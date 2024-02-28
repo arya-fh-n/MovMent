@@ -35,4 +35,9 @@
     <string name="btn_rent_directly">Sewa Langsung</string>
     <string name="tv_movie_detail_ratings_title">"Nilai : "</string>
     <string name="tv_movie_detail_price">Harga : %1$d Token</string>
+    <string name="menu_sign_out">Keluar</string>
+    <string name="menu_cart">Keranjang</string>
+    <string name="menu_settings">Pengaturan</string>
+    <string name="ev_wishlist_empty_desc">Anda tidak memiliki film yang difavoritkan. Mulai tambahkan!</string>
+    <string name="ev_wishlist_empty_title">Wishlist Anda kosong</string>
 </resources>

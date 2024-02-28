@@ -17,7 +17,7 @@
         <ImageView
             android:id="@+id/iv_movie_now_playing_banner"
             android:layout_width="match_parent"
-            android:layout_height="225dp"
+            android:layout_height="235dp"
             android:importantForAccessibility="no"
             android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
