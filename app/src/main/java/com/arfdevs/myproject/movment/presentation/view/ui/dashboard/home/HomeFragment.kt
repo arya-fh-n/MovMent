@@ -7,6 +7,7 @@ import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentHomeBinding
+import com.arfdevs.myproject.movment.presentation.helper.Constants.USERNAME
 import com.arfdevs.myproject.movment.presentation.view.adapter.NowPlayingAdapter
 import com.arfdevs.myproject.movment.presentation.view.adapter.PopularAdapter
 import com.arfdevs.myproject.movment.presentation.viewmodel.HomeViewModel
@@ -24,7 +25,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private var nowPlayingAdapter = NowPlayingAdapter()
 
     override fun initView() = with(binding) {
-        tvUsername.text = getString(R.string.tv_username_ph, "Username")
+        tvUsername.text = getString(R.string.tv_username_ph, USERNAME)
         tvBalanceIs.text = getString(R.string.tv_balance_is)
         ivBalance.load(R.drawable.ic_balance)
         tvBalance.text = getString(R.string.tv_balance)
