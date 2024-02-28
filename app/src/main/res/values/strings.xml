@@ -39,4 +39,17 @@
     <string name="err_username_short">Username should at least be 3 characters long</string>
     <string name="tv_movie_price" translatable="false">%1$d Token</string>
     <string name="btn_add_to_cart">+ Cart</string>
+    <string name="desc_fab_favorite" translatable="false">Floating Favorite Button</string>
+    <string name="btn_rent_directly">Rent Directly</string>
+    <string name="tv_movie_detail_overview_ph" translatable="false">Young hobbit Frodo Baggins, after inheriting a mysterious ring from his uncle Bilbo, must leave his home in order to keep it from falling into the hands of its evil creator. Along the way, a fellowship is formed to protect the ringbearer and make sure that the ring arrives at its final destination: Mt. Doom, the only place where it can be destroyed.</string>
+    <string name="tv_movie_detail_overview" translatable="false">Movie Overview</string>
+    <string name="tv_movie_detail_title_ph" translatable="false">The Lord of The Rings: The Fellowship of The Ring</string>
+    <string name="tv_movie_detail_title" translatable="false">Movie Title</string>
+    <string name="tv_movie_detail_genres_ph" translatable="false">Adventure, Fantasy, Action</string>
+    <string name="tv_movie_detail_genres" translatable="false">Genres</string>
+    <string name="tv_movie_detail_ratings_title">"Ratings : "</string>
+    <string name="tv_movie_detail_price_ph" translatable="false">Price : 140 Token</string>
+    <string name="tv_movie_detail_price">Price : %1$d Token</string>
+    <string name="tv_movie_detail_tagline_ph" translatable="false">\"One Ring to Rule Them All.\"</string>
+    <string name="tv_movie_detail_tagline" translatable="false">\"%1$s\"</string>
 </resources>

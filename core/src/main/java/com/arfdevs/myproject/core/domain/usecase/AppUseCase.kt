@@ -1,5 +1,6 @@
 package com.arfdevs.myproject.core.domain.usecase
 
+import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
 import com.arfdevs.myproject.core.domain.model.User
@@ -7,6 +8,7 @@ import com.arfdevs.myproject.core.domain.repository.MovieRepository
 import com.arfdevs.myproject.core.domain.repository.UserRepository
 import com.arfdevs.myproject.core.helper.DataMapper.toNowPlayingList
 import com.arfdevs.myproject.core.helper.DataMapper.toPopularList
+import com.arfdevs.myproject.core.helper.DataMapper.toUIData
 import com.arfdevs.myproject.core.helper.SourceResult
 import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.core.helper.safeDataCall
@@ -19,6 +21,8 @@ interface AppUseCase {
     suspend fun getPopular(page: Int): List<PopularModel>
 
     suspend fun getNowPlaying(page: Int): List<NowPlayingModel>
+
+    suspend fun getMovieDetails(movieId: Int): MovieDetailsModel
 
     suspend fun createUser(user: User): Flow<UiState<Boolean>>
 
@@ -42,6 +46,11 @@ class AppInteractor(
     override suspend fun getNowPlaying(page: Int): List<NowPlayingModel> = safeDataCall {
         movieRepository.fetchNowPlaying(page).results.toNowPlayingList()
     }
+
+    override suspend fun getMovieDetails(movieId: Int): MovieDetailsModel = safeDataCall {
+        movieRepository.fetchMovieDetails(movieId).toUIData()
+    }
+
 
     override suspend fun createUser(user: User): Flow<UiState<Boolean>> = safeDataCall {
         userRepository.createUser(user).map {

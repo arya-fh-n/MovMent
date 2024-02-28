@@ -4,7 +4,6 @@ sealed class UiState<out R> {
     data class Success<out T>(val data: T) : UiState<T>()
     data class Error(val error: Throwable) : UiState<Nothing>()
     object Loading : UiState<Nothing>()
-    object Empty : UiState<Nothing>()
 }
 
 fun <T> UiState<T>.onSuccess(

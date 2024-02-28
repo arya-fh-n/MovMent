@@ -1,60 +1,143 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.dashboard.detail
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import coil.load
+import com.arfdevs.myproject.core.base.BaseFragment
+import com.arfdevs.myproject.core.helper.Constants
+import com.arfdevs.myproject.core.helper.onError
+import com.arfdevs.myproject.core.helper.onLoading
+import com.arfdevs.myproject.core.helper.onSuccess
+import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
+import com.arfdevs.myproject.movment.databinding.FragmentDetailBinding
+import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
+import com.arfdevs.myproject.movment.presentation.viewmodel.MovieViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding::inflate) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [DetailFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class DetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private val viewModel: MovieViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private val safeArgs: DetailFragmentArgs by navArgs()
+
+    override fun initView() = with(binding) {
+        safeArgs.movieId.let { id ->
+            viewModel.getMovieDetails(id)
+        }
+
+        toolbarDetail.title = getString(R.string.app_name)
+
+        ivMovieBackdrop.load(R.drawable.product_thumbnail)
+        tvMovieDetailTitle.text = getString(R.string.tv_movie_detail_title)
+        tvMovieDetailGenres.text = getString(R.string.tv_movie_detail_genres)
+
+        fabFavorite.load(R.drawable.ic_favorite_outline)
+
+        tvMovieDetailRatingsTitle.text = getString(R.string.tv_movie_detail_ratings_title)
+        rbRating.rating = 0.0f
+        tvMovieDetailPrice.text = getString(R.string.tv_movie_detail_price, 0)
+
+        tvMovieDetailTagline.text = getString(R.string.tv_movie_detail_tagline)
+        tvMovieDetailOverview.text = getString(R.string.tv_movie_detail_overview)
+
+        btnRent.text = getString(R.string.btn_rent_directly)
+        btnAddToCart.text = getString(R.string.btn_add_to_cart)
+
+    }
+
+    override fun initListener() = with(binding) {
+        var isFavorite = false
+
+        toolbarDetail.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        fabFavorite.setOnClickListener {
+            isFavorite = !isFavorite
+
+            if (isFavorite) {
+                fabFavorite.setImageResource(R.drawable.ic_favorite)
+            } else {
+                fabFavorite.setImageResource(R.drawable.ic_favorite_outline)
+            }
+
+            context?.let { it1 ->
+                CustomSnackbar.show(
+                    it1,
+                    root,
+                    "Favorite clicked",
+                    "Movie is favorite: $fabFavorite"
+                )
+            }
+        }
+
+        btnRent.setOnClickListener {
+            context?.let { it1 ->
+                CustomSnackbar.show(
+                    it1,
+                    root,
+                    "Rent clicked",
+                    "Movie is rented"
+                )
+            }
+        }
+
+        btnAddToCart.setOnClickListener {
+            context?.let { it1 ->
+                CustomSnackbar.show(
+                    it1,
+                    root,
+                    "Add to cart clicked",
+                    "Movie is added to cart"
+                )
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail, container, false)
-    }
+    override fun initObserver() = with(viewModel) {
+        responseDetails.observe(viewLifecycleOwner) { state ->
+            binding.apply {
+                state.onSuccess { detail ->
+                    loadingOverlay.visible(false)
+                    loadingAnim.visible(false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DetailFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    ivMovieBackdrop.load(Constants.BACKDROP_PATH + detail.backdropPath)
+                    tvMovieDetailTitle.text = detail.originalTitle
+                    tvMovieDetailGenres.text = detail.genres.joinToString(separator = " / ")
+
+                    fabFavorite.load(R.drawable.ic_favorite_outline)
+
+                    tvMovieDetailRatingsTitle.text =
+                        getString(R.string.tv_movie_detail_ratings_title)
+                    rbRating.rating = detail.voteAverage.toFloat()
+                    tvMovieDetailPrice.text =
+                        getString(R.string.tv_movie_detail_price, detail.price)
+
+                    if (detail.tagline.isNotEmpty()) {
+                        tvMovieDetailTagline.text =
+                            getString(R.string.tv_movie_detail_tagline, detail.tagline)
+                    } else {
+                        tvMovieDetailTagline.visible(false)
+                    }
+
+                    tvMovieDetailOverview.text = detail.overview
+                }.onError { e ->
+                    loadingOverlay.visible(false)
+                    loadingAnim.visible(false)
+                    context?.let {
+                        CustomSnackbar.show(
+                            it, binding.root,
+                            getString(R.string.err_title_login_failed),
+                            e.cause.toString()
+                        )
+                    }
+                }.onLoading {
+                    loadingOverlay.visible(true)
+                    loadingAnim.visible(true)
                 }
             }
+        }
     }
+
 }

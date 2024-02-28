@@ -32,4 +32,7 @@
     <string name="err_username_empty">Username tidak boleh kosong</string>
     <string name="err_username_short">Username setidaknya terdiri dari 3 karakter</string>
     <string name="btn_add_to_cart">+ Keranjang</string>
+    <string name="btn_rent_directly">Sewa Langsung</string>
+    <string name="tv_movie_detail_ratings_title">"Nilai : "</string>
+    <string name="tv_movie_detail_price">Harga : %1$d Token</string>
 </resources>

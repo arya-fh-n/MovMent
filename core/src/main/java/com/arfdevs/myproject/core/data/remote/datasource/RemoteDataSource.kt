@@ -1,6 +1,7 @@
 package com.arfdevs.myproject.core.data.remote.datasource
 
 import com.arfdevs.myproject.core.data.remote.ApiEndpoint
+import com.arfdevs.myproject.core.data.remote.responses.MovieDetailsResponse
 import com.arfdevs.myproject.core.data.remote.responses.NowPlayingResponse
 import com.arfdevs.myproject.core.data.remote.responses.PopularResponse
 import com.arfdevs.myproject.core.domain.model.User
@@ -24,6 +25,12 @@ class RemoteDataSource(private val endpoint: ApiEndpoint, private val auth: Fire
     suspend fun fetchNowPlaying(page: Int): NowPlayingResponse {
         return safeApiCall {
             endpoint.fetchNowPlayingMovies(page = page)
+        }
+    }
+
+    suspend fun fetchMovieDetails(movieId: Int): MovieDetailsResponse {
+        return safeApiCall {
+            endpoint.fetchMovieDetails(movieId)
         }
     }
 
