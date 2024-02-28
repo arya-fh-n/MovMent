@@ -1,5 +1,6 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.dashboard.detail
 
+import android.util.Log
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
@@ -11,6 +12,7 @@ import com.arfdevs.myproject.core.helper.onSuccess
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentDetailBinding
+import com.arfdevs.myproject.movment.presentation.helper.Constants.ERROR
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.MovieViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -102,7 +104,12 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                     loadingOverlay.visible(false)
                     loadingAnim.visible(false)
 
-                    ivMovieBackdrop.load(Constants.BACKDROP_PATH + detail.backdropPath)
+                    if (detail.backdropPath?.isNotEmpty() == true) {
+                        ivMovieBackdrop.load(Constants.BACKDROP_PATH + detail.backdropPath)
+                    } else {
+                        ivMovieBackdrop.load(R.drawable.product_thumbnail)
+                    }
+
                     tvMovieDetailTitle.text = detail.originalTitle
                     tvMovieDetailGenres.text = detail.genres.joinToString(separator = " / ")
 
@@ -129,7 +136,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                         CustomSnackbar.show(
                             it, binding.root,
                             getString(R.string.err_title_login_failed),
-                            e.cause.toString()
+                            e.localizedMessage?.toString() ?: ERROR
                         )
                     }
                 }.onLoading {

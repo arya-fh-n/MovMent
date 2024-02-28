@@ -15,7 +15,7 @@ object DataMapper {
         id = id,
         originalTitle = originalTitle,
         posterPath = posterPath,
-        voteAverage = voteAverage
+        voteAverage = (voteAverage / 10.0 * 5.0)
     )
 
     fun List<PopularItem>.toPopularList() = map {
@@ -26,7 +26,7 @@ object DataMapper {
         id = id,
         originalTitle = originalTitle,
         posterPath = posterPath,
-        voteAverage = voteAverage,
+        voteAverage = (voteAverage / 10.0 * 5.0),
         price = popularity.toInt()
     )
 

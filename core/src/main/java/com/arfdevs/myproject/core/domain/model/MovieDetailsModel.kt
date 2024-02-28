@@ -14,7 +14,7 @@ data class MovieDetailsModel(
 
     var overview: String = "",
 
-    var backdropPath: String = "",
+    var backdropPath: String? = "",
 
     var voteAverage: Double = 0.0,
 
