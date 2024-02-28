@@ -30,4 +30,13 @@
     <string name="err_password_invalid">Password is invalid</string>
     <string name="tv_tnc_link">https://www.google.com</string>
     <string name="tv_pp_link" translatable="false">https://www.bing.com</string>
+    <string name="err_title_login_failed">Login Failed</string>
+    <string name="err_msg_login_failed">Please try again</string>
+    <string name="tv_profile_title">Profile Name</string>
+    <string name="ti_username_hint" translatable="false">Username</string>
+    <string name="btn_profile_finish">Finish</string>
+    <string name="err_username_empty">Username cannot be empty</string>
+    <string name="err_username_short">Username should at least be 3 characters long</string>
+    <string name="tv_movie_price" translatable="false">%1$d Token</string>
+    <string name="btn_add_to_cart">+ Cart</string>
 </resources>

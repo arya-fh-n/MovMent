@@ -11,9 +11,9 @@ import com.arfdevs.myproject.movment.databinding.ItemPopularBinding
 class PopularAdapter: BaseListAdapter<PopularModel, ItemPopularBinding>(ItemPopularBinding::inflate) {
     override fun onItemBind(): (PopularModel, ItemPopularBinding, View, Int) -> Unit = { item, binding, view, _ ->
         with(binding) {
-            ivMovieWishlistBanner.load(Constants.BACKDROP_PATH + item.posterPath)
+            ivMoviePopularBanner.load(Constants.BACKDROP_PATH + item.posterPath)
             icRating.load(R.drawable.ic_star)
-            tvMovieWishlistTitle.text = item.originalTitle
+            tvMoviePopularTitle.text = item.originalTitle
             tvRating.text = String.format("%.1f", item.voteAverage)
         }
     }

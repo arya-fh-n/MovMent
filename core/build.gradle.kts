@@ -77,11 +77,10 @@ dependencies {
     ksp("androidx.room:room-compiler:2.6.1")
 
     //firebase
-    api("com.google.firebase:firebase-bom:32.7.2")
-    api("com.google.firebase:firebase-crashlytics")
-    api("com.google.firebase:firebase-analytics")
+    api(platform("com.google.firebase:firebase-bom:32.7.2"))
+    api("com.google.firebase:firebase-crashlytics-ktx")
+    api("com.google.firebase:firebase-analytics-ktx")
     api("com.google.firebase:firebase-auth-ktx")
-    api("com.google.firebase:firebase-auth")
     api("com.google.firebase:firebase-database-ktx")
 
 

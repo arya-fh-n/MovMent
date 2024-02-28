@@ -17,20 +17,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Profile" />
+        tools:text="Profile Name" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_profile"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_marginTop="32dp"
-        android:background="@color/purple"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_profile_title"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.CornerSize50"
-        tools:src="@drawable/ic_person_outline" />
+<!--    <com.google.android.material.imageview.ShapeableImageView-->
+<!--        android:id="@+id/iv_profile"-->
+<!--        android:layout_width="128dp"-->
+<!--        android:layout_height="128dp"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:background="@color/purple"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_profile_title"-->
+<!--        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.CornerSize50"-->
+<!--        tools:src="@drawable/ic_person_outline" />-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/ti_username"
@@ -42,7 +42,7 @@
         app:errorTextColor="@color/red_error"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_profile"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_title"
         app:placeholderText="John Doe"
         tools:hint="Username">
 
@@ -79,5 +79,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_profile_finish"
         tools:text="By signing up, you have agreed to MovMent\'s \nTerms and Conditions &amp; Privacy Policy." />
+
+    <View
+        android:id="@+id/loading_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/loading_greyed"
+        android:visibility="gone" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading_anim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading_animation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

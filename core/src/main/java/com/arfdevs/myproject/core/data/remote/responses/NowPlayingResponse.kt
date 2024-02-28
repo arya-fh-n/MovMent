@@ -17,7 +17,7 @@ data class NowPlayingResponse(
 	val totalPages: Int,
 
 	@field:SerializedName("results")
-	val results: List<PopularItem>,
+	val results: List<NowPlayingItem>,
 
 	@field:SerializedName("total_results")
 	val totalResults: Int

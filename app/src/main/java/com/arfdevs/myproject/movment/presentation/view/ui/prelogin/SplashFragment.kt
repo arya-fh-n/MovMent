@@ -11,24 +11,37 @@ import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentSplashBinding
+import com.arfdevs.myproject.movment.presentation.viewmodel.HomeViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding::inflate) {
 
-    override fun initListener() {}
+    private val viewModel: HomeViewModel by viewModel()
 
+    override fun initListener() {}
     override fun initView() {
         with(binding) {
             ivSplash.load(R.drawable.splash_icon)
             tvSplashTitle.text = getString(R.string.app_name)
             splashAnim()
 
-            val navController =
-                activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
-                    ?.findNavController()
-
             Handler(Looper.getMainLooper()).postDelayed({
-                navController?.navigate(R.id.action_splashFragment_to_onboardingFragment)
+                viewModel.getCurrentUser()
             }, 3000L)
+        }
+    }
+
+    override fun initObserver() {
+        val navController =
+            activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
+                ?.findNavController()
+
+        viewModel.currentUser.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                navController?.navigate(R.id.action_splashFragment_to_dashboardFragment)
+            } else {
+                navController?.navigate(R.id.action_splashFragment_to_loginFragment)
+            }
         }
     }
 

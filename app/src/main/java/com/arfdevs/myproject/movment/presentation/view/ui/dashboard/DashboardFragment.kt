@@ -19,4 +19,8 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(FragmentDashboa
 
     }
 
+    override fun initObserver() {
+
+    }
+
 }

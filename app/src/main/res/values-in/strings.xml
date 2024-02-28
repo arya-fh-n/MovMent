@@ -25,4 +25,11 @@
     <string name="err_password_empty">Kata sandi tidak boleh kosong</string>
     <string name="err_password_invalid">Kata sandi tidak valid</string>
     <string name="tv_tnc_link">https://www.google.co.id</string>
+    <string name="err_title_login_failed">Gagal Masuk</string>
+    <string name="err_msg_login_failed">Mohon coba lagi</string>
+    <string name="tv_profile_title">Nama Profile</string>
+    <string name="btn_profile_finish">Selesai</string>
+    <string name="err_username_empty">Username tidak boleh kosong</string>
+    <string name="err_username_short">Username setidaknya terdiri dari 3 karakter</string>
+    <string name="btn_add_to_cart">+ Keranjang</string>
 </resources>

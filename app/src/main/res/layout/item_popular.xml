@@ -15,7 +15,7 @@
         android:paddingBottom="12dp">
 
         <ImageView
-            android:id="@+id/iv_movie_wishlist_banner"
+            android:id="@+id/iv_movie_popular_banner"
             android:layout_width="match_parent"
             android:layout_height="225dp"
             android:importantForAccessibility="no"
@@ -25,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_movie_wishlist_title"
+            android:id="@+id/tv_movie_popular_title"
             style="@style/TextAppearance.Material3.TitleSmall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:maxLines="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_movie_wishlist_banner"
+            app:layout_constraintTop_toBottomOf="@+id/iv_movie_popular_banner"
             tools:text="The Lord of The Rings: The Fellowship of The Ring" />
 
         <LinearLayout
@@ -47,8 +47,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_movie_wishlist_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_movie_wishlist_title"
+            app:layout_constraintStart_toStartOf="@id/tv_movie_popular_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_movie_popular_title"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView

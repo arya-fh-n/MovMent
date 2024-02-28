@@ -1,11 +1,14 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.dashboard.home
 
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentHomeBinding
+import com.arfdevs.myproject.movment.presentation.helper.Constants.USERNAME
+import com.arfdevs.myproject.movment.presentation.view.adapter.NowPlayingAdapter
 import com.arfdevs.myproject.movment.presentation.view.adapter.PopularAdapter
 import com.arfdevs.myproject.movment.presentation.viewmodel.HomeViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -13,11 +16,16 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
     private val viewModel: HomeViewModel by viewModel()
+
     private lateinit var rvPopular: RecyclerView
+    private lateinit var rvNowPlaying: RecyclerView
+
+
     private var popularAdapter = PopularAdapter()
+    private var nowPlayingAdapter = NowPlayingAdapter()
 
     override fun initView() = with(binding) {
-        tvUsername.text = getString(R.string.tv_username_ph)
+        tvUsername.text = getString(R.string.tv_username_ph, USERNAME)
         tvBalanceIs.text = getString(R.string.tv_balance_is)
         ivBalance.load(R.drawable.ic_balance)
         tvBalance.text = getString(R.string.tv_balance)
@@ -32,19 +40,38 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             adapter = popularAdapter
         }
 
+        this@HomeFragment.rvNowPlaying = rvNowPlaying
+        this@HomeFragment.rvNowPlaying.run {
+            hasFixedSize()
+            layoutManager = GridLayoutManager(context, 2)
+            adapter = nowPlayingAdapter
+        }
+
         viewModel.getPopularMovies(1)
-        initObserver()
+        viewModel.getNowPlaying(1)
+        viewModel.getCurrentUser()
     }
 
     override fun initListener() {
 
     }
 
-    private fun initObserver() {
+    override fun initObserver() {
         with(viewModel) {
+            currentUser.observe(viewLifecycleOwner) { user ->
+                with(binding) {
+                    tvUsername.text = getString(R.string.tv_username_ph, user.displayName)
+                }
+            }
+
+            responseNowPlaying.observe(viewLifecycleOwner) { list ->
+                nowPlayingAdapter.submitList(list)
+            }
+
             responsePopular.observe(viewLifecycleOwner) { list ->
                 popularAdapter.submitList(list)
             }
+
         }
     }
 

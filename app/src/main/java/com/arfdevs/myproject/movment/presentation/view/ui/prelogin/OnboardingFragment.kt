@@ -46,6 +46,10 @@ class OnboardingFragment :
         }
     }
 
+    override fun initObserver() {
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         binding.vpOnboarding.unregisterOnPageChangeCallback(object :
