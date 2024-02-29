@@ -17,11 +17,11 @@ import kotlin.coroutines.CoroutineContext
 
 suspend fun <T> safeApiCall(
     dispatcher: CoroutineContext = Dispatchers.IO,
-    apiCall: suspend () -> T?
+    apiCall: suspend () -> T
 ): T {
     return withContext(dispatcher) {
         try {
-            apiCall() ?: throw Exception("Network no")
+            apiCall()
         } catch (error: Throwable) {
             throw error
         }

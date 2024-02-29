@@ -120,10 +120,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
                 android:contentDescription="@string/desc_fab_favorite"
-                android:src="@drawable/ic_favorite_outline"
                 app:layout_constraintBottom_toBottomOf="@id/iv_movie_backdrop"
                 app:layout_constraintEnd_toEndOf="@id/iv_movie_backdrop"
-                app:layout_constraintTop_toBottomOf="@id/iv_movie_backdrop" />
+                app:layout_constraintTop_toBottomOf="@id/iv_movie_backdrop"
+                tools:src="@drawable/ic_favorite_outline" />
 
             <TextView
                 android:id="@+id/tv_movie_detail_tagline"

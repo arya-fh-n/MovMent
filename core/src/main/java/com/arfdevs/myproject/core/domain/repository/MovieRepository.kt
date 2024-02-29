@@ -1,5 +1,8 @@
 package com.arfdevs.myproject.core.domain.repository
 
+import androidx.lifecycle.LiveData
+import com.arfdevs.myproject.core.data.local.datasource.LocalDataSource
+import com.arfdevs.myproject.core.data.local.db.entity.WishlistEntity
 import com.arfdevs.myproject.core.data.remote.datasource.RemoteDataSource
 import com.arfdevs.myproject.core.data.remote.responses.MovieDetailsResponse
 import com.arfdevs.myproject.core.data.remote.responses.NowPlayingResponse
@@ -14,10 +17,19 @@ interface MovieRepository {
 
     suspend fun fetchMovieDetails(movieId: Int): MovieDetailsResponse
 
+    suspend fun insertWishlistMovie(wishlist: WishlistEntity)
+
+    fun getWishlist(userId: String): LiveData<List<WishlistEntity>>
+
+    suspend fun checkFavorite(movieId: Int): Int
+
+    suspend fun deleteWishlistMovie(wishlist: WishlistEntity)
+
 }
 
 class MovieRepositoryImpl(
-    private var remote: RemoteDataSource
+    private val remote: RemoteDataSource,
+    private val local: LocalDataSource
 ) : MovieRepository {
 
     override suspend fun fetchPopular(page: Int): PopularResponse = safeDataCall {
@@ -30,6 +42,22 @@ class MovieRepositoryImpl(
 
     override suspend fun fetchMovieDetails(movieId: Int): MovieDetailsResponse = safeDataCall {
         remote.fetchMovieDetails(movieId)
+    }
+
+    override suspend fun insertWishlistMovie(wishlist: WishlistEntity) {
+        local.insertWishlistMovie(wishlist)
+    }
+
+    override fun getWishlist(userId: String): LiveData<List<WishlistEntity>> =
+        local.gethWishlistMovie(userId)
+
+
+    override suspend fun checkFavorite(movieId: Int): Int = safeDataCall {
+        local.checkFavorite(movieId)
+    }
+
+    override suspend fun deleteWishlistMovie(wishlist: WishlistEntity) {
+        local.deleteWishlistMovie(wishlist)
     }
 
 }

@@ -52,4 +52,18 @@
     <string name="tv_movie_detail_price">Price : %1$d Token</string>
     <string name="tv_movie_detail_tagline_ph" translatable="false">\"One Ring to Rule Them All.\"</string>
     <string name="tv_movie_detail_tagline" translatable="false">\"%1$s\"</string>
+    <string name="menu_sign_out">Sign out</string>
+    <string name="menu_cart">Cart</string>
+    <string name="menu_settings">Settings</string>
+    <string name="error_title" translatable="false">Error Title</string>
+    <string name="error_description" translatable="false">Error Description</string>
+    <string name="error_btn" translatable="false">Error Button</string>
+    <string name="ev_wishlist_empty_desc">You don\'t have any favorited movies. Start adding!</string>
+    <string name="ev_wishlist_empty_title">Wishlist is empty</string>
+    <string name="ob_title_1">Your favorite movies, in one app.</string>
+    <string name="ob_title_2">All great selections, from all genres</string>
+    <string name="ob_title_3">Join our MovMent!</string>
+    <string name="ad_msg">Are you sure you want to log out of the app?</string>
+    <string name="option_negative">No</string>
+    <string name="option_positive">Yes</string>
 </resources>

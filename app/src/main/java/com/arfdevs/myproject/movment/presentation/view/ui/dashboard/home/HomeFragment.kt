@@ -83,6 +83,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     override fun initObserver() {
         with(viewModel) {
             currentUser.observe(viewLifecycleOwner) { user ->
+                saveUID(user.uid)
+
                 with(binding) {
                     tvUsername.text = getString(R.string.tv_username_ph, user.displayName)
                 }

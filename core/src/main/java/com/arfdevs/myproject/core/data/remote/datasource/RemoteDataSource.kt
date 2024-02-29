@@ -76,7 +76,11 @@ class RemoteDataSource(private val endpoint: ApiEndpoint, private val auth: Fire
         awaitClose()
     }
 
-    suspend fun fetchCurrentUser(): FirebaseUser = safeApiCall {
+    suspend fun signOutUser() = safeApiCall {
+        auth.signOut()
+    }
+
+    suspend fun fetchCurrentUser(): FirebaseUser? = safeApiCall {
         auth.currentUser
     }
 

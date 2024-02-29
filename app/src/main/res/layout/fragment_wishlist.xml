@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="12dp"
+    android:layout_marginHorizontal="6dp"
     tools:context=".presentation.view.ui.dashboard.wishlist.WishlistFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -21,5 +21,14 @@
         tools:itemCount="10"
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/item_wishlist" />
+
+    <com.arfdevs.myproject.movment.presentation.view.component.ErrorView
+        android:id="@+id/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

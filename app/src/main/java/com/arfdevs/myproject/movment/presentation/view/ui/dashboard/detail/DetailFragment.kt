@@ -1,10 +1,10 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.dashboard.detail
 
-import android.util.Log
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
+import com.arfdevs.myproject.core.domain.model.WishlistModel
 import com.arfdevs.myproject.core.helper.Constants
 import com.arfdevs.myproject.core.helper.onError
 import com.arfdevs.myproject.core.helper.onLoading
@@ -26,6 +26,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
     override fun initView() = with(binding) {
         safeArgs.movieId.let { id ->
             viewModel.getMovieDetails(id)
+            viewModel.checkFavorite(id)
         }
 
         toolbarDetail.title = getString(R.string.app_name)
@@ -49,30 +50,47 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
     }
 
     override fun initListener() = with(binding) {
-        var isFavorite = false
+        viewModel.isFavorite.observe(this@DetailFragment) { isFavorite ->
 
-        toolbarDetail.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        fabFavorite.setOnClickListener {
-            isFavorite = !isFavorite
-
-            if (isFavorite) {
+            if (isFavorite == 1) {
                 fabFavorite.setImageResource(R.drawable.ic_favorite)
             } else {
                 fabFavorite.setImageResource(R.drawable.ic_favorite_outline)
             }
 
-            context?.let { it1 ->
-                CustomSnackbar.show(
-                    it1,
-                    root,
-                    "Favorite clicked",
-                    "Movie is favorite: $fabFavorite"
-                )
+            fabFavorite.setOnClickListener {
+                if (isFavorite == 1) {
+                    viewModel.deleteWishlistFromDetail()
+                    fabFavorite.setImageResource(R.drawable.ic_favorite_outline)
+
+                    context?.let {
+                        CustomSnackbar.show(
+                            it,
+                            root,
+                            "Movie Removed from Wishlist",
+                            "Movie is removed from wishlist!"
+                        )
+                    }
+                } else {
+                    viewModel.insertWishlistMovie()
+                    fabFavorite.setImageResource(R.drawable.ic_favorite)
+
+                    context?.let {
+                        CustomSnackbar.show(
+                            it,
+                            root,
+                            "Movie Favorited",
+                            "Movie is added to wishlist!"
+                        )
+                    }
+                }
             }
         }
+
+        toolbarDetail.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
 
         btnRent.setOnClickListener {
             context?.let { it1 ->
@@ -112,8 +130,18 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
 
                     tvMovieDetailTitle.text = detail.originalTitle
                     tvMovieDetailGenres.text = detail.genres.joinToString(separator = " / ")
+                    val userId = getUID().hashCode().toString()
 
-                    fabFavorite.load(R.drawable.ic_favorite_outline)
+                    setWishlistModel(
+                        WishlistModel(
+                            movieId = detail.id,
+                            userId = userId,
+                            originalTitle = detail.originalTitle,
+                            posterPath = Constants.BACKDROP_PATH + detail.posterPath,
+                            voteAverage = detail.voteAverage,
+                            price = detail.price
+                        )
+                    )
 
                     tvMovieDetailRatingsTitle.text =
                         getString(R.string.tv_movie_detail_ratings_title)
