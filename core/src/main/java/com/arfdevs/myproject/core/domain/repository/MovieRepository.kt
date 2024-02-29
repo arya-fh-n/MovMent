@@ -1,6 +1,5 @@
 package com.arfdevs.myproject.core.domain.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.arfdevs.myproject.core.data.local.datasource.LocalDataSource
 import com.arfdevs.myproject.core.data.local.db.entity.WishlistEntity
@@ -49,13 +48,12 @@ class MovieRepositoryImpl(
         local.insertWishlistMovie(wishlist)
     }
 
-    override fun getWishlist(userId: String): LiveData<List<WishlistEntity>> = local.gethWishlistMovie(userId)
+    override fun getWishlist(userId: String): LiveData<List<WishlistEntity>> =
+        local.gethWishlistMovie(userId)
 
 
     override suspend fun checkFavorite(movieId: Int): Int = safeDataCall {
-        val fav = local.checkFavorite(movieId)
-        Log.d("Repository", "checkFavorite: for $movieId, isFavorite: $fav")
-        fav
+        local.checkFavorite(movieId)
     }
 
     override suspend fun deleteWishlistMovie(wishlist: WishlistEntity) {

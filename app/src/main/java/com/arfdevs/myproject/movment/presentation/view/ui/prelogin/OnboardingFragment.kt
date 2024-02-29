@@ -6,10 +6,14 @@ import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentOnboardingBinding
 import com.arfdevs.myproject.movment.presentation.view.adapter.OnboardingPagerAdapter
+import com.arfdevs.myproject.movment.presentation.viewmodel.HomeViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OnboardingFragment :
     BaseFragment<FragmentOnboardingBinding>(FragmentOnboardingBinding::inflate) {
+
+    private val viewModel: HomeViewModel by viewModel()
 
     private val onboardingImages = listOf(
         R.drawable.movment_1,
@@ -18,9 +22,9 @@ class OnboardingFragment :
     )
 
     private val onboardingTitles = listOf(
-        "Your favorite movies, in one app.",
-        "All great selections, from all genres",
-        "Join our MovMent!"
+        R.string.ob_title_1,
+        R.string.ob_title_2,
+        R.string.ob_title_3
     )
 
     override fun initView() = with(binding) {
@@ -36,6 +40,8 @@ class OnboardingFragment :
         vp.adapter = adapter
 
         TabLayoutMediator(tabLayout, vp) { _, _ -> }.attach()
+
+        viewModel.saveOnboardingState(true)
 
         btnObJoin.setOnClickListener {
             findNavController().navigate(R.id.action_onboardingFragment_to_registerFragment)

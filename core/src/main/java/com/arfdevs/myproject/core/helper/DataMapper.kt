@@ -8,6 +8,7 @@ import com.arfdevs.myproject.core.data.remote.responses.PopularItem
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
+import com.arfdevs.myproject.core.domain.model.SessionModel
 import com.arfdevs.myproject.core.domain.model.WishlistModel
 
 object DataMapper {
@@ -72,5 +73,27 @@ object DataMapper {
         voteAverage = voteAverage,
         price = price
     )
+
+    fun SessionModel.toSplashState() = when {
+        this.displayName.isEmpty() && this.uid.isEmpty().not() && this.onboardingState -> {
+            SplashState.Profile
+        }
+
+        this.displayName.isEmpty() && this.uid.isEmpty() && this.onboardingState -> {
+            SplashState.Login
+        }
+
+        this.displayName.isEmpty() && this.uid.isEmpty() && !this.onboardingState -> {
+            SplashState.Onboarding
+        }
+
+        this.displayName.isNotEmpty() && this.uid.isNotEmpty() && this.onboardingState -> {
+            SplashState.Main
+        }
+
+        else -> {
+            SplashState.Onboarding
+        }
+    }
 
 }

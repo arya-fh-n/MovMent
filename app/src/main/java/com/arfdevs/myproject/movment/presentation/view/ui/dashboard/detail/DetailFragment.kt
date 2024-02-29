@@ -1,13 +1,11 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.dashboard.detail
 
-import android.util.Log
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.WishlistModel
 import com.arfdevs.myproject.core.helper.Constants
-import com.arfdevs.myproject.core.helper.Constants.USER_ID
 import com.arfdevs.myproject.core.helper.onError
 import com.arfdevs.myproject.core.helper.onLoading
 import com.arfdevs.myproject.core.helper.onSuccess
@@ -53,7 +51,6 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
 
     override fun initListener() = with(binding) {
         viewModel.isFavorite.observe(this@DetailFragment) { isFavorite ->
-            Log.d("Fragment", "initListener: isFavorite: $isFavorite")
 
             if (isFavorite == 1) {
                 fabFavorite.setImageResource(R.drawable.ic_favorite)
@@ -133,11 +130,12 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
 
                     tvMovieDetailTitle.text = detail.originalTitle
                     tvMovieDetailGenres.text = detail.genres.joinToString(separator = " / ")
+                    val userId = getUID().hashCode().toString()
 
                     setWishlistModel(
                         WishlistModel(
                             movieId = detail.id,
-                            userId = USER_ID,
+                            userId = userId,
                             originalTitle = detail.originalTitle,
                             posterPath = Constants.BACKDROP_PATH + detail.posterPath,
                             voteAverage = detail.voteAverage,

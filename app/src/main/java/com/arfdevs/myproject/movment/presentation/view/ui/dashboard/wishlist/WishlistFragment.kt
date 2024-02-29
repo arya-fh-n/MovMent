@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.WishlistModel
-import com.arfdevs.myproject.core.helper.Constants.USER_ID
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentWishlistBinding
@@ -82,7 +81,9 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding>(FragmentWishlistB
     override fun initListener() {}
 
     override fun initObserver() = with(viewModel) {
-        getWishlist(USER_ID).observe(viewLifecycleOwner) { list ->
+        val userId = getUID()
+
+        getWishlist(userId).observe(viewLifecycleOwner) { list ->
             showError(list.isEmpty())
             wishlistAdapter.submitList(list)
         }

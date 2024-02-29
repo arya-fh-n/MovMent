@@ -1,6 +1,5 @@
 package com.arfdevs.myproject.core.data.local.datasource
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.arfdevs.myproject.core.data.local.db.Dao
 import com.arfdevs.myproject.core.data.local.db.entity.WishlistEntity
@@ -19,9 +18,7 @@ class LocalDataSource(
     fun gethWishlistMovie(userId: String): LiveData<List<WishlistEntity>> = dao.getWishlistMovie(userId)
 
     suspend fun checkFavorite(movieId: Int): Int = safeDataCall {
-        val fav = dao.checkFavorite(movieId)
-        Log.d("LocalDataSource", "checkFavorite: for $movieId, isFavorite: $fav")
-        fav
+        dao.checkFavorite(movieId)
     }
 
     suspend fun deleteWishlistMovie(wishlist: WishlistEntity) {
@@ -46,6 +43,14 @@ class LocalDataSource(
 
     fun saveLanguage(value: String) {
         sharedPreferencesHelper.putLanguage(value)
+    }
+
+    fun getUID(): String =
+        sharedPreferencesHelper.getUID()
+
+
+    fun saveUID(value: String) {
+        sharedPreferencesHelper.putUID(value)
     }
 
     fun getTheme(): Boolean =

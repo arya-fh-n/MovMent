@@ -1,11 +1,11 @@
 package com.arfdevs.myproject.core.domain.usecase
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
+import com.arfdevs.myproject.core.domain.model.SessionModel
 import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.core.domain.model.WishlistModel
 import com.arfdevs.myproject.core.domain.repository.MovieRepository
@@ -44,9 +44,11 @@ interface AppUseCase {
 
     suspend fun updateUsername(username: String): Flow<UiState<Boolean>>
 
-    suspend fun getCurrentUser(): FirebaseUser
+    suspend fun getCurrentUser(): FirebaseUser?
 
-    fun getOnboardingState(): Boolean
+    suspend fun sessionModel(): SessionModel
+
+    suspend fun signOutUser()
 
     fun saveOnboardingState(state: Boolean)
 
@@ -57,6 +59,10 @@ interface AppUseCase {
     fun getTheme(): Boolean
 
     fun saveTheme(value: Boolean)
+
+    fun getUID(): String
+
+    fun saveUID(value: String)
 
 }
 
@@ -86,9 +92,7 @@ class AppInteractor(
         }
 
     override suspend fun checkFavorite(movieId: Int): Int = safeDataCall {
-        val fav = movieRepository.checkFavorite(movieId)
-        Log.d("UseCase", "checkFavorite: for $movieId, isFavorite: $fav")
-        fav
+        movieRepository.checkFavorite(movieId)
     }
 
     override suspend fun deleteWishlistMovie(wishlist: WishlistModel) {
@@ -149,11 +153,21 @@ class AppInteractor(
         }
     }
 
-    override suspend fun getCurrentUser(): FirebaseUser = safeDataCall {
+    override suspend fun getCurrentUser(): FirebaseUser? = safeDataCall {
         userRepository.fetchCurrentUser()
     }
 
-    override fun getOnboardingState(): Boolean = userRepository.getOnboardingState()
+    override suspend fun sessionModel(): SessionModel {
+        val user = userRepository.fetchCurrentUser()
+        val onboardingState = userRepository.getOnboardingState()
+
+        return SessionModel(user?.displayName ?: "", user?.uid ?: "", onboardingState)
+    }
+
+    override suspend fun signOutUser() {
+        userRepository.signOutUser()
+    }
+
 
     override fun saveOnboardingState(state: Boolean) {
         userRepository.saveOnboardingState(state)
@@ -169,6 +183,12 @@ class AppInteractor(
 
     override fun saveTheme(value: Boolean) {
         userRepository.saveTheme(value)
+    }
+
+    override fun getUID(): String = userRepository.getUID()
+
+    override fun saveUID(value: String) {
+        userRepository.saveUID(value)
     }
 
 }

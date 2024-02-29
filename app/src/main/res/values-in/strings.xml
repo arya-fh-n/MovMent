@@ -40,4 +40,10 @@
     <string name="menu_settings">Pengaturan</string>
     <string name="ev_wishlist_empty_desc">Anda tidak memiliki film yang difavoritkan. Mulai tambahkan!</string>
     <string name="ev_wishlist_empty_title">Wishlist Anda kosong</string>
+    <string name="ob_title_1">Film favorit Anda, dalam satu aplikasi.</string>
+    <string name="ob_title_2">Berbagai pilihan, dari semua genre</string>
+    <string name="ob_title_3">Ikuti MovMent kami!</string>
+    <string name="ad_msg">Apakah Anda yakin ingin keluar dari aplikasi?</string>
+    <string name="option_negative">Tidak</string>
+    <string name="option_positive">Ya</string>
 </resources>

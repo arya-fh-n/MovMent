@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.arfdevs.myproject.core.helper.Constants.LANGUAGE_KEY
 import com.arfdevs.myproject.core.helper.Constants.ONBOARDING_KEY
 import com.arfdevs.myproject.core.helper.Constants.THEME_KEY
+import com.arfdevs.myproject.core.helper.Constants.USER_ID
 
 interface SharedPreferencesHelper {
 
@@ -18,6 +19,10 @@ interface SharedPreferencesHelper {
     fun putLanguage(value: String)
 
     fun getLanguage(): String
+
+    fun putUID(value: String)
+
+    fun getUID(): String
 
     fun removeValue(key: String)
 
@@ -49,6 +54,14 @@ class SharedPreferencesHelperImpl(private val sharedPreferences: SharedPreferenc
 
     override fun getLanguage(): String {
         return sharedPreferences.getString(LANGUAGE_KEY, "").toString()
+    }
+
+    override fun putUID(value: String) {
+        sharedPreferences.edit().putString(USER_ID, value).apply()
+    }
+
+    override fun getUID(): String {
+        return sharedPreferences.getString(USER_ID, "").toString()
     }
 
     override fun removeValue(key: String) {

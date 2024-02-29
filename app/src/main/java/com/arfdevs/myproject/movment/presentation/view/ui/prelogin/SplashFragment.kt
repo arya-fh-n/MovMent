@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
+import com.arfdevs.myproject.core.helper.SplashState
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentSplashBinding
 import com.arfdevs.myproject.movment.presentation.viewmodel.HomeViewModel
@@ -18,29 +19,42 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
 
     private val viewModel: HomeViewModel by viewModel()
 
-    override fun initListener() {}
     override fun initView() {
         with(binding) {
             ivSplash.load(R.drawable.splash_icon)
             tvSplashTitle.text = getString(R.string.app_name)
             splashAnim()
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                viewModel.getCurrentUser()
-            }, 3000L)
+            viewModel.getOnboardingState()
         }
     }
 
-    override fun initObserver() {
-        val navController =
-            activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
-                ?.findNavController()
+    override fun initListener() {}
 
-        viewModel.currentUser.observe(viewLifecycleOwner) { user ->
-            if (user != null) {
-                navController?.navigate(R.id.action_splashFragment_to_dashboardFragment)
-            } else {
-                navController?.navigate(R.id.action_splashFragment_to_loginFragment)
+    override fun initObserver() {
+        with(viewModel) {
+            onboardingState.observe(viewLifecycleOwner) { state ->
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val navController =
+                        activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
+                            ?.findNavController()
+                    when (state) {
+                        is SplashState.Main -> {
+                            navController?.navigate(R.id.action_splashFragment_to_dashboardFragment)
+                        }
+
+                        is SplashState.Profile -> {
+                            navController?.navigate(R.id.action_splashFragment_to_profileFragment)
+                        }
+
+                        is SplashState.Onboarding -> {
+                            navController?.navigate(R.id.action_splashFragment_to_onboardingFragment)
+                        }
+
+                        else -> {
+                            navController?.navigate(R.id.action_splashFragment_to_loginFragment)
+                        }
+                    }
+                }, 3000L)
             }
         }
     }

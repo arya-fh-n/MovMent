@@ -1,6 +1,5 @@
 package com.arfdevs.myproject.movment.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,8 +35,6 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
 
     fun checkFavorite(movieId: Int) {
         viewModelScope.launch {
-            val fav = useCase.checkFavorite(movieId)
-            Log.d("ViewModel", "checkFavorite: for $movieId, isFavorite: $fav")
             _isFavorite.value = useCase.checkFavorite(movieId)
         }
     }
@@ -45,7 +42,6 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
     fun insertWishlistMovie() {
         viewModelScope.launch {
             wishlistModel?.let { wishlist ->
-                Log.d("ViewModel", "insertWishlist: for $wishlist")
                 useCase.insertWishlistMovie(wishlist)
             }
         }
@@ -71,5 +67,6 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
         this.wishlistModel = wishlistModel
     }
 
+    fun getUID(): String = useCase.getUID()
 
 }

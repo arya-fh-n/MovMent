@@ -60,4 +60,10 @@
     <string name="error_btn" translatable="false">Error Button</string>
     <string name="ev_wishlist_empty_desc">You don\'t have any favorited movies. Start adding!</string>
     <string name="ev_wishlist_empty_title">Wishlist is empty</string>
+    <string name="ob_title_1">Your favorite movies, in one app.</string>
+    <string name="ob_title_2">All great selections, from all genres</string>
+    <string name="ob_title_3">Join our MovMent!</string>
+    <string name="ad_msg">Are you sure you want to log out of the app?</string>
+    <string name="option_negative">No</string>
+    <string name="option_positive">Yes</string>
 </resources>

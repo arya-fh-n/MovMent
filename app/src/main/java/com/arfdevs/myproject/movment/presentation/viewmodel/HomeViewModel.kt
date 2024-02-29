@@ -1,18 +1,18 @@
 package com.arfdevs.myproject.movment.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
+import com.arfdevs.myproject.core.domain.model.SessionModel
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
-import com.arfdevs.myproject.movment.presentation.helper.Constants
+import com.arfdevs.myproject.core.helper.DataMapper.toSplashState
+import com.arfdevs.myproject.core.helper.SplashState
 import com.arfdevs.myproject.movment.presentation.helper.Constants.INDONESIAN
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val useCase: AppUseCase) : ViewModel() {
@@ -32,6 +32,10 @@ class HomeViewModel(private val useCase: AppUseCase) : ViewModel() {
     private val _theme: MutableLiveData<Boolean> = MutableLiveData()
     val theme: LiveData<Boolean> = _theme
 
+    private val _onboardingState =
+        MutableLiveData<SplashState<SessionModel>>()
+    val onboardingState: LiveData<SplashState<SessionModel>> = _onboardingState
+
     fun getPopularMovies(page: Int) {
         viewModelScope.launch {
             _responsePopular.value = useCase.getPopular(page)
@@ -48,6 +52,23 @@ class HomeViewModel(private val useCase: AppUseCase) : ViewModel() {
         viewModelScope.launch {
             _currentUser.value = useCase.getCurrentUser()
         }
+    }
+
+    fun saveOnboardingState(state: Boolean) {
+        useCase.saveOnboardingState(state)
+    }
+
+    fun getOnboardingState() {
+        viewModelScope.launch {
+            val splashState = useCase.sessionModel().toSplashState()
+            Log.d("ViewModel", "getSplashState: $splashState")
+            Log.d("ViewModel", "getSessionModel: ${useCase.sessionModel()}")
+            _onboardingState.value = useCase.sessionModel().toSplashState()
+        }
+    }
+
+    fun saveUID(uid: String) {
+        useCase.saveUID(uid)
     }
 
     fun saveLanguage(locale: String) {

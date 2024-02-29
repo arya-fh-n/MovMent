@@ -16,7 +16,9 @@ interface UserRepository {
 
     suspend fun updateUsername(username: String): Flow<SourceResult<Boolean>>
 
-    suspend fun fetchCurrentUser(): FirebaseUser
+    suspend fun fetchCurrentUser(): FirebaseUser?
+
+    suspend fun signOutUser()
 
     fun getOnboardingState(): Boolean
 
@@ -29,6 +31,10 @@ interface UserRepository {
     fun getTheme(): Boolean
 
     fun saveTheme(value: Boolean)
+
+    fun getUID(): String
+
+    fun saveUID(value: String)
 
 }
 
@@ -51,8 +57,12 @@ class UserRepositoryImpl(
             remote.updateUsername(username)
         }
 
-    override suspend fun fetchCurrentUser(): FirebaseUser = safeDataCall {
+    override suspend fun fetchCurrentUser(): FirebaseUser? = safeDataCall {
         remote.fetchCurrentUser()
+    }
+
+    override suspend fun signOutUser() {
+        remote.signOutUser()
     }
 
     override fun getOnboardingState(): Boolean = local.getOnboardingState()
@@ -75,6 +85,12 @@ class UserRepositoryImpl(
 
     override fun saveTheme(value: Boolean) {
         local.saveTheme(value)
+    }
+
+    override fun getUID(): String = local.getUID()
+
+    override fun saveUID(value: String) {
+        local.saveUID(value)
     }
 
 }
