@@ -35,8 +35,6 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
         tvMovieDetailTitle.text = getString(R.string.tv_movie_detail_title)
         tvMovieDetailGenres.text = getString(R.string.tv_movie_detail_genres)
 
-        fabFavorite.load(R.drawable.ic_favorite_outline)
-
         tvMovieDetailRatingsTitle.text = getString(R.string.tv_movie_detail_ratings_title)
         rbRating.rating = 0.0f
         tvMovieDetailPrice.text = getString(R.string.tv_movie_detail_price, 0)

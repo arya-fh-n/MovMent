@@ -2,9 +2,11 @@ package com.arfdevs.myproject.core.domain.usecase
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
+import androidx.paging.PagingData
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
+import com.arfdevs.myproject.core.domain.model.SearchModel
 import com.arfdevs.myproject.core.domain.model.SessionModel
 import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.core.domain.model.WishlistModel
@@ -37,6 +39,8 @@ interface AppUseCase {
     suspend fun checkFavorite(movieId: Int): Int
 
     suspend fun deleteWishlistMovie(wishlist: WishlistModel)
+
+    suspend fun fetchSearch(query: String): LiveData<PagingData<SearchModel>>
 
     suspend fun createUser(user: User): Flow<UiState<Boolean>>
 
@@ -97,6 +101,10 @@ class AppInteractor(
 
     override suspend fun deleteWishlistMovie(wishlist: WishlistModel) {
         movieRepository.deleteWishlistMovie(wishlist.toEntityData())
+    }
+
+    override suspend fun fetchSearch(query: String): LiveData<PagingData<SearchModel>> = safeDataCall {
+        movieRepository.fetchSearch(query)
     }
 
     override suspend fun createUser(user: User): Flow<UiState<Boolean>> = safeDataCall {

@@ -19,19 +19,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Profile Name" />
 
-<!--    <com.google.android.material.imageview.ShapeableImageView-->
-<!--        android:id="@+id/iv_profile"-->
-<!--        android:layout_width="128dp"-->
-<!--        android:layout_height="128dp"-->
-<!--        android:layout_marginTop="32dp"-->
-<!--        android:background="@color/purple"-->
-<!--        android:scaleType="centerCrop"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/tv_profile_title"-->
-<!--        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.CornerSize50"-->
-<!--        tools:src="@drawable/ic_person_outline" />-->
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/ti_username"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

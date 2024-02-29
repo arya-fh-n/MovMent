@@ -1,6 +1,7 @@
 package com.arfdevs.myproject.core.data.remote
 
 import com.arfdevs.myproject.core.data.remote.responses.MovieDetailsResponse
+import com.arfdevs.myproject.core.data.remote.responses.MovieSearchResponse
 import com.arfdevs.myproject.core.data.remote.responses.NowPlayingResponse
 import com.arfdevs.myproject.core.data.remote.responses.PopularResponse
 import retrofit2.http.GET
@@ -26,12 +27,12 @@ interface ApiEndpoint {
         @Path("movie_id") movieId: Int
     ): MovieDetailsResponse
 
-//    @GET("search/movie")
-//    suspend fun fetchSearch(
-//        @Query("query") query: String? = null,
-//        @Query("include_adult") includeAdult: Boolean? = true,
-//        @Query("page") page: Int? = null,
-//        @Query("region") region: String? = "ID"
-//    ): MovieSearchResponse
+    @GET("search/movie")
+    suspend fun fetchSearch(
+        @Query("query") query: String = "",
+        @Query("include_adult") includeAdult: Boolean? = true,
+        @Query("page") page: Int? = null,
+        @Query("region") region: String? = "ID"
+    ): MovieSearchResponse
 
 }

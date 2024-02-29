@@ -5,9 +5,11 @@ import com.arfdevs.myproject.core.data.remote.responses.GenresItem
 import com.arfdevs.myproject.core.data.remote.responses.MovieDetailsResponse
 import com.arfdevs.myproject.core.data.remote.responses.NowPlayingItem
 import com.arfdevs.myproject.core.data.remote.responses.PopularItem
+import com.arfdevs.myproject.core.data.remote.responses.SearchItem
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
+import com.arfdevs.myproject.core.domain.model.SearchModel
 import com.arfdevs.myproject.core.domain.model.SessionModel
 import com.arfdevs.myproject.core.domain.model.WishlistModel
 
@@ -51,6 +53,18 @@ object DataMapper {
     private fun List<GenresItem>.toGenreNameList() = map { genres ->
         genres.name
     }
+
+    fun SearchItem.toUIData() = SearchModel(
+        id = id,
+        originalTitle = originalTitle,
+        posterPath = posterPath,
+        voteAverage = (voteAverage / 10.0 * 5.0),
+        price = popularity.toInt()
+    )
+
+    fun List<SearchItem>.toSearchList() = map {
+        it.toUIData()
+    }.toList()
 
     fun WishlistEntity.toUIData() = WishlistModel(
         movieId = movieId,

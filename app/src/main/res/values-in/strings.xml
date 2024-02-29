@@ -49,4 +49,6 @@
     <string name="theme_light">Terang</string>
     <string name="theme_dark">Gelap</string>
     <string name="tv_settings_title">Pengaturan</string>
+    <string name="ti_search_ph">Cari film-mu…</string>
+    <string name="ti_search_hint">Cari</string>
 </resources>

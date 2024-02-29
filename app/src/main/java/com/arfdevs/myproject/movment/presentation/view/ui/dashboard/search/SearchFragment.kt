@@ -1,60 +1,70 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.dashboard.search
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.core.widget.doAfterTextChanged
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import com.arfdevs.myproject.core.base.BaseFragment
+import com.arfdevs.myproject.core.domain.model.SearchModel
 import com.arfdevs.myproject.movment.R
+import com.arfdevs.myproject.movment.databinding.FragmentSearchBinding
+import com.arfdevs.myproject.movment.presentation.view.adapter.SearchAdapter
+import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
+import com.arfdevs.myproject.movment.presentation.viewmodel.MovieViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding::inflate) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private val viewModel: MovieViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private val searchAdapter: SearchAdapter by lazy {
+        SearchAdapter(
+            onItemClickListener = { search ->
+                navigateToDetailFromSearch(search)
+            },
+            onAddToCartClickListener = {
+                context?.let {
+                    CustomSnackbar.show(
+                        it,
+                        binding.root,
+                        "Added to Cart",
+                        "Item successfully added to cart!"
+                    )
+                }
+            }
+        )
+    }
+
+    override fun initView() = with(binding) {
+        tiSearch.hint = getString(R.string.ti_search_hint)
+        tiSearch.placeholderText = getString(R.string.ti_search_ph)
+    }
+
+    override fun initListener() {
+        with(binding) {
+            rvSearch.run {
+                layoutManager = GridLayoutManager(context, 2)
+                adapter = searchAdapter
+            }
+
+            etSearch.doAfterTextChanged {
+                parentFragment?.viewLifecycleOwner?.let {
+                    viewModel.searchMovies(etSearch.text.toString())
+                        .observe(it) { pagingData ->
+                            searchAdapter.submitData(lifecycle, pagingData)
+                        }
+                }
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+    override fun initObserver() {}
+
+    private fun navigateToDetailFromSearch(search: SearchModel) {
+        val bundle = bundleOf("movieId" to search.id)
+        activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
+            ?.findNavController()
+            ?.navigate(R.id.action_dashboardFragment_to_detailFragment, bundle)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

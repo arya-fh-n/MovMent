@@ -1,9 +1,15 @@
 package com.arfdevs.myproject.core.data.remote.datasource
 
+import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.arfdevs.myproject.core.data.remote.ApiEndpoint
 import com.arfdevs.myproject.core.data.remote.responses.MovieDetailsResponse
 import com.arfdevs.myproject.core.data.remote.responses.NowPlayingResponse
 import com.arfdevs.myproject.core.data.remote.responses.PopularResponse
+import com.arfdevs.myproject.core.domain.model.SearchModel
 import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.core.helper.SourceResult
 import com.arfdevs.myproject.core.helper.safeApiCall
@@ -32,6 +38,20 @@ class RemoteDataSource(private val endpoint: ApiEndpoint, private val auth: Fire
         return safeApiCall {
             endpoint.fetchMovieDetails(movieId)
         }
+    }
+
+    suspend fun fetchSearch(query: String): LiveData<PagingData<SearchModel>> = safeApiCall {
+        Pager(
+            config = PagingConfig(
+                enablePlaceholders = true,
+                pageSize = 10,
+                initialLoadSize = 10,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = {
+                SearchPagingSource(apiEndpoint = endpoint, query = query)
+            }
+        ).liveData
     }
 
     suspend fun createUser(user: User): Flow<SourceResult<Boolean>> = callbackFlow {

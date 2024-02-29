@@ -45,7 +45,7 @@
     <string name="tv_movie_detail_overview" translatable="false">Movie Overview</string>
     <string name="tv_movie_detail_title_ph" translatable="false">The Lord of The Rings: The Fellowship of The Ring</string>
     <string name="tv_movie_detail_title" translatable="false">Movie Title</string>
-    <string name="tv_movie_detail_genres_ph" translatable="false">Adventure, Fantasy, Action</string>
+    <string name="tv_movie_detail_genres_ph" translatable="false">Adventure, Fantasy, Action, Family, Horror, Fiction, Elf, Hobbit</string>
     <string name="tv_movie_detail_genres" translatable="false">Genres</string>
     <string name="tv_movie_detail_ratings_title">"Ratings : "</string>
     <string name="tv_movie_detail_price_ph" translatable="false">Price : 140 Token</string>
@@ -71,4 +71,6 @@
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
     <string name="tv_settings_title">Settings</string>
+    <string name="ti_search_ph">Find your movies…</string>
+    <string name="ti_search_hint">Search</string>
 </resources>

@@ -15,4 +15,7 @@ object Constants {
     const val WISHLIST_TABLE = "wishlist"
 
     const val BACKDROP_PATH = "https://image.tmdb.org/t/p/w500"
+
+    const val INITIAL_PAGE_INDEX = 1
+
 }
