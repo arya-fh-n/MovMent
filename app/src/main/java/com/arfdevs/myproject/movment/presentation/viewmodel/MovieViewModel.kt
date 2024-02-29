@@ -9,6 +9,7 @@ import com.arfdevs.myproject.core.domain.model.WishlistModel
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
 import com.arfdevs.myproject.core.helper.UiState
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
 
@@ -68,5 +69,9 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
     }
 
     fun getUID(): String = useCase.getUID()
+
+    fun searchMovies(query: String) = runBlocking {
+        useCase.fetchSearch(query)
+    }
 
 }

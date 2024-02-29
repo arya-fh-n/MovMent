@@ -66,11 +66,12 @@
                 style="@style/TextAppearance.Material3.TitleSmall"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginBottom="4dp"
                 android:textColor="@color/white"
+                android:maxLines="2"
                 app:layout_constraintBottom_toBottomOf="@id/iv_movie_backdrop"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/fab_favorite"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="@string/tv_movie_detail_genres_ph" />
 
