@@ -1,6 +1,5 @@
 package com.arfdevs.myproject.movment.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -60,9 +59,6 @@ class HomeViewModel(private val useCase: AppUseCase) : ViewModel() {
 
     fun getOnboardingState() {
         viewModelScope.launch {
-            val splashState = useCase.sessionModel().toSplashState()
-            Log.d("ViewModel", "getSplashState: $splashState")
-            Log.d("ViewModel", "getSessionModel: ${useCase.sessionModel()}")
             _onboardingState.value = useCase.sessionModel().toSplashState()
         }
     }
