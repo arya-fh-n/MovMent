@@ -68,11 +68,9 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
     override fun initObserver() {
         with(viewModel) {
             theme.observe(viewLifecycleOwner) {
-                Log.d("Settings", "initObserver:pref theme is dark? : $it")
                 binding.switchTheme.isChecked = it
             }
             language.observe(viewLifecycleOwner) {
-                Log.d("Settings", "initObserver:pref language is indonesian? : $it")
                 binding.switchLanguage.isChecked = it
             }
         }
