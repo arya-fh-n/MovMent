@@ -46,4 +46,7 @@
     <string name="ad_msg">Apakah Anda yakin ingin keluar dari aplikasi?</string>
     <string name="option_negative">Tidak</string>
     <string name="option_positive">Ya</string>
+    <string name="theme_light">Terang</string>
+    <string name="theme_dark">Gelap</string>
+    <string name="tv_settings_title">Pengaturan</string>
 </resources>

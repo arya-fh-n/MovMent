@@ -66,4 +66,9 @@
     <string name="ad_msg">Are you sure you want to log out of the app?</string>
     <string name="option_negative">No</string>
     <string name="option_positive">Yes</string>
+    <string name="loc_english" translatable="false">EN</string>
+    <string name="loc_indonesian" translatable="false">ID</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="tv_settings_title">Settings</string>
 </resources>

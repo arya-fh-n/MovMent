@@ -75,9 +75,7 @@ class HomeViewModel(private val useCase: AppUseCase) : ViewModel() {
 
     fun getLanguage() {
         viewModelScope.launch {
-            _language.value.run {
-                useCase.getLanguage().equals(INDONESIAN, true)
-            }
+            _language.value = useCase.getLanguage().equals(INDONESIAN, true)
         }
     }
 
@@ -89,9 +87,7 @@ class HomeViewModel(private val useCase: AppUseCase) : ViewModel() {
 
     fun getTheme() {
         viewModelScope.launch {
-            _theme.value.run {
-                useCase.getTheme()
-            }
+            _theme.value = useCase.getTheme()
         }
     }
 
