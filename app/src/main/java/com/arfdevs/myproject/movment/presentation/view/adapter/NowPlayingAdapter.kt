@@ -9,6 +9,7 @@ import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.ItemNowPlayingBinding
 
 class NowPlayingAdapter(
+    private val onItemClickListener: (NowPlayingModel) -> Unit,
     private val onAddToCartClickListener: (NowPlayingModel) -> Unit = {}
 ) : BaseListAdapter<NowPlayingModel, ItemNowPlayingBinding>(ItemNowPlayingBinding::inflate) {
 
@@ -26,6 +27,10 @@ class NowPlayingAdapter(
 
                 btnAddToCart.setOnClickListener {
                     onAddToCartClickListener.invoke(item)
+                }
+
+                root.setOnClickListener {
+                    onItemClickListener(item)
                 }
             }
         }
