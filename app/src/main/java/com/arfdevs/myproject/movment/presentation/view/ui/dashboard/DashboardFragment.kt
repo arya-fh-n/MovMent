@@ -34,6 +34,9 @@ class DashboardFragment :
                 }
 
                 R.id.menu_settings -> {
+                    activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
+                        ?.findNavController()
+                        ?.navigate(R.id.action_dashboardFragment_to_settingsFragment)
                     true
                 }
 
