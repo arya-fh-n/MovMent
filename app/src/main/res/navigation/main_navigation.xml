@@ -96,6 +96,9 @@
             android:id="@+id/action_dashboardFragment_to_settingsFragment"
             app:destination="@id/settingsFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_tokenFragment"
+            app:destination="@id/tokenFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -122,4 +125,9 @@
         android:name="com.arfdevs.myproject.movment.presentation.view.ui.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/tokenFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.dashboard.token.TokenFragment"
+        android:label="fragment_token"
+        tools:layout="@layout/fragment_token" />
 </navigation>

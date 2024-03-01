@@ -44,7 +44,7 @@ class RemoteDataSource(private val endpoint: ApiEndpoint, private val auth: Fire
         Pager(
             config = PagingConfig(
                 enablePlaceholders = true,
-                pageSize = 10,
+                pageSize = 20,
                 initialLoadSize = 10,
                 prefetchDistance = 1
             ),

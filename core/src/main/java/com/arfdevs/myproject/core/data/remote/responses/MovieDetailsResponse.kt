@@ -1,9 +1,11 @@
 package com.arfdevs.myproject.core.data.remote.responses
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
+@Keep
 @Parcelize
 data class MovieDetailsResponse(
 
@@ -83,6 +85,7 @@ data class MovieDetailsResponse(
     val status: String = ""
 ) : Parcelable
 
+@Keep
 @Parcelize
 data class ProductionCountriesItem(
 
@@ -93,6 +96,7 @@ data class ProductionCountriesItem(
     val name: String = ""
 ) : Parcelable
 
+@Keep
 @Parcelize
 data class SpokenLanguagesItem(
 
@@ -106,6 +110,7 @@ data class SpokenLanguagesItem(
     val englishName: String = ""
 ) : Parcelable
 
+@Keep
 @Parcelize
 data class GenresItem(
 
@@ -116,6 +121,7 @@ data class GenresItem(
     val id: Int = 0
 ) : Parcelable
 
+@Keep
 @Parcelize
 data class BelongsToCollection(
 
@@ -132,6 +138,7 @@ data class BelongsToCollection(
     val posterPath: String = ""
 ) : Parcelable
 
+@Keep
 @Parcelize
 data class ProductionCompaniesItem(
 

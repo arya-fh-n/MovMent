@@ -73,4 +73,8 @@
     <string name="tv_settings_title">Settings</string>
     <string name="ti_search_ph">Find your movies…</string>
     <string name="ti_search_hint">Search</string>
+    <string name="tv_token_balance_is">Balance</string>
+    <string name="tv_token_balance" translatable="false">%1$d Token</string>
+    <string name="tv_token_manual_amt" translatable="false">Token</string>
+    <string name="btn_token_continue">Continue</string>
 </resources>

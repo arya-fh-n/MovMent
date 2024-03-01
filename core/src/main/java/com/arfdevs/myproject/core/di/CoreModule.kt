@@ -10,6 +10,8 @@ import com.arfdevs.myproject.core.data.local.sharedpref.SharedPreferencesHelperI
 import com.arfdevs.myproject.core.data.remote.ApiClient
 import com.arfdevs.myproject.core.data.remote.ApiEndpoint
 import com.arfdevs.myproject.core.data.remote.datasource.RemoteDataSource
+import com.arfdevs.myproject.core.domain.repository.FirebaseRepository
+import com.arfdevs.myproject.core.domain.repository.FirebaseRepositoryImpl
 import com.arfdevs.myproject.core.domain.repository.MovieRepository
 import com.arfdevs.myproject.core.domain.repository.MovieRepositoryImpl
 import com.arfdevs.myproject.core.domain.repository.UserRepository
@@ -18,9 +20,11 @@ import com.arfdevs.myproject.core.domain.usecase.AppInteractor
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
 import com.arfdevs.myproject.core.helper.Constants.SHARED_PREF_FILE
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -34,6 +38,14 @@ object CoreModule : BaseModule {
 
         single {
             Firebase.crashlytics
+        }
+
+        single {
+            Firebase.remoteConfig
+        }
+
+        single {
+            Firebase.analytics
         }
     }
 
@@ -77,11 +89,15 @@ object CoreModule : BaseModule {
         single<UserRepository> {
             UserRepositoryImpl(get(), get())
         }
+
+        single<FirebaseRepository> {
+            FirebaseRepositoryImpl(get(), get())
+        }
     }
 
     private val useCaseModule = module {
         single<AppUseCase> {
-            AppInteractor(get(), get())
+            AppInteractor(get(), get(), get())
         }
     }
 

@@ -3,13 +3,18 @@ package com.arfdevs.myproject.core.domain.usecase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.paging.PagingData
+import com.arfdevs.myproject.core.data.remote.responses.PaymentType
+import com.arfdevs.myproject.core.data.remote.responses.TokenTopupResponse
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
+import com.arfdevs.myproject.core.domain.model.PaymentMethodModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
 import com.arfdevs.myproject.core.domain.model.SearchModel
 import com.arfdevs.myproject.core.domain.model.SessionModel
+import com.arfdevs.myproject.core.domain.model.TokenTopupModel
 import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.core.domain.model.WishlistModel
+import com.arfdevs.myproject.core.domain.repository.FirebaseRepository
 import com.arfdevs.myproject.core.domain.repository.MovieRepository
 import com.arfdevs.myproject.core.domain.repository.UserRepository
 import com.arfdevs.myproject.core.helper.DataMapper.toEntityData
@@ -21,6 +26,7 @@ import com.arfdevs.myproject.core.helper.SourceResult
 import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.core.helper.safeDataCall
 import com.google.firebase.auth.FirebaseUser
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -41,6 +47,14 @@ interface AppUseCase {
     suspend fun deleteWishlistMovie(wishlist: WishlistModel)
 
     suspend fun fetchSearch(query: String): LiveData<PagingData<SearchModel>>
+
+    suspend fun getConfigTokenTopupList(): Flow<List<TokenTopupModel>>
+
+    suspend fun updateConfigTokenTopupList(): Flow<Boolean>
+
+    suspend fun getConfigPaymentMethodsList(): Flow<List<PaymentMethodModel>>
+
+    suspend fun updateConfigPaymentMethodsList(): Flow<Boolean>
 
     suspend fun createUser(user: User): Flow<UiState<Boolean>>
 
@@ -71,7 +85,9 @@ interface AppUseCase {
 }
 
 class AppInteractor(
-    private val movieRepository: MovieRepository, private val userRepository: UserRepository
+    private val movieRepository: MovieRepository,
+    private val userRepository: UserRepository,
+    private val firebaseRepository: FirebaseRepository
 ) : AppUseCase {
 
     override suspend fun getPopular(page: Int): List<PopularModel> = safeDataCall {
@@ -103,8 +119,39 @@ class AppInteractor(
         movieRepository.deleteWishlistMovie(wishlist.toEntityData())
     }
 
-    override suspend fun fetchSearch(query: String): LiveData<PagingData<SearchModel>> = safeDataCall {
-        movieRepository.fetchSearch(query)
+    override suspend fun fetchSearch(query: String): LiveData<PagingData<SearchModel>> =
+        safeDataCall {
+            movieRepository.fetchSearch(query)
+        }
+
+    override suspend fun getConfigTokenTopupList(): Flow<List<TokenTopupModel>> =
+        safeDataCall {
+            firebaseRepository.getConfigTokenTopupList().map { data ->
+                val response = Gson().fromJson(data, TokenTopupResponse::class.java)
+                response.map {
+                    it.toUIData()
+                }
+            }
+        }
+
+
+    override suspend fun updateConfigTokenTopupList(): Flow<Boolean> = safeDataCall {
+        firebaseRepository.updateConfigTokenTopupList()
+    }
+
+    override suspend fun getConfigPaymentMethodsList(): Flow<List<PaymentMethodModel>> =
+        safeDataCall {
+            firebaseRepository.getConfigPaymentMethodsList().map { data ->
+                val response = Gson().fromJson(data, PaymentType::class.java)
+                response.item.map {
+                    it.toUIData()
+                }.toList()
+            }
+        }
+
+
+    override suspend fun updateConfigPaymentMethodsList(): Flow<Boolean> = safeDataCall {
+        firebaseRepository.updateConfigPaymentMethodsList()
     }
 
     override suspend fun createUser(user: User): Flow<UiState<Boolean>> = safeDataCall {

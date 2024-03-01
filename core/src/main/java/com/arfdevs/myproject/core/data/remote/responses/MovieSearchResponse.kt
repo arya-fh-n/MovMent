@@ -2,8 +2,11 @@ package com.arfdevs.myproject.core.data.remote.responses
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+
+@Keep
 @Parcelize
 data class MovieSearchResponse(
 
@@ -20,6 +23,7 @@ data class MovieSearchResponse(
 	val totalResults: Int
 ) : Parcelable
 
+@Keep
 @Parcelize
 data class SearchItem(
 
