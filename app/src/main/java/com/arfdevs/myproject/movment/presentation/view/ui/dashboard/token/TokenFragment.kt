@@ -12,7 +12,6 @@ import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentTokenBinding
 import com.arfdevs.myproject.movment.presentation.view.adapter.TokenItemAdapter
-import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.FirebaseViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

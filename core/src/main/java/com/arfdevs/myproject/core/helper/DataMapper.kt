@@ -18,7 +18,6 @@ import com.arfdevs.myproject.core.domain.model.SearchModel
 import com.arfdevs.myproject.core.domain.model.SessionModel
 import com.arfdevs.myproject.core.domain.model.TokenTopupModel
 import com.arfdevs.myproject.core.domain.model.WishlistModel
-import com.arfdevs.myproject.core.helper.DataMapper.toUIData
 
 object DataMapper {
 

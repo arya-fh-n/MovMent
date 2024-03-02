@@ -6,10 +6,9 @@ import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentTopupBinding
-import com.arfdevs.myproject.movment.presentation.viewmodel.FirebaseViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TopupFragment : BaseFragment<FragmentTopupBinding>(FragmentTopupBinding::inflate), PaymentMethodFragment.OnPaymentMethodListener {
+class TopupFragment : BaseFragment<FragmentTopupBinding>(FragmentTopupBinding::inflate),
+    PaymentMethodFragment.OnPaymentMethodListener {
 
     private val safeArgs: TopupFragmentArgs by navArgs()
 
@@ -38,7 +37,10 @@ class TopupFragment : BaseFragment<FragmentTopupBinding>(FragmentTopupBinding::i
     override fun initListener() = with(binding) {
         cardviewTopupPaymentMethod.setOnClickListener {
             paymentMethodFragment.setPaymentMethodListener(this@TopupFragment)
-            paymentMethodFragment.show(childFragmentManager, getString(R.string.tv_payment_method_title))
+            paymentMethodFragment.show(
+                childFragmentManager,
+                getString(R.string.tv_payment_method_title)
+            )
         }
 
         toolbarTopup.setNavigationOnClickListener {
