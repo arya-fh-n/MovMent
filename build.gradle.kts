@@ -7,4 +7,6 @@ plugins {
     id("com.google.firebase.crashlytics") version "2.9.9" apply false
     id("com.google.devtools.ksp") version "1.9.22-1.0.17" apply false
     id("androidx.navigation.safeargs.kotlin") version "2.7.7" apply false
+    id("io.gitlab.arturbosch.detekt") version "1.23.3" apply false
+    jacoco
 }
