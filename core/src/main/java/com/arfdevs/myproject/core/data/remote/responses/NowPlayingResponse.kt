@@ -2,8 +2,10 @@ package com.arfdevs.myproject.core.data.remote.responses
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 @Parcelize
 data class NowPlayingResponse(
 
@@ -23,6 +25,7 @@ data class NowPlayingResponse(
 	val totalResults: Int
 ) : Parcelable
 
+@Keep
 @Parcelize
 data class Dates(
 
@@ -33,6 +36,7 @@ data class Dates(
 	val minimum: String
 ) : Parcelable
 
+@Keep
 @Parcelize
 data class NowPlayingItem(
 

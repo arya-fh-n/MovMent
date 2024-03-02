@@ -122,6 +122,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+                    <TextView
+                        android:id="@+id/tv_token_topup_title"
+                        style="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Top up Token" />
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ti_topup_amount"
                         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
@@ -132,14 +145,14 @@
                         app:errorTextColor="@color/red_error"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_token_topup_title"
                         tools:hint="Token">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_topup_amount"
                             android:layout_width="match_parent"
                             android:layout_height="70dp"
-                            android:inputType="textEmailAddress" />
+                            android:inputType="number" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -154,8 +167,18 @@
                         app:layout_constraintTop_toBottomOf="@id/ti_topup_amount"
                         tools:itemCount="6"
                         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        tools:listitem="@layout/item_topup_amount"
+                        tools:listitem="@layout/item_token_topup"
                         tools:spanCount="2" />
+
+                    <com.arfdevs.myproject.movment.presentation.view.component.ErrorView
+                        android:id="@+id/error_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

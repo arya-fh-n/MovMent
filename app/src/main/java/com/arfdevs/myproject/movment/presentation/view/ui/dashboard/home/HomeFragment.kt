@@ -76,8 +76,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         viewModel.getCurrentUser()
     }
 
-    override fun initListener() {
-
+    override fun initListener() = with(binding) {
+        btnToTokenBalance.setOnClickListener {
+            activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
+                ?.findNavController()
+                ?.navigate(R.id.action_dashboardFragment_to_tokenFragment)
+        }
     }
 
     override fun initObserver() {

@@ -6,15 +6,10 @@ import kotlinx.parcelize.Parcelize
 
 @Keep
 @Parcelize
-data class SearchModel(
-    var id: Int? = 0,
+data class PaymentTypeModel(
 
-    var originalTitle: String? = "",
+    var item: List<PaymentMethodModel> = listOf(),
 
-    var posterPath: String? = "",
-
-    var voteAverage: Double? = 0.0,
-
-    var price: Int? = 0
+    val title: String = ""
 
 ): Parcelable

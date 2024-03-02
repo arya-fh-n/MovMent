@@ -82,6 +82,7 @@ dependencies {
     api("com.google.firebase:firebase-analytics-ktx")
     api("com.google.firebase:firebase-auth-ktx")
     api("com.google.firebase:firebase-database-ktx")
+    api("com.google.firebase:firebase-config-ktx")
 
 
     //koin di

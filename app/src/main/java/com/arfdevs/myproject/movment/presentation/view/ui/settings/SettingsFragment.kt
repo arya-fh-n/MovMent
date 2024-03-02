@@ -1,6 +1,5 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.settings
 
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.navigation.fragment.findNavController

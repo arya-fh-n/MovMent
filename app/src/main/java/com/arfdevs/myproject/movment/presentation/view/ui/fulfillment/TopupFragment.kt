@@ -1,60 +1,67 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.fulfillment
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import coil.load
+import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.movment.R
+import com.arfdevs.myproject.movment.databinding.FragmentTopupBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class TopupFragment : BaseFragment<FragmentTopupBinding>(FragmentTopupBinding::inflate),
+    PaymentMethodFragment.OnPaymentMethodListener {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [TopupFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class TopupFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private val safeArgs: TopupFragmentArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private val paymentMethodFragment: PaymentMethodFragment by lazy {
+        PaymentMethodFragment()
+    }
+
+    override fun initView() = with(binding) {
+        safeArgs.tokenModel.let { tokenTopup ->
+            tvAmount.text = getString(R.string.tv_amount, tokenTopup.token)
+            tvPrice.text = getString(R.string.tv_price, tokenTopup.price)
+        }
+
+        toolbarTopup.title = getString(R.string.app_name_movment)
+
+        tvTopupPaymentTitle.text = getString(R.string.tv_topup_payment_title)
+        tvAmountTitle.text = getString(R.string.tv_amount_title)
+        tvPriceTitle.text = getString(R.string.tv_price_title)
+
+        ivPaymentLogo.load(R.drawable.ic_payment_method)
+        tvPaymentMethodTitle.text = getString(R.string.tv_payment_method_title)
+
+        btnPay.text = getString(R.string.btn_pay)
+    }
+
+    override fun initListener() = with(binding) {
+        cardviewTopupPaymentMethod.setOnClickListener {
+            paymentMethodFragment.setPaymentMethodListener(this@TopupFragment)
+            paymentMethodFragment.show(
+                childFragmentManager,
+                getString(R.string.tv_payment_method_title)
+            )
+        }
+
+        toolbarTopup.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        btnPay.setOnClickListener {
+
+        }
+
+    }
+
+    override fun initObserver() {
+
+    }
+
+    override fun onPaymentMethodClick(icon: String?, method: String?) {
+        with(binding) {
+            ivPaymentLogo.load(icon)
+            tvPaymentMethodTitle.text = method
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_topup, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TopupFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TopupFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }
