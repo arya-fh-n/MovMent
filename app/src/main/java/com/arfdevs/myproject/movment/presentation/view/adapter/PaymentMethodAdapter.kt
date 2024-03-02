@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.arfdevs.myproject.core.domain.model.PaymentMethodModel
 import com.arfdevs.myproject.core.helper.visible
-import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.ItemPaymentMethodBinding
 import com.arfdevs.myproject.movment.presentation.helper.Constants.VIEW_ALPHA
 

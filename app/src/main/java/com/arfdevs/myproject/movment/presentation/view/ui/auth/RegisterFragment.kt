@@ -10,7 +10,6 @@ import android.text.Spanned
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import androidx.core.os.bundleOf

@@ -11,7 +11,6 @@ import com.arfdevs.myproject.movment.databinding.FragmentSearchBinding
 import com.arfdevs.myproject.movment.presentation.view.adapter.SearchAdapter
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.MovieViewModel
-import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding::inflate) {

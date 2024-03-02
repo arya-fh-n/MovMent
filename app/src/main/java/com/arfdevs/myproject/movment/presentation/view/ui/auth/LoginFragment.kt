@@ -2,7 +2,6 @@ package com.arfdevs.myproject.movment.presentation.view.ui.auth
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.util.Patterns
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
@@ -19,7 +18,6 @@ import com.arfdevs.myproject.movment.databinding.FragmentLoginBinding
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.AuthViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {

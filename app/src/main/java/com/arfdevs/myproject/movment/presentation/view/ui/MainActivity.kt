@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.core.os.bundleOf
-import com.arfdevs.myproject.core.helper.launchAndCollectIn
-import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.ActivityMainBinding
 import com.arfdevs.myproject.movment.presentation.helper.Constants.ENGLISH
 import com.arfdevs.myproject.movment.presentation.helper.Constants.INDONESIAN
@@ -42,7 +40,11 @@ class MainActivity : AppCompatActivity() {
 
             language.observe(this@MainActivity) { isIndonesian ->
                 if (isIndonesian) {
-                    AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(INDONESIAN))
+                    AppCompatDelegate.setApplicationLocales(
+                        LocaleListCompat.forLanguageTags(
+                            INDONESIAN
+                        )
+                    )
                 } else {
                     AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(ENGLISH))
                 }

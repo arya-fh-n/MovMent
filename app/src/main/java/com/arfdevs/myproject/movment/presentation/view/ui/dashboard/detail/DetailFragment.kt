@@ -1,6 +1,5 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.dashboard.detail
 
-import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
@@ -16,7 +15,6 @@ import com.arfdevs.myproject.movment.databinding.FragmentDetailBinding
 import com.arfdevs.myproject.movment.presentation.helper.Constants.ERROR
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.MovieViewModel
-import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding::inflate) {

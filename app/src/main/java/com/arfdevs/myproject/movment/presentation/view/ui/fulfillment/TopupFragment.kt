@@ -1,7 +1,6 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.fulfillment
 
 import android.icu.text.SimpleDateFormat
-import android.util.Log
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
