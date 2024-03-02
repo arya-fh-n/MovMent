@@ -1,7 +1,12 @@
 package com.arfdevs.myproject.core.domain.repository
 
 import android.os.Bundle
+import com.arfdevs.myproject.core.domain.model.TokenTransactionModel
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -22,11 +27,19 @@ interface FirebaseRepository {
 
     fun logEvent(eventName: String, bundle: Bundle)
 
+    fun insertTokenTransaction(
+        transaction: TokenTransactionModel,
+        userId: String
+    ): Flow<Boolean>
+
+    fun getTokenBalance(userId: String): Flow<Int>
+
 }
 
 class FirebaseRepositoryImpl(
     private val config: FirebaseRemoteConfig,
-    private val analytics: FirebaseAnalytics
+    private val analytics: FirebaseAnalytics,
+    private val realtime: DatabaseReference
 ) : FirebaseRepository {
 
     override fun getConfigTokenTopupList(): Flow<String> = callbackFlow {
@@ -89,6 +102,50 @@ class FirebaseRepositoryImpl(
 
     override fun logEvent(eventName: String, bundle: Bundle) {
         analytics.logEvent(eventName, bundle)
+    }
+
+    override fun insertTokenTransaction(
+        transaction: TokenTransactionModel,
+        userId: String
+    ): Flow<Boolean> =
+        callbackFlow {
+            trySend(false)
+
+            realtime.database.reference.child("token_transaction").child(userId).push()
+                .setValue(transaction)
+                .addOnCompleteListener { task ->
+                    trySend(task.isSuccessful)
+                }.addOnFailureListener { e ->
+                    trySend(e.message!!.isNotEmpty())
+                }
+
+            awaitClose()
+        }
+
+    override fun getTokenBalance(userId: String): Flow<Int> = callbackFlow {
+        trySend(0)
+
+        realtime.database.reference.child("token_transaction").child(userId)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var currentBalance = 0
+
+                    for (transactions in snapshot.children) {
+                        val token = transactions.child("token").getValue(Int::class.java)
+                        if (token != null) {
+                            currentBalance += token
+                        }
+                    }
+                    trySend(currentBalance)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    trySend(0)
+                }
+
+            })
+
+        awaitClose()
     }
 
 }

@@ -78,11 +78,11 @@ dependencies {
 
     //firebase
     api(platform("com.google.firebase:firebase-bom:32.7.2"))
-    api("com.google.firebase:firebase-crashlytics-ktx")
-    api("com.google.firebase:firebase-analytics-ktx")
-    api("com.google.firebase:firebase-auth-ktx")
-    api("com.google.firebase:firebase-database-ktx")
-    api("com.google.firebase:firebase-config-ktx")
+    api("com.google.firebase:firebase-crashlytics")
+    api("com.google.firebase:firebase-analytics")
+    api("com.google.firebase:firebase-auth")
+    api("com.google.firebase:firebase-database")
+    api("com.google.firebase:firebase-config")
 
 
     //koin di

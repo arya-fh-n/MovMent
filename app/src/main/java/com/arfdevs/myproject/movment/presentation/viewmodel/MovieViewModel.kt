@@ -1,5 +1,7 @@
 package com.arfdevs.myproject.movment.presentation.viewmodel
 
+import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +10,7 @@ import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
 import com.arfdevs.myproject.core.domain.model.WishlistModel
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
 import com.arfdevs.myproject.core.helper.UiState
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -27,6 +30,7 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
         viewModelScope.launch {
             try {
                 val details = useCase.getMovieDetails(movieId)
+                useCase.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundleOf("Movie Details" to details))
                 _responseDetails.value = UiState.Success(details)
             } catch (e: Throwable) {
                 _responseDetails.value = UiState.Error(e)
@@ -44,6 +48,7 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
         viewModelScope.launch {
             wishlistModel?.let { wishlist ->
                 useCase.insertWishlistMovie(wishlist)
+                useCase.logEvent(FirebaseAnalytics.Event.ADD_TO_WISHLIST, bundleOf("Movie Wishlisted" to wishlist))
             }
         }
     }
@@ -71,7 +76,12 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
     fun getUID(): String = useCase.getUID()
 
     fun searchMovies(query: String) = runBlocking {
+        useCase.logEvent(FirebaseAnalytics.Event.SEARCH, bundleOf("Movie Searched" to query))
         useCase.fetchSearch(query)
+    }
+
+    fun logEvent(eventName: String, bundle: Bundle) {
+        useCase.logEvent(eventName, bundle)
     }
 
 }

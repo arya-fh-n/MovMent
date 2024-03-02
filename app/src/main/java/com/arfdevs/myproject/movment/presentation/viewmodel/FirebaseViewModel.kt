@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.arfdevs.myproject.core.domain.model.TokenTopupModel
+import com.arfdevs.myproject.core.domain.model.TokenTransactionModel
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
 import kotlinx.coroutines.runBlocking
 
@@ -44,6 +45,16 @@ class FirebaseViewModel(private val useCase: AppUseCase): ViewModel() {
 
     fun updateConfigPaymentMethodsList() = runBlocking {
         useCase.updateConfigPaymentMethodsList()
+    }
+
+    fun getUID(): String = useCase.getUID()
+
+    fun insertTokenTransaction(transaction: TokenTransactionModel, userId: String) = runBlocking {
+        useCase.insertTokenTransaction(transaction, userId)
+    }
+
+    fun getTokenBalance(userId: String) = runBlocking {
+        useCase.getTokenBalance(userId)
     }
 
 }

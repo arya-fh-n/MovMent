@@ -72,7 +72,6 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                 } else {
                     viewModel.insertWishlistMovie()
                     fabFavorite.setImageResource(R.drawable.ic_favorite)
-
                     context?.let {
                         CustomSnackbar.show(
                             it,

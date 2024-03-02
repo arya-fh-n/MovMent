@@ -1,5 +1,6 @@
 package com.arfdevs.myproject.movment.presentation.viewmodel
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
@@ -22,5 +23,10 @@ class AuthViewModel(private val useCase: AppUseCase) : ViewModel() {
     fun logoutUser() = runBlocking {
         useCase.signOutUser()
     }
+
+    fun logEvent(eventName: String, bundle: Bundle) {
+        useCase.logEvent(eventName, bundle)
+    }
+
 
 }

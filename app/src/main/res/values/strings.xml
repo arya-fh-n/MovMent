@@ -21,7 +21,7 @@
     <string name="btn_skip">Skip</string>
     <string name="tv_username_ph">Hello, %1$s!</string>
     <string name="tv_balance_is">Your account\'s balance is:</string>
-    <string name="tv_balance" translatable="false">10 Token</string>
+    <string name="tv_balance" translatable="false">%1$d Token</string>
     <string name="tv_section_popular">Popular</string>
     <string name="tv_section_now_playing">Now Playing</string>
     <string name="err_email_empty">Email cannot be empty</string>
@@ -77,15 +77,25 @@
     <string name="tv_token_balance" translatable="false">%1$d Token</string>
     <string name="tv_token_manual_amt" translatable="false">Token</string>
     <string name="btn_token_continue">Continue</string>
-    <string name="tv_amount_title">Amount :</string>
+    <string name="tv_amount_title">Amount</string>
     <string name="tv_topup_payment_title">Payment</string>
     <string name="tv_amount" translatable="false">%1$d Token</string>
     <string name="tv_amount_ph" translatable="false">200 Token</string>
-    <string name="tv_price_title">Price :</string>
+    <string name="tv_price_title">Price</string>
     <string name="tv_price_ph" translatable="false">Rp30.000</string>
     <string name="tv_price" translatable="false">Rp%1$d</string>
     <string name="tv_payment_method_title">Choose Payment Method</string>
     <string name="btn_pay">Pay</string>
     <string name="tv_payment_method_name">BCA Virtual Account</string>
     <string name="tv_payment_type_title" translatable="false">Transfer Virtual Account</string>
+    <string name="err_msg_login_failed_unsuccessful">Make sure your email and password are correct!</string>
+    <string name="err_title_register_failed">Register Failed</string>
+    <string name="tv_token_ph_2">Purchased 200 Token</string>
+    <string name="tv_token_status">Purchased %1$d Token</string>
+    <string name="tv_price_status_title">Total Paid</string>
+    <string name="tv_payment_method_status_title">Payment Method</string>
+    <string name="tv_payment_date_title">Time</string>
+    <string name="btn_go_back_to_home">Go back to Home</string>
+    <string name="tv_topup_status_title">Payment Successful!</string>
+    <string name="tv_payment_date_ph" translatable="false">01-01-2024 12:00:00</string>
 </resources>

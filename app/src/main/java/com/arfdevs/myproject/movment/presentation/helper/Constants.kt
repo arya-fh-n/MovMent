@@ -8,4 +8,5 @@ object Constants {
     const val INDONESIAN = "in"
     const val ENGLISH = "en"
 
+    const val VIEW_ALPHA = 0.4f
 }
