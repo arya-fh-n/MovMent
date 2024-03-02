@@ -21,7 +21,7 @@
     <string name="btn_skip">Skip</string>
     <string name="tv_username_ph">Hello, %1$s!</string>
     <string name="tv_balance_is">Your account\'s balance is:</string>
-    <string name="tv_balance" translatable="false">10 Token</string>
+    <string name="tv_balance" translatable="false">%1$d Token</string>
     <string name="tv_section_popular">Popular</string>
     <string name="tv_section_now_playing">Now Playing</string>
     <string name="err_email_empty">Email cannot be empty</string>
@@ -88,4 +88,6 @@
     <string name="btn_pay">Pay</string>
     <string name="tv_payment_method_name">BCA Virtual Account</string>
     <string name="tv_payment_type_title" translatable="false">Transfer Virtual Account</string>
+    <string name="err_msg_login_failed_unsuccessful">Make sure your email and password are correct!</string>
+    <string name="err_title_register_failed">Register Failed</string>
 </resources>

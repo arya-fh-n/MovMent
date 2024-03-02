@@ -2,7 +2,9 @@ package com.arfdevs.myproject.movment.presentation.view.ui.auth
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.util.Patterns
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
@@ -16,6 +18,8 @@ import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentLoginBinding
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.AuthViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
@@ -56,10 +60,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     private fun collectLogin(user: User) = with(binding) {
         viewModel.loginUser(user).launchAndCollectIn(viewLifecycleOwner) { state ->
-            state.onSuccess {
+            state.onSuccess { success ->
+                viewModel.logEvent(FirebaseAnalytics.Event.LOGIN, bundleOf("Credentials" to user))
                 loadingOverlay.visible(false)
                 loadingAnim.visible(false)
-                findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+                if (success) {
+                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+                }
             }.onError { e ->
                 loadingOverlay.visible(false)
                 loadingAnim.visible(false)
@@ -67,7 +74,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                     CustomSnackbar.show(
                         it, binding.root,
                         getString(R.string.err_title_login_failed),
-                        e.cause.toString()
+                        e.localizedMessage?.toString() ?: e.message.toString()
                     )
                 }
             }.onLoading {

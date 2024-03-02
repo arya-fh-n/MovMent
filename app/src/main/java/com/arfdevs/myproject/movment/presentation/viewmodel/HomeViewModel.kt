@@ -1,5 +1,6 @@
 package com.arfdevs.myproject.movment.presentation.viewmodel
 
+import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +14,7 @@ import com.arfdevs.myproject.core.helper.SplashState
 import com.arfdevs.myproject.movment.presentation.helper.Constants.INDONESIAN
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class HomeViewModel(private val useCase: AppUseCase) : ViewModel() {
 
@@ -89,6 +91,14 @@ class HomeViewModel(private val useCase: AppUseCase) : ViewModel() {
         viewModelScope.launch {
             _theme.value = useCase.getTheme()
         }
+    }
+
+    fun logEvent(eventName: String, bundle: Bundle) {
+        useCase.logEvent(eventName, bundle)
+    }
+
+    fun getTokenBalance(userId: String) = runBlocking {
+        useCase.getTokenBalance(userId)
     }
 
 }

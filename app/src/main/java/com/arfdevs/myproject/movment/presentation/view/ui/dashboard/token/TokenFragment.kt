@@ -17,24 +17,24 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::inflate) {
 
+    private val viewModel: FirebaseViewModel by viewModel()
+
     private val tokenItemAdapter = TokenItemAdapter(
         onItemClickListener = {
             binding.etTopupAmount.setText(it.token.toString())
         }
     )
 
-    private val viewModel: FirebaseViewModel by viewModel()
-
     private var amount: Int = 0
     private var price: Int = 0
     private var tokenModel = TokenTopupModel()
+    private var userId: String = ""
 
     override fun initView() = with(binding) {
         btnContinue.isEnabled = false
-        val token = 10
         toolbarToken.title = getString(R.string.app_name_movment)
         tvBalanceIs.text = getString(R.string.tv_token_balance_is)
-        tvBalance.text = getString(R.string.tv_token_balance, token)
+        tvBalance.text = getString(R.string.tv_token_balance, 0)
 
         tiTopupAmount.hint = getString(R.string.tv_token_manual_amt)
         btnContinue.text = getString(R.string.btn_token_continue)
@@ -81,6 +81,7 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
         observeAmount()
         observePrice()
         observeTokenModel()
+        observeTokenBalance()
     }
 
     private fun getConfig() = with(viewModel) {
@@ -124,6 +125,12 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
     private fun observePrice() = with(viewModel) {
         tokenPrice.observe(viewLifecycleOwner) {
             price = it
+        }
+    }
+
+    private fun observeTokenBalance() = with(viewModel) {
+        getTokenBalance(getUID()).launchAndCollectIn(viewLifecycleOwner) { balance ->
+            binding.tvBalance.text = getString(R.string.tv_balance, balance)
         }
     }
 

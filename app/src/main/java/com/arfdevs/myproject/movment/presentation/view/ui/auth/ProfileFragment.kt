@@ -1,5 +1,6 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.auth
 
+import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
 import com.arfdevs.myproject.core.base.BaseFragment
@@ -12,6 +13,7 @@ import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentProfileBinding
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.AuthViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
@@ -44,18 +46,21 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 
     private fun collectProfile(username: String) = with(binding) {
         viewModel.updateUsername(username).launchAndCollectIn(viewLifecycleOwner) { state ->
-            state.onSuccess {
+            state.onSuccess { success ->
                 loadingOverlay.visible(false)
                 loadingAnim.visible(false)
 
-                context?.let {
-                    CustomSnackbar.show(
-                        it,
-                        root,
-                        "Register complete!",
-                        "Welcome to MovMent!"
-                    ) {
-                        findNavController().navigate(R.id.action_profileFragment_to_dashboardFragment)
+                if (success) {
+                    viewModel.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundleOf("New User Profile Name" to username))
+                    context?.let {
+                        CustomSnackbar.show(
+                            it,
+                            root,
+                            "Register complete!",
+                            "Welcome to MovMent!"
+                        ) {
+                            findNavController().navigate(R.id.action_profileFragment_to_dashboardFragment)
+                        }
                     }
                 }
             }.onError { e ->
@@ -66,8 +71,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                     CustomSnackbar.show(
                         it,
                         root,
-                        "Register failed",
-                        "${e.message}"
+                        getString(R.string.err_title_register_failed),
+                        e.localizedMessage ?: e.message.toString()
                     )
                 }
 

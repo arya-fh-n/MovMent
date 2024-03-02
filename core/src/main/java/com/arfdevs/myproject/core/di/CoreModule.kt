@@ -20,11 +20,12 @@ import com.arfdevs.myproject.core.domain.usecase.AppInteractor
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
 import com.arfdevs.myproject.core.helper.Constants.SHARED_PREF_FILE
 import com.chuckerteam.chucker.api.ChuckerInterceptor
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
+import com.google.firebase.auth.auth
+import com.google.firebase.crashlytics.crashlytics
+import com.google.firebase.database.database
+import com.google.firebase.remoteconfig.remoteConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -46,6 +47,10 @@ object CoreModule : BaseModule {
 
         single {
             Firebase.analytics
+        }
+
+        single {
+            Firebase.database.reference
         }
     }
 
@@ -91,7 +96,7 @@ object CoreModule : BaseModule {
         }
 
         single<FirebaseRepository> {
-            FirebaseRepositoryImpl(get(), get())
+            FirebaseRepositoryImpl(get(), get(), get())
         }
     }
 

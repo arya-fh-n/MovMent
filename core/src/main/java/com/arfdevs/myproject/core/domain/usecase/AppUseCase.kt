@@ -1,5 +1,6 @@
 package com.arfdevs.myproject.core.domain.usecase
 
+import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.paging.PagingData
@@ -12,6 +13,7 @@ import com.arfdevs.myproject.core.domain.model.PopularModel
 import com.arfdevs.myproject.core.domain.model.SearchModel
 import com.arfdevs.myproject.core.domain.model.SessionModel
 import com.arfdevs.myproject.core.domain.model.TokenTopupModel
+import com.arfdevs.myproject.core.domain.model.TokenTransactionModel
 import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.core.domain.model.WishlistModel
 import com.arfdevs.myproject.core.domain.repository.FirebaseRepository
@@ -55,6 +57,12 @@ interface AppUseCase {
     suspend fun getConfigPaymentMethodsList(): Flow<List<PaymentTypeModel>>
 
     suspend fun updateConfigPaymentMethodsList(): Flow<Boolean>
+
+    fun logEvent(eventName: String, bundle: Bundle)
+
+    suspend fun insertTokenTransaction(transactionModel: TokenTransactionModel, userId: String): Flow<Boolean>
+
+    suspend fun getTokenBalance(userId: String): Flow<Int>
 
     suspend fun createUser(user: User): Flow<UiState<Boolean>>
 
@@ -152,6 +160,18 @@ class AppInteractor(
 
     override suspend fun updateConfigPaymentMethodsList(): Flow<Boolean> = safeDataCall {
         firebaseRepository.updateConfigPaymentMethodsList()
+    }
+
+    override fun logEvent(eventName: String, bundle: Bundle) {
+        firebaseRepository.logEvent(eventName, bundle)
+    }
+
+    override suspend fun insertTokenTransaction(transactionModel: TokenTransactionModel, userId: String): Flow<Boolean> = safeDataCall {
+        firebaseRepository.insertTokenTransaction(transactionModel, userId)
+    }
+
+    override suspend fun getTokenBalance(userId: String): Flow<Int> = safeDataCall {
+        firebaseRepository.getTokenBalance(userId)
     }
 
     override suspend fun createUser(user: User): Flow<UiState<Boolean>> = safeDataCall {

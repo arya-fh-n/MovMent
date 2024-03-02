@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "175059646772",
+    "firebase_url": "https://movment-fb-default-rtdb.firebaseio.com",
     "project_id": "movment-fb",
     "storage_bucket": "movment-fb.appspot.com"
   },

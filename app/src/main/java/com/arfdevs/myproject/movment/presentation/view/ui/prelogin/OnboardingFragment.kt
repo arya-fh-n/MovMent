@@ -1,5 +1,6 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.prelogin
 
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.arfdevs.myproject.core.base.BaseFragment
@@ -8,6 +9,7 @@ import com.arfdevs.myproject.movment.databinding.FragmentOnboardingBinding
 import com.arfdevs.myproject.movment.presentation.view.adapter.OnboardingPagerAdapter
 import com.arfdevs.myproject.movment.presentation.viewmodel.HomeViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OnboardingFragment :
@@ -41,7 +43,10 @@ class OnboardingFragment :
 
         TabLayoutMediator(tabLayout, vp) { _, _ -> }.attach()
 
-        viewModel.saveOnboardingState(true)
+        viewModel.run {
+            saveOnboardingState(true)
+            logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundleOf("Onboarding shown" to "OnboardingFragment"))
+        }
 
         btnObJoin.setOnClickListener {
             findNavController().navigate(R.id.action_onboardingFragment_to_registerFragment)

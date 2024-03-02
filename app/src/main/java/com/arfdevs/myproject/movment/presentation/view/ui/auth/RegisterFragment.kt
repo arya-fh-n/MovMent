@@ -10,8 +10,10 @@ import android.text.Spanned
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Log
 import android.util.Patterns
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
@@ -25,6 +27,7 @@ import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentRegisterBinding
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.AuthViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
@@ -71,10 +74,11 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
     private fun collectRegister(user: User) = with(binding) {
         viewModel.registerUser(user).launchAndCollectIn(viewLifecycleOwner) { state ->
-            state.onSuccess {
+            state.onSuccess { success ->
+                viewModel.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundleOf("New User" to user))
                 loadingOverlay.visible(false)
                 loadingAnim.visible(false)
-                if (it) {
+                if (success) {
                     findNavController().navigate(R.id.action_registerFragment_to_profileFragment)
                 }
             }.onError { e ->
@@ -83,8 +87,8 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                 context?.let {
                     CustomSnackbar.show(
                         it, binding.root,
-                        getString(R.string.err_title_login_failed),
-                        e.cause.toString()
+                        getString(R.string.err_title_register_failed),
+                        e.localizedMessage?.toString() ?: e.message.toString()
                     )
                 }
             }.onLoading {

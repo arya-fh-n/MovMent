@@ -9,6 +9,7 @@ import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
+import com.arfdevs.myproject.core.helper.launchAndCollectIn
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentHomeBinding
 import com.arfdevs.myproject.movment.presentation.helper.Constants.USERNAME
@@ -16,6 +17,7 @@ import com.arfdevs.myproject.movment.presentation.view.adapter.NowPlayingAdapter
 import com.arfdevs.myproject.movment.presentation.view.adapter.PopularAdapter
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.HomeViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
@@ -25,6 +27,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private lateinit var rvPopular: RecyclerView
     private lateinit var rvNowPlaying: RecyclerView
 
+    private var userId: String = ""
 
     private var popularAdapter = PopularAdapter(
         onItemClickListener = { popular ->
@@ -52,10 +55,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         tvUsername.text = getString(R.string.tv_username_ph, USERNAME)
         tvBalanceIs.text = getString(R.string.tv_balance_is)
         ivBalance.load(R.drawable.ic_balance)
-        tvBalance.text = getString(R.string.tv_balance)
 
         tvSectionPopular.text = getString(R.string.tv_section_popular)
         tvSectionNowPlaying.text = getString(R.string.tv_section_now_playing)
+
+        setupHome()
 
         this@HomeFragment.rvPopular = rvPopular
         this@HomeFragment.rvPopular.run {
@@ -71,9 +75,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             adapter = nowPlayingAdapter
         }
 
-        viewModel.getPopularMovies(1)
-        viewModel.getNowPlaying(1)
-        viewModel.getCurrentUser()
     }
 
     override fun initListener() = with(binding) {
@@ -88,6 +89,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         with(viewModel) {
             currentUser.observe(viewLifecycleOwner) { user ->
                 saveUID(user.uid)
+                userId = user.uid
 
                 with(binding) {
                     tvUsername.text = getString(R.string.tv_username_ph, user.displayName)
@@ -102,6 +104,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 popularAdapter.submitList(list)
             }
 
+            logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundleOf("Home shown" to "HomeFragment"))
+        }
+    }
+
+    private fun setupHome() = with(viewModel) {
+        getPopularMovies(1)
+        getNowPlaying(1)
+        getCurrentUser()
+
+        getTokenBalance(userId).launchAndCollectIn(viewLifecycleOwner) { balance ->
+            binding.tvBalance.text = getString(R.string.tv_balance, balance)
         }
     }
 

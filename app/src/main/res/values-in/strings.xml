@@ -59,4 +59,5 @@
     <string name="tv_payment_method_title">Pilih Metode Pembayaran</string>
     <string name="btn_pay">Bayar</string>
     <string name="tv_payment_method_name">BCA Virtual Account</string>
+    <string name="err_title_register_failed">Gagal Daftar</string>
 </resources>
