@@ -30,6 +30,9 @@ class DashboardFragment :
         toolbarDashboard.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_cart -> {
+                    activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
+                        ?.findNavController()
+                        ?.navigate(R.id.action_dashboardFragment_to_topupStatusFragment)
                     true
                 }
 

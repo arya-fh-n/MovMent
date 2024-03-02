@@ -99,6 +99,10 @@
         <action
             android:id="@+id/action_dashboardFragment_to_tokenFragment"
             app:destination="@id/tokenFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_topupStatusFragment"
+            app:destination="@id/topupStatusFragment"
+            app:popUpTo="@id/dashboardFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -143,4 +147,9 @@
             android:name="tokenModel"
             app:argType="com.arfdevs.myproject.core.domain.model.TokenTopupModel" />
     </fragment>
+    <fragment
+        android:id="@+id/topupStatusFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.fulfillment.TopupStatusFragment"
+        android:label="fragment_topup_status"
+        tools:layout="@layout/fragment_topup_status" />
 </navigation>
