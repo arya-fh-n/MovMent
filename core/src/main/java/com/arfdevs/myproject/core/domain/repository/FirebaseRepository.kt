@@ -34,7 +34,6 @@ class FirebaseRepositoryImpl(
         config.fetchAndActivate().addOnCompleteListener {
             trySend(config.getString("token_list"))
         }.addOnFailureListener { e ->
-            Log.d("Repo", "$e")
             trySend(e.message.toString())
         }
 

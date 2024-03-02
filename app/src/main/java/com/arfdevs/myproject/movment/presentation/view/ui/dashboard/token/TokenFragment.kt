@@ -1,10 +1,12 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.dashboard.token
 
+import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
+import com.arfdevs.myproject.core.domain.model.TokenTopupModel
 import com.arfdevs.myproject.core.helper.launchAndCollectIn
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
@@ -18,23 +20,18 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
 
     private val tokenItemAdapter = TokenItemAdapter(
         onItemClickListener = {
-            context?.let { it1 ->
-                CustomSnackbar.show(
-                    it1,
-                    binding.root,
-                    "Token Amount Clicked",
-                    "Token amount is : ${it.token}"
-                )
-            }
             binding.etTopupAmount.setText(it.token.toString())
         }
     )
 
     private val viewModel: FirebaseViewModel by viewModel()
 
-    private var tokenAmount: String? = ""
+    private var amount: Int = 0
+    private var price: Int = 0
+    private var tokenModel = TokenTopupModel()
 
     override fun initView() = with(binding) {
+        btnContinue.isEnabled = false
         val token = 10
         toolbarToken.title = getString(R.string.app_name_movment)
         tvBalanceIs.text = getString(R.string.tv_token_balance_is)
@@ -57,26 +54,34 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
         }
 
         etTopupAmount.doAfterTextChanged {
+            btnContinue.isEnabled = etTopupAmount.text?.isNotEmpty() ?: false
             if (it != null) {
-                tokenAmount = it.toString()
+                val amount = etTopupAmount.text.toString().toIntOrNull()
+                amount?.let { token ->
+                    viewModel.setAmount(token)
+                    viewModel.setPrice(token.times(150))
+                }
             }
         }
 
         btnContinue.setOnClickListener {
-            context?.let { it1 ->
-                CustomSnackbar.show(
-                    it1,
-                    binding.root,
-                    "Continue Clicked",
-                    "Amount set is $tokenAmount"
+            viewModel.setTokenModel(
+                TokenTopupModel(
+                    token = amount,
+                    price = price
                 )
-            }
+            )
+            navigateToTopup(tokenModel)
         }
     }
 
     override fun initObserver() {
         getConfig()
         updateConfig()
+
+        observeAmount()
+        observePrice()
+        observeTokenModel()
     }
 
     private fun getConfig() = with(viewModel) {
@@ -103,6 +108,29 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
         ) {
             getConfig()
         }
+    }
+
+    private fun observeTokenModel() = with(viewModel) {
+        tokenModel.observe(viewLifecycleOwner) {
+            this@TokenFragment.tokenModel = it
+        }
+    }
+
+    private fun observeAmount() = with(viewModel) {
+        tokenAmount.observe(viewLifecycleOwner) {
+            amount = it
+        }
+    }
+
+    private fun observePrice() = with(viewModel) {
+        tokenPrice.observe(viewLifecycleOwner) {
+            price = it
+        }
+    }
+
+    private fun navigateToTopup(topup: TokenTopupModel) {
+        val bundle = bundleOf("tokenModel" to topup)
+        findNavController().navigate(R.id.action_tokenFragment_to_topupFragment, bundle)
     }
 
 }

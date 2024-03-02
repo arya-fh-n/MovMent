@@ -3,11 +3,11 @@ package com.arfdevs.myproject.core.domain.usecase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.paging.PagingData
-import com.arfdevs.myproject.core.data.remote.responses.PaymentType
+import com.arfdevs.myproject.core.data.remote.responses.PaymentMethodsResponse
 import com.arfdevs.myproject.core.data.remote.responses.TokenTopupResponse
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
-import com.arfdevs.myproject.core.domain.model.PaymentMethodModel
+import com.arfdevs.myproject.core.domain.model.PaymentTypeModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
 import com.arfdevs.myproject.core.domain.model.SearchModel
 import com.arfdevs.myproject.core.domain.model.SessionModel
@@ -52,7 +52,7 @@ interface AppUseCase {
 
     suspend fun updateConfigTokenTopupList(): Flow<Boolean>
 
-    suspend fun getConfigPaymentMethodsList(): Flow<List<PaymentMethodModel>>
+    suspend fun getConfigPaymentMethodsList(): Flow<List<PaymentTypeModel>>
 
     suspend fun updateConfigPaymentMethodsList(): Flow<Boolean>
 
@@ -139,11 +139,11 @@ class AppInteractor(
         firebaseRepository.updateConfigTokenTopupList()
     }
 
-    override suspend fun getConfigPaymentMethodsList(): Flow<List<PaymentMethodModel>> =
+    override suspend fun getConfigPaymentMethodsList(): Flow<List<PaymentTypeModel>> =
         safeDataCall {
             firebaseRepository.getConfigPaymentMethodsList().map { data ->
-                val response = Gson().fromJson(data, PaymentType::class.java)
-                response.item.map {
+                val response = Gson().fromJson(data, PaymentMethodsResponse::class.java)
+                response.data.map {
                     it.toUIData()
                 }.toList()
             }

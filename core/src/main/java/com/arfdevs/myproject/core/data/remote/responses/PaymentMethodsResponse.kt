@@ -21,6 +21,17 @@ data class PaymentMethodsResponse(
 
 @Keep
 @Parcelize
+data class PaymentType(
+
+	@field:SerializedName("item")
+	val item: List<PaymentMethodItem>,
+
+	@field:SerializedName("title")
+	val title: String
+) : Parcelable
+
+@Keep
+@Parcelize
 data class PaymentMethodItem(
 
 	@field:SerializedName("image")
@@ -31,15 +42,4 @@ data class PaymentMethodItem(
 
 	@field:SerializedName("status")
 	val status: Boolean
-) : Parcelable
-
-@Keep
-@Parcelize
-data class PaymentType(
-
-	@field:SerializedName("item")
-	val item: List<PaymentMethodItem>,
-
-	@field:SerializedName("title")
-	val title: String
 ) : Parcelable

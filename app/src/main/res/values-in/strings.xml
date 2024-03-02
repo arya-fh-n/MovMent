@@ -53,4 +53,10 @@
     <string name="ti_search_hint">Cari</string>
     <string name="tv_token_balance_is">Saldo</string>
     <string name="btn_token_continue">Lanjut</string>
+    <string name="tv_amount_title">Jumlah :</string>
+    <string name="tv_topup_payment_title">Pembayaran</string>
+    <string name="tv_price_title">Harga :</string>
+    <string name="tv_payment_method_title">Pilih Metode Pembayaran</string>
+    <string name="btn_pay">Bayar</string>
+    <string name="tv_payment_method_name">BCA Virtual Account</string>
 </resources>

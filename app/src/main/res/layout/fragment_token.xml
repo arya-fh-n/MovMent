@@ -123,7 +123,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/tv_topup_title"
+                        android:id="@+id/tv_token_topup_title"
                         style="@style/TextAppearance.Material3.HeadlineSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
                         app:errorTextColor="@color/red_error"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_topup_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_token_topup_title"
                         tools:hint="Token">
 
                         <com.google.android.material.textfield.TextInputEditText

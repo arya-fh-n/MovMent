@@ -129,5 +129,18 @@
         android:id="@+id/tokenFragment"
         android:name="com.arfdevs.myproject.movment.presentation.view.ui.dashboard.token.TokenFragment"
         android:label="fragment_token"
-        tools:layout="@layout/fragment_token" />
+        tools:layout="@layout/fragment_token" >
+        <action
+            android:id="@+id/action_tokenFragment_to_topupFragment"
+            app:destination="@id/topupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/topupFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.fulfillment.TopupFragment"
+        android:label="fragment_topup"
+        tools:layout="@layout/fragment_topup" >
+        <argument
+            android:name="tokenModel"
+            app:argType="com.arfdevs.myproject.core.domain.model.TokenTopupModel" />
+    </fragment>
 </navigation>

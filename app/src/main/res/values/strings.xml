@@ -77,4 +77,15 @@
     <string name="tv_token_balance" translatable="false">%1$d Token</string>
     <string name="tv_token_manual_amt" translatable="false">Token</string>
     <string name="btn_token_continue">Continue</string>
+    <string name="tv_amount_title">Amount :</string>
+    <string name="tv_topup_payment_title">Payment</string>
+    <string name="tv_amount" translatable="false">%1$d Token</string>
+    <string name="tv_amount_ph" translatable="false">200 Token</string>
+    <string name="tv_price_title">Price :</string>
+    <string name="tv_price_ph" translatable="false">Rp30.000</string>
+    <string name="tv_price" translatable="false">Rp%1$d</string>
+    <string name="tv_payment_method_title">Choose Payment Method</string>
+    <string name="btn_pay">Pay</string>
+    <string name="tv_payment_method_name">BCA Virtual Account</string>
+    <string name="tv_payment_type_title">Transfer Virtual Account</string>
 </resources>
