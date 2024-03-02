@@ -32,7 +32,7 @@ class DashboardFragment :
                 R.id.menu_cart -> {
                     activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
                         ?.findNavController()
-                        ?.navigate(R.id.action_dashboardFragment_to_topupStatusFragment)
+                        ?.navigate(R.id.action_dashboardFragment_to_cartFragment)
                     true
                 }
 

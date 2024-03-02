@@ -1,6 +1,7 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.fulfillment
 
 import android.icu.text.SimpleDateFormat
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
@@ -107,7 +108,7 @@ class TopupFragment : BaseFragment<FragmentTopupBinding>(FragmentTopupBinding::i
                 userId
             ).launchAndCollectIn(viewLifecycleOwner) { success ->
                 if (success) {
-                    findNavController().popBackStack()
+                    findNavController().navigate(R.id.action_topupFragment_to_topupStatusFragment, bundleOf("tokenTransactionModel" to transaction))
                 }
             }
         }
