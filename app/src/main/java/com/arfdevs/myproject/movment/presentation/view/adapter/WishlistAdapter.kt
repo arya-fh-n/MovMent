@@ -1,6 +1,5 @@
 package com.arfdevs.myproject.movment.presentation.view.adapter
 
-import android.util.Log
 import android.view.View
 import coil.load
 import com.arfdevs.myproject.core.base.BaseListAdapter

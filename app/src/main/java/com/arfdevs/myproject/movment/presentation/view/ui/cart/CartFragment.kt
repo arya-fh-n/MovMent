@@ -1,7 +1,6 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.cart
 
 import android.app.AlertDialog
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
@@ -9,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.CartModel
+import com.arfdevs.myproject.core.domain.model.CheckoutModel
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentCartBinding
@@ -68,19 +68,20 @@ class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::infl
         toolbarCart.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+
+        btnBuy.setOnClickListener {
+            findNavController().navigate(R.id.action_cartFragment_to_checkoutFragment)
+        }
     }
 
     override fun initObserver() = with(viewModel) {
-        val userId = getUID().hashCode().toString()
+        val userId = getUID()
 
         getCartList(userId).observe(viewLifecycleOwner) { list ->
             showError(list.isEmpty())
-            logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundleOf("Open Cart" to list))
             cartAdapter.submitList(list)
             var totalPrice = 0
             for (item in list) {
-                Log.d("Fragment", "initObserver: Movies ${list}")
-                Log.d("Fragment", "initObserver: Movies ${item}")
                 totalPrice += item?.price ?: 0
             }
             binding.tvPaymentTotal.text = getString(R.string.tv_payment_total, totalPrice)

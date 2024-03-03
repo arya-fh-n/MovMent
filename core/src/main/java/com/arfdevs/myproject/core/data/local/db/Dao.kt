@@ -40,4 +40,7 @@ interface Dao {
     @Delete
     suspend fun deleteCartItem(cart: CartEntity)
 
+    @Query("DELETE FROM cart")
+    suspend fun deleteAllCartItem()
+
 }

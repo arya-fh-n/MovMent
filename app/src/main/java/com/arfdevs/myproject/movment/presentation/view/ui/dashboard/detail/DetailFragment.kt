@@ -98,7 +98,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
 
                     tvMovieDetailTitle.text = detail.originalTitle
                     tvMovieDetailGenres.text = detail.genres.joinToString(separator = " / ")
-                    val userId = getUID().hashCode().toString()
+                    val userId = getUID()
 
                     setWishlistModel(
                         WishlistModel(

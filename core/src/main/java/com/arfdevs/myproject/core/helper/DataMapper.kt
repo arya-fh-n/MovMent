@@ -11,7 +11,9 @@ import com.arfdevs.myproject.core.data.remote.responses.PopularItem
 import com.arfdevs.myproject.core.data.remote.responses.SearchItem
 import com.arfdevs.myproject.core.data.remote.responses.TokenTopupResponse
 import com.arfdevs.myproject.core.domain.model.CartModel
+import com.arfdevs.myproject.core.domain.model.CheckoutModel
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
+import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PaymentMethodModel
 import com.arfdevs.myproject.core.domain.model.PaymentTypeModel
@@ -45,6 +47,14 @@ object DataMapper {
     fun List<NowPlayingItem>.toNowPlayingList() = map {
         it.toUIData()
     }.toList()
+
+    fun NowPlayingModel.toCartModel() = CartModel(
+        movieId = id,
+        originalTitle = originalTitle,
+        posterPath = posterPath,
+        voteAverage = voteAverage,
+        price = price
+    )
 
     fun MovieDetailsResponse.toUIData() = MovieDetailsModel(
         id = id,
@@ -114,7 +124,7 @@ object DataMapper {
         price = price
     )
 
-    fun List<CartEntity?>.toLocalCartList() = this.map {  cart ->
+    fun List<CartEntity?>.toLocalCartList() = this.map { cart ->
         cart?.toUIData()
     }
 
@@ -126,6 +136,23 @@ object DataMapper {
         voteAverage = voteAverage,
         price = price
     )
+
+    private fun CartModel.toCheckoutModel() = CheckoutModel(
+        movieId = movieId,
+        userId = userId,
+        originalTitle = originalTitle,
+        posterPath = posterPath,
+        voteAverage = voteAverage,
+        price = price
+    )
+
+    fun List<CartModel?>.toCheckoutModelList() = this.map { cart ->
+        cart?.toCheckoutModel()
+    }
+
+    fun List<CheckoutModel?>.toMovieTransactionModel(uid: String, total: Int, date: String) =
+        MovieTransactionModel(uid = uid, movies = this, total = total, date = date)
+
 
     fun SessionModel.toSplashState() = when {
         this.displayName.isEmpty() && this.uid.isEmpty().not() && this.onboardingState -> {

@@ -73,4 +73,10 @@
     <string name="ev_cart_empty_title">Keranjang Anda kosong</string>
     <string name="ev_cart_empty_desc">Anda tidak memiliki film di dalam keranjang. Mulai tambahkan!</string>
     <string name="ad_msg_remove_cart">Apakah Anda yakin ingin hapus film ini dari keranjang?</string>
+    <string name="toolbar_title_checkout">Checkout</string>
+    <string name="btn_checkout">Checkout</string>
+    <string name="ad_msg_checkout">Apakah Anda yakin ingin checkout?</string>
+    <string name="tv_payment_status_detail_title">Detail Transaksi</string>
+    <string name="tv_payment_status_title">Pembelian Berhasil!</string>
+    <string name="tv_payment_status_transaction_id_title">ID Transaksi</string>
 </resources>

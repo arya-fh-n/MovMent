@@ -6,8 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Keep
 @Parcelize
-data class CartModel(
-
+data class CheckoutModel(
     var movieId: Int = 0,
 
     var userId: String = "",
@@ -18,6 +17,5 @@ data class CartModel(
 
     var voteAverage: Double = 0.0,
 
-    var price: Int = 0
-
+    var price: Int = 0,
 ) : Parcelable

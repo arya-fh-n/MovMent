@@ -10,6 +10,7 @@ import com.arfdevs.myproject.core.domain.model.TokenTransactionModel
 import com.arfdevs.myproject.core.helper.launchAndCollectIn
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentTopupBinding
+import com.arfdevs.myproject.movment.presentation.helper.Constants.getCurrentDateInDDMMYYYYFormat
 import com.arfdevs.myproject.movment.presentation.viewmodel.FirebaseViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Date
@@ -90,12 +91,6 @@ class TopupFragment : BaseFragment<FragmentTopupBinding>(FragmentTopupBinding::i
                 btnPay.isEnabled = true
             }
         }
-    }
-
-    private fun getCurrentDateInDDMMYYYYFormat(): String {
-        val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
-        val currentDate = Date()
-        return dateFormat.format(currentDate)
     }
 
     private fun collectTransaction(

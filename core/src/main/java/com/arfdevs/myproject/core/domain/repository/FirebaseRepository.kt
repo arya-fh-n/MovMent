@@ -1,6 +1,8 @@
 package com.arfdevs.myproject.core.domain.repository
 
 import android.os.Bundle
+import android.util.Log
+import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
 import com.arfdevs.myproject.core.domain.model.TokenTransactionModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.database.DataSnapshot
@@ -33,6 +35,13 @@ interface FirebaseRepository {
     ): Flow<Boolean>
 
     fun getTokenBalance(userId: String): Flow<Int>
+
+    fun insertMovieTransaction(
+        movieTransaction: MovieTransactionModel,
+        userId: String
+    ): Flow<Boolean>
+
+    fun getMovieTransaction(userId: String): Flow<List<MovieTransactionModel>>
 
 }
 
@@ -114,8 +123,10 @@ class FirebaseRepositoryImpl(
             realtime.database.reference.child("token_transaction").child(userId).push()
                 .setValue(transaction)
                 .addOnCompleteListener { task ->
+                    Log.d("Repo", "insertTokenTransaction : isSuccess: $task")
                     trySend(task.isSuccessful)
                 }.addOnFailureListener { e ->
+                    Log.d("Repo", "insertTokenTransaction : failure: $e")
                     trySend(e.message!!.isNotEmpty())
                 }
 
@@ -146,6 +157,28 @@ class FirebaseRepositoryImpl(
             })
 
         awaitClose()
+    }
+
+    override fun insertMovieTransaction(
+        movieTransaction: MovieTransactionModel,
+        userId: String
+    ): Flow<Boolean> = callbackFlow {
+        trySend(false)
+
+        realtime.database.reference.child("movie_transaction").child(userId).push()
+            .setValue(movieTransaction).addOnCompleteListener { task ->
+                Log.d("Repo", "insertTransaction : isSuccess: $task")
+                trySend(task.isSuccessful)
+            }.addOnFailureListener { e ->
+                Log.d("Repo", "insertTransaction : failure: $e")
+                trySend(e.message!!.isNotEmpty())
+            }
+
+        awaitClose()
+    }
+
+    override fun getMovieTransaction(userId: String): Flow<List<MovieTransactionModel>> {
+        TODO("Not yet implemented")
     }
 
 }

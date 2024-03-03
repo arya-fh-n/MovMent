@@ -74,7 +74,6 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
     private fun collectRegister(user: User) = with(binding) {
         viewModel.registerUser(user).launchAndCollectIn(viewLifecycleOwner) { state ->
             state.onSuccess { success ->
-                viewModel.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundleOf("New User" to user))
                 loadingOverlay.visible(false)
                 loadingAnim.visible(false)
                 if (success) {

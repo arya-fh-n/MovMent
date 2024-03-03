@@ -87,7 +87,7 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding>(FragmentWishlistB
     override fun initListener() {}
 
     override fun initObserver() = with(viewModel) {
-        val userId = getUID().hashCode().toString()
+        val userId = getUID()
 
         getWishlist(userId).observe(viewLifecycleOwner) { list ->
             showError(list.isEmpty())

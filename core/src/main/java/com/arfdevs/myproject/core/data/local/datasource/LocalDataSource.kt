@@ -45,6 +45,8 @@ class LocalDataSource(
 
     suspend fun deleteCartItem(cart: CartEntity) = dao.deleteCartItem(cart)
 
+    suspend fun deleteAllCart() = dao.deleteAllCartItem()
+
     fun getOnboardingState(): Boolean =
         sharedPreferencesHelper.getOnboardingState()
 

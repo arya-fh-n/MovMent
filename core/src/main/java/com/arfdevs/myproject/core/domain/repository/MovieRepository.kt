@@ -39,6 +39,8 @@ interface MovieRepository {
 
     suspend fun deleteCartItem(cart: CartEntity)
 
+    suspend fun deleteAllCartItem()
+
 }
 
 class MovieRepositoryImpl(
@@ -92,6 +94,10 @@ class MovieRepositoryImpl(
 
     override suspend fun deleteCartItem(cart: CartEntity) {
         local.deleteCartItem(cart)
+    }
+
+    override suspend fun deleteAllCartItem() {
+        local.deleteAllCart()
     }
 
 

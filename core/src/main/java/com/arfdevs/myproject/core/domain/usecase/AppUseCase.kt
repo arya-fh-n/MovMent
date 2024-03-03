@@ -9,6 +9,7 @@ import com.arfdevs.myproject.core.data.remote.responses.PaymentMethodsResponse
 import com.arfdevs.myproject.core.data.remote.responses.TokenTopupResponse
 import com.arfdevs.myproject.core.domain.model.CartModel
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
+import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PaymentTypeModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
@@ -59,6 +60,8 @@ interface AppUseCase {
 
     suspend fun deleteCartItem(cart: CartModel)
 
+    suspend fun deleteAllCartItem()
+
     suspend fun fetchSearch(query: String): LiveData<PagingData<SearchModel>>
 
     suspend fun getConfigTokenTopupList(): Flow<List<TokenTopupModel>>
@@ -77,6 +80,11 @@ interface AppUseCase {
     ): Flow<Boolean>
 
     suspend fun getTokenBalance(userId: String): Flow<Int>
+
+    suspend fun insertMovieTransaction(
+        movieTransaction: MovieTransactionModel,
+        userId: String
+    ): Flow<Boolean>
 
     suspend fun createUser(user: User): Flow<UiState<Boolean>>
 
@@ -160,6 +168,10 @@ class AppInteractor(
         movieRepository.deleteCartItem(cart.toEntityData())
     }
 
+    override suspend fun deleteAllCartItem() {
+        movieRepository.deleteAllCartItem()
+    }
+
     override suspend fun fetchSearch(query: String): LiveData<PagingData<SearchModel>> =
         safeDataCall {
             movieRepository.fetchSearch(query)
@@ -203,11 +215,20 @@ class AppInteractor(
         transactionModel: TokenTransactionModel,
         userId: String
     ): Flow<Boolean> = safeDataCall {
+        Log.d("UseCase", "insertTransaction : $transactionModel")
         firebaseRepository.insertTokenTransaction(transactionModel, userId)
     }
 
     override suspend fun getTokenBalance(userId: String): Flow<Int> = safeDataCall {
         firebaseRepository.getTokenBalance(userId)
+    }
+
+    override suspend fun insertMovieTransaction(
+        movieTransaction: MovieTransactionModel,
+        userId: String
+    ): Flow<Boolean> = safeDataCall {
+        Log.d("UseCase", "insertTransaction : $movieTransaction")
+        firebaseRepository.insertMovieTransaction(movieTransaction, userId)
     }
 
     override suspend fun createUser(user: User): Flow<UiState<Boolean>> = safeDataCall {

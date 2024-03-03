@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arfdevs.myproject.core.domain.model.CartModel
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
+import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
 import com.arfdevs.myproject.core.domain.model.WishlistModel
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
 import com.arfdevs.myproject.core.helper.UiState
@@ -36,7 +37,6 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
         viewModelScope.launch {
             try {
                 val details = useCase.getMovieDetails(movieId)
-                useCase.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundleOf("Movie Details" to details))
                 _responseDetails.value = UiState.Success(details)
             } catch (e: Throwable) {
                 _responseDetails.value = UiState.Error(e)
@@ -54,7 +54,6 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
         viewModelScope.launch {
             wishlistModel?.let { wishlist ->
                 useCase.insertWishlistMovie(wishlist)
-                useCase.logEvent(FirebaseAnalytics.Event.ADD_TO_WISHLIST, bundleOf("Movie Wishlisted" to wishlist))
             }
         }
     }
@@ -85,6 +84,7 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
 
     fun insertToCart(cart: CartModel) {
         viewModelScope.launch {
+            Log.d("Wishlist ViewModel", "insertToCart: $cart")
             useCase.insertCartMovie(cart)
         }
     }
@@ -113,10 +113,24 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
         }
     }
 
+    fun removeAllCartItem() {
+        viewModelScope.launch {
+            useCase.deleteAllCartItem()
+        }
+    }
+
+    fun getTokenBalance(userId: String) = runBlocking {
+        useCase.getTokenBalance(userId)
+    }
+
+    fun insertTransactionModel(transaction: MovieTransactionModel, userId: String) = runBlocking {
+        Log.d("ViewModel", "insertTransaction : $transaction")
+        useCase.insertMovieTransaction(transaction, userId)
+    }
+
     fun getUID(): String = useCase.getUID()
 
     fun searchMovies(query: String) = runBlocking {
-        useCase.logEvent(FirebaseAnalytics.Event.SEARCH, bundleOf("Movie Searched" to query))
         useCase.fetchSearch(query)
     }
 

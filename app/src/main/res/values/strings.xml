@@ -106,4 +106,10 @@
     <string name="tv_payment_total_title" translatable="false">Total</string>
     <string name="btn_buy_cart">Buy</string>
     <string name="tv_payment_total" translatable="false">%1$d Token</string>
+    <string name="toolbar_title_checkout">Checkout</string>
+    <string name="btn_checkout">Checkout</string>
+    <string name="ad_msg_checkout">Are you sure you want to checkout?</string>
+    <string name="tv_payment_status_detail_title">Transaction Detail</string>
+    <string name="tv_payment_status_title">Purchase Successful!</string>
+    <string name="tv_payment_status_transaction_id_title">Transaction ID</string>
 </resources>

@@ -59,7 +59,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     private fun collectLogin(user: User) = with(binding) {
         viewModel.loginUser(user).launchAndCollectIn(viewLifecycleOwner) { state ->
             state.onSuccess { success ->
-                viewModel.logEvent(FirebaseAnalytics.Event.LOGIN, bundleOf("Credentials" to user))
                 loadingOverlay.visible(false)
                 loadingAnim.visible(false)
                 if (success) {

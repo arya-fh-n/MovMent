@@ -28,7 +28,6 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
     private var amount: Int = 0
     private var price: Int = 0
     private var tokenModel = TokenTopupModel()
-    private var userId: String = ""
 
     override fun initView() = with(binding) {
         btnContinue.isEnabled = false

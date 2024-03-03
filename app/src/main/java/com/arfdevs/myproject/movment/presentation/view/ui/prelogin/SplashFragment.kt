@@ -34,7 +34,6 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
 
     override fun initObserver() {
         with(viewModel) {
-            logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundleOf("Splash shown" to "SplashFragment"))
             onboardingState.observe(viewLifecycleOwner) { state ->
                 Handler(Looper.getMainLooper()).postDelayed({
                     val navController =
