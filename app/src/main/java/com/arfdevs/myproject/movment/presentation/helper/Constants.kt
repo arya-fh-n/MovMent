@@ -24,4 +24,12 @@ object Constants {
         val parts = this.split(" ")[0].split("-") + this.split(" ")[1].split(":")
         return "TR-${parts[0]}${parts[1]}${parts[2]}${parts[3]}${parts[4]}${parts[5]}"
     }
+
+    fun String.convertToDateInDDMMYYYYFormat(): String {
+        val inputFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+
+        val date = inputFormat.parse(this)
+        return outputFormat.format(date)
+    }
 }

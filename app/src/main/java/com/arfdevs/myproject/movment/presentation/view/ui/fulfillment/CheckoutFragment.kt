@@ -1,7 +1,6 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.fulfillment
 
 import android.app.AlertDialog
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
@@ -89,9 +88,9 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
     }
 
     override fun initObserver() = with(viewModel) {
-        val userIdHash = getUID()
+        val userId = getUID()
 
-        getCartList(userIdHash).observe(viewLifecycleOwner) { list ->
+        getCartList(userId).observe(viewLifecycleOwner) { list ->
             val checkoutList = list.toCheckoutModelList()
             checkoutAdapter.submitList(checkoutList)
             var totalPrice = 0
@@ -100,9 +99,7 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
             }
             binding.tvPaymentTotal.text = getString(R.string.tv_payment_total, totalPrice)
 
-            val userIdClean = getUID()
-
-            getTokenBalance(userIdClean).launchAndCollectIn(viewLifecycleOwner) { balance ->
+            getTokenBalance(userId).launchAndCollectIn(viewLifecycleOwner) { balance ->
                 with(binding) {
                     tvBalance.text = getString(R.string.tv_balance, balance)
                     btnCheckout.isEnabled = balance >= totalPrice
@@ -111,7 +108,7 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
                     val transactionId = date.convertTotransactionID()
 
                     this@CheckoutFragment.transactionModel = checkoutList.toMovieTransactionModel(
-                        uid = userIdClean,
+                        uid = userId,
                         total = totalPrice,
                         date = date
                     ).copy(transactionId = transactionId)

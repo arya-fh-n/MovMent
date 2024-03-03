@@ -79,4 +79,8 @@
     <string name="tv_payment_status_detail_title">Detail Transaksi</string>
     <string name="tv_payment_status_title">Pembelian Berhasil!</string>
     <string name="tv_payment_status_transaction_id_title">ID Transaksi</string>
+    <string name="tv_item_transaction_total">%1$d film</string>
+    <string name="tv_item_transaction_id">ID Transaksi: %1$s</string>
+    <string name="ev_transaction_empty_title">Tidak ada histori transaksi</string>
+    <string name="ev_transaction_empty_desc">Tidak ditemukan histori pembelian. Mulai beli film!</string>
 </resources>

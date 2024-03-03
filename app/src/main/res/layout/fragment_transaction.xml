@@ -20,4 +20,13 @@
         tools:itemCount="4"
         tools:listitem="@layout/item_transaction"/>
 
+    <com.arfdevs.myproject.movment.presentation.view.component.ErrorView
+        android:id="@+id/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

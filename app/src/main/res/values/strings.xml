@@ -112,4 +112,10 @@
     <string name="tv_payment_status_detail_title">Transaction Detail</string>
     <string name="tv_payment_status_title">Purchase Successful!</string>
     <string name="tv_payment_status_transaction_id_title">Transaction ID</string>
+    <string name="tv_item_transaction_total">%1$d movies</string>
+    <string name="tv_item_transaction_id">Transaction ID: %1$s</string>
+    <string name="ev_transaction_empty_title">No transaction history</string>
+    <string name="ev_transaction_empty_desc">No transaction history found. Start buying movies!</string>
+    <string name="csb_transaction_detail_title">Transaction Detail Clicked</string>
+    <string name="csb_transaction_detail_msg">This feature is not available yet!</string>
 </resources>

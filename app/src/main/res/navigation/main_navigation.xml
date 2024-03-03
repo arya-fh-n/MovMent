@@ -122,6 +122,10 @@
         <argument
             android:name="movieId"
             app:argType="integer"/>
+        <action
+            android:id="@+id/action_detailFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment"
+            app:popUpTo="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

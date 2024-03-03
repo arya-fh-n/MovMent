@@ -23,7 +23,7 @@ class PaymentStatusFragment :
 
         safeArgs.movieTransactionModel.let { transaction ->
             tvPaymentStatusId.text = transaction.transactionId
-            tvPrice.text = transaction.total.toString()
+            tvPrice.text = getString(R.string.tv_payment_total, transaction.total)
             tvPaymentDate.text = transaction.date
         }
     }

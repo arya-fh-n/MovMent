@@ -51,10 +51,26 @@ object DataMapper {
     fun NowPlayingModel.toCartModel() = CartModel(
         movieId = id,
         originalTitle = originalTitle,
-        posterPath = posterPath,
+        posterPath = Constants.BACKDROP_PATH + posterPath,
         voteAverage = voteAverage,
         price = price
     )
+
+    fun SearchModel.toCartModel(): CartModel {
+        val movieId = id ?: 0
+        val originalTitle = originalTitle ?: ""
+        val posterPath = Constants.BACKDROP_PATH + (posterPath)
+        val voteAverage = voteAverage ?: 0.0
+        val price = price ?: 0
+
+        return CartModel(
+            movieId = movieId,
+            originalTitle = originalTitle,
+            posterPath = posterPath,
+            voteAverage = voteAverage,
+            price = price
+        )
+    }
 
     fun MovieDetailsResponse.toUIData() = MovieDetailsModel(
         id = id,

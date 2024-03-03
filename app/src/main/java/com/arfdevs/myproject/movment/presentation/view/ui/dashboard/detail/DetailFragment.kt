@@ -58,16 +58,10 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
             findNavController().popBackStack()
         }
 
-
         btnRent.setOnClickListener {
-            context?.let { it1 ->
-                CustomSnackbar.show(
-                    it1,
-                    root,
-                    "Rent clicked",
-                    "Movie is rented"
-                )
-            }
+            viewModel.removeAllCartItem()
+            viewModel.insertToCartFromDetail()
+            findNavController().navigate(R.id.action_detailFragment_to_checkoutFragment)
         }
 
         btnAddToCart.setOnClickListener {

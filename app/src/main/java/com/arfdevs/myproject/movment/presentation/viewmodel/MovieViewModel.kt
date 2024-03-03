@@ -124,6 +124,10 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
         useCase.insertMovieTransaction(transaction, userId)
     }
 
+    fun getTransactionHistory(userId: String) = runBlocking {
+        useCase.getMovieTransaction(userId)
+    }
+
     fun getUID(): String = useCase.getUID()
 
     fun searchMovies(query: String) = runBlocking {

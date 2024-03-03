@@ -26,7 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_item_movie_title"
+            android:id="@+id/tv_item_transaction_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -105,7 +105,7 @@
             android:textSize="11sp"
             app:layout_constraintStart_toEndOf="@id/iv_movie_banner"
             app:layout_constraintTop_toBottomOf="@+id/tv_item_total_movies"
-            tools:text="Total" />
+            tools:text="@string/tv_payment_total_title" />
 
         <TextView
             android:id="@+id/tv_item_total"
@@ -117,7 +117,7 @@
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@id/tv_item_total_title"
             app:layout_constraintTop_toBottomOf="@id/tv_item_total_title"
-            tools:text="10 TOKEN" />
+            tools:text="10 Token" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

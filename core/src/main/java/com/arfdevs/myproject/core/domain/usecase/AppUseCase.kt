@@ -88,6 +88,8 @@ interface AppUseCase {
         userId: String
     ): Flow<Boolean>
 
+    suspend fun getMovieTransaction(userId: String): Flow<List<MovieTransactionModel?>>
+
     suspend fun createUser(user: User): Flow<UiState<Boolean>>
 
     suspend fun signInUser(user: User): Flow<UiState<Boolean>>
@@ -233,6 +235,10 @@ class AppInteractor(
         userId: String
     ): Flow<Boolean> = safeDataCall {
         firebaseRepository.insertMovieTransaction(movieTransaction, userId)
+    }
+
+    override suspend fun getMovieTransaction(userId: String): Flow<List<MovieTransactionModel?>> = safeDataCall {
+        firebaseRepository.getMovieTransaction(userId)
     }
 
     override suspend fun createUser(user: User): Flow<UiState<Boolean>> = safeDataCall {
