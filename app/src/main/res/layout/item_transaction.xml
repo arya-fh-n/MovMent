@@ -67,10 +67,10 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/product_thumbnail"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/separator_transaction" />
+            app:layout_constraintTop_toBottomOf="@id/separator_transaction"
+            tools:src="@drawable/product_thumbnail" />
 
         <TextView
             android:id="@+id/tv_item_first_movie_title"

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.WishlistModel
+import com.arfdevs.myproject.core.helper.DataMapper.toCartModel
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentWishlistBinding
@@ -22,11 +23,15 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding>(FragmentWishlistB
     private val viewModel: MovieViewModel by viewModel()
 
     private var wishlistAdapter = WishlistAdapter(
+        onItemSet = { wishlist ->
+            getCartById(wishlist)
+        },
         onItemClickListener = { wishlist ->
             navigateToDetailFromWishlist(wishlist)
         },
         onAddToCartClickListener = { wishlist ->
             context?.let {
+                viewModel.insertToCart(wishlist.toCartModel())
                 CustomSnackbar.show(
                     it,
                     binding.root,
@@ -105,6 +110,13 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding>(FragmentWishlistB
         activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
             ?.findNavController()
             ?.navigate(R.id.action_dashboardFragment_to_detailFragment, bundle)
+    }
+
+    private fun getCartById(wishlist: WishlistModel) {
+        viewModel.getCartById(wishlist.movieId, wishlist.userId)
+        viewModel.cartItemById.observe(viewLifecycleOwner) {
+            wishlistAdapter.itemIsInCart(it != null)
+        }
     }
 
 }

@@ -1,0 +1,25 @@
+package com.arfdevs.myproject.core.domain.model
+
+import android.os.Parcelable
+import androidx.annotation.Keep
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
+
+@Keep
+@Parcelize
+data class CartModel(
+
+    var movieId: Int = 0,
+
+    var userId: String = "",
+
+    var originalTitle: String = "",
+
+    var posterPath: String = "",
+
+    var voteAverage: Double = 0.0,
+
+    var price: Int = 0,
+
+): Parcelable

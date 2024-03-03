@@ -1,11 +1,13 @@
 package com.arfdevs.myproject.movment.presentation.viewmodel
 
 import android.os.Bundle
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.arfdevs.myproject.core.domain.model.CartModel
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
 import com.arfdevs.myproject.core.domain.model.WishlistModel
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
@@ -23,6 +25,10 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
     val isFavorite: LiveData<Int> = _isFavorite
 
     private var wishlistModel: WishlistModel? = null
+    private var cartModel: CartModel? = null
+
+    private val _cartItemById = MutableLiveData<CartModel?>()
+    val cartItemById: LiveData<CartModel?> = _cartItemById
 
     fun getMovieDetails(movieId: Int) {
         _responseDetails.value = UiState.Loading
@@ -71,6 +77,40 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
 
     fun setWishlistModel(wishlistModel: WishlistModel) {
         this.wishlistModel = wishlistModel
+    }
+
+    fun setCartModel(cart: CartModel) {
+        cartModel = cart
+    }
+
+    fun insertToCart(cart: CartModel) {
+        viewModelScope.launch {
+            useCase.insertCartMovie(cart)
+        }
+    }
+
+    fun insertToCartFromDetail() {
+        viewModelScope.launch {
+            cartModel?.let { cart ->
+                useCase.insertCartMovie(cart)
+            }
+        }
+    }
+
+    fun getCartList(userId: String) = useCase.getCartList(userId)
+
+    fun getCartById(movieId: Int, userId: String) {
+        viewModelScope.launch {
+            useCase.getCartItemById(movieId, userId).collect { cartById ->
+                _cartItemById.postValue(cartById)
+            }
+        }
+    }
+
+    fun deleteCart(cart: CartModel) {
+        viewModelScope.launch {
+            useCase.deleteCartItem(cart)
+        }
     }
 
     fun getUID(): String = useCase.getUID()

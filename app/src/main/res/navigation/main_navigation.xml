@@ -169,5 +169,9 @@
         android:id="@+id/cartFragment"
         android:name="com.arfdevs.myproject.movment.presentation.view.ui.cart.CartFragment"
         android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" />
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cartFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
 </navigation>

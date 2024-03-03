@@ -1,5 +1,6 @@
 package com.arfdevs.myproject.core.helper
 
+import com.arfdevs.myproject.core.data.local.db.entity.CartEntity
 import com.arfdevs.myproject.core.data.local.db.entity.WishlistEntity
 import com.arfdevs.myproject.core.data.remote.responses.GenresItem
 import com.arfdevs.myproject.core.data.remote.responses.MovieDetailsResponse
@@ -9,6 +10,7 @@ import com.arfdevs.myproject.core.data.remote.responses.PaymentType
 import com.arfdevs.myproject.core.data.remote.responses.PopularItem
 import com.arfdevs.myproject.core.data.remote.responses.SearchItem
 import com.arfdevs.myproject.core.data.remote.responses.TokenTopupResponse
+import com.arfdevs.myproject.core.domain.model.CartModel
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PaymentMethodModel
@@ -81,11 +83,42 @@ object DataMapper {
         price = price
     )
 
-    fun List<WishlistEntity>.toLocalList() = this.map { wishlist ->
+    fun List<WishlistEntity>.toLocalWishlistList() = this.map { wishlist ->
         wishlist.toUIData()
     }
 
     fun WishlistModel.toEntityData() = WishlistEntity(
+        movieId = movieId,
+        userId = userId,
+        originalTitle = originalTitle,
+        posterPath = posterPath,
+        voteAverage = voteAverage,
+        price = price
+    )
+
+    fun WishlistModel.toCartModel() = CartModel(
+        movieId = movieId,
+        userId = userId,
+        originalTitle = originalTitle,
+        posterPath = posterPath,
+        voteAverage = voteAverage,
+        price = price
+    )
+
+    fun CartEntity.toUIData() = CartModel(
+        movieId = movieId,
+        userId = userId,
+        originalTitle = originalTitle,
+        posterPath = posterPath,
+        voteAverage = voteAverage,
+        price = price
+    )
+
+    fun List<CartEntity?>.toLocalCartList() = this.map {  cart ->
+        cart?.toUIData()
+    }
+
+    fun CartModel.toEntityData() = CartEntity(
         movieId = movieId,
         userId = userId,
         originalTitle = originalTitle,

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_cart"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="8dp"
+    tools:layout_gravity="center">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_movie_banner"
+            android:layout_width="80dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/movie_banner_sample" />
+
+        <TextView
+            android:id="@+id/tv_item_cart_movie_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_bold"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_movie_banner"
+            app:layout_constraintTop_toTopOf="@id/iv_movie_banner"
+            tools:text="The Lord of The Rings: The Fellowship of The Ring" />
+
+        <LinearLayout
+            android:id="@+id/ll_review"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_item_cart_movie_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_cart_movie_title"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/ic_rating"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginEnd="4dp"
+                app:tint="?attr/colorControlNormal"
+                tools:src="@drawable/ic_star" />
+
+            <TextView
+                android:id="@+id/tv_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="14dp"
+                android:textSize="11sp"
+                tools:text="(SKOR)" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_price_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="11sp"
+            app:layout_constraintStart_toEndOf="@id/iv_movie_banner"
+            app:layout_constraintTop_toBottomOf="@+id/ll_review"
+            tools:text="@string/tv_price_title" />
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tv_price_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_price_title"
+            tools:text="@string/tv_movie_price_ph" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_remove_wishlist"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginBottom="18dp"
+            android:fontFamily="@font/poppins_medium"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            app:cornerRadius="8dp"
+            app:icon="@drawable/ic_delete"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

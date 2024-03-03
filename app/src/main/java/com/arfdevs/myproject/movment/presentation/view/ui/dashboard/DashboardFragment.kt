@@ -65,7 +65,7 @@ class DashboardFragment :
     private fun logOut() {
         context?.let {
             MaterialAlertDialogBuilder(it)
-                .setMessage(getString(R.string.ad_msg))
+                .setMessage(getString(R.string.ad_msg_logout))
                 .setNegativeButton(getString(R.string.option_negative)) { dialog, which ->
                     dialog.dismiss()
                 }
