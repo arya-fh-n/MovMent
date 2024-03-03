@@ -1,7 +1,6 @@
 package com.arfdevs.myproject.core.domain.usecase
 
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.paging.PagingData
@@ -237,9 +236,10 @@ class AppInteractor(
         firebaseRepository.insertMovieTransaction(movieTransaction, userId)
     }
 
-    override suspend fun getMovieTransaction(userId: String): Flow<List<MovieTransactionModel?>> = safeDataCall {
-        firebaseRepository.getMovieTransaction(userId)
-    }
+    override suspend fun getMovieTransaction(userId: String): Flow<List<MovieTransactionModel?>> =
+        safeDataCall {
+            firebaseRepository.getMovieTransaction(userId)
+        }
 
     override suspend fun createUser(user: User): Flow<UiState<Boolean>> = safeDataCall {
         userRepository.createUser(user).map {

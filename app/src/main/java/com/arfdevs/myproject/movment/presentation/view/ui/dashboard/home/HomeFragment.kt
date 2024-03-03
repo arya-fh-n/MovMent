@@ -1,6 +1,5 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.dashboard.home
 
-import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
