@@ -128,6 +128,9 @@ dependencies {
     api("androidx.room:room-paging:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
 
+    //worker
+    api("androidx.work:work-runtime-ktx:2.9.0")
+
     //firebase
     api(platform("com.google.firebase:firebase-bom:32.7.2"))
     api("com.google.firebase:firebase-crashlytics")
@@ -135,7 +138,6 @@ dependencies {
     api("com.google.firebase:firebase-auth")
     api("com.google.firebase:firebase-database")
     api("com.google.firebase:firebase-config")
-
 
     //koin di
     api("io.insert-koin:koin-core:3.5.3")

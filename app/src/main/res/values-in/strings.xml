@@ -83,4 +83,7 @@
     <string name="tv_item_transaction_id">ID Transaksi: %1$s</string>
     <string name="ev_transaction_empty_title">Tidak ada histori transaksi</string>
     <string name="ev_transaction_empty_desc">Tidak ditemukan histori pembelian. Mulai beli film!</string>
+    <string name="notify_content">Movie checkout success!</string>
+    <string name="notify_channel_name">MovMent Sewa Film</string>
+    <string name="tv_item_transaction_total_notif">%1$d film berhasil checkout!</string>
 </resources>
