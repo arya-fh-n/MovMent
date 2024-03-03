@@ -1,6 +1,5 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.fulfillment
 
-import android.icu.text.SimpleDateFormat
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -13,8 +12,6 @@ import com.arfdevs.myproject.movment.databinding.FragmentTopupBinding
 import com.arfdevs.myproject.movment.presentation.helper.Constants.getCurrentDateInDDMMYYYYFormat
 import com.arfdevs.myproject.movment.presentation.viewmodel.FirebaseViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.Date
-import java.util.Locale
 
 class TopupFragment : BaseFragment<FragmentTopupBinding>(FragmentTopupBinding::inflate),
     PaymentMethodFragment.OnPaymentMethodListener {
@@ -103,7 +100,10 @@ class TopupFragment : BaseFragment<FragmentTopupBinding>(FragmentTopupBinding::i
                 userId
             ).launchAndCollectIn(viewLifecycleOwner) { success ->
                 if (success) {
-                    findNavController().navigate(R.id.action_topupFragment_to_topupStatusFragment, bundleOf("tokenTransactionModel" to transaction))
+                    findNavController().navigate(
+                        R.id.action_topupFragment_to_topupStatusFragment,
+                        bundleOf("tokenTransactionModel" to transaction)
+                    )
                 }
             }
         }

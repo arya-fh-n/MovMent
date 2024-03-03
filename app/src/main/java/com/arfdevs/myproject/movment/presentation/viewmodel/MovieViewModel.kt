@@ -2,7 +2,6 @@ package com.arfdevs.myproject.movment.presentation.viewmodel
 
 import android.os.Bundle
 import android.util.Log
-import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +12,6 @@ import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
 import com.arfdevs.myproject.core.domain.model.WishlistModel
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
 import com.arfdevs.myproject.core.helper.UiState
-import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -84,7 +82,6 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
 
     fun insertToCart(cart: CartModel) {
         viewModelScope.launch {
-            Log.d("Wishlist ViewModel", "insertToCart: $cart")
             useCase.insertCartMovie(cart)
         }
     }
@@ -124,7 +121,6 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
     }
 
     fun insertTransactionModel(transaction: MovieTransactionModel, userId: String) = runBlocking {
-        Log.d("ViewModel", "insertTransaction : $transaction")
         useCase.insertMovieTransaction(transaction, userId)
     }
 

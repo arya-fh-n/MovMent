@@ -27,8 +27,8 @@ class LocalDataSource(
         dao.deleteWishlistMovie(wishlist)
     }
 
-    suspend fun deleteWishlistTable() {
-        dao.deleteWishlistTable()
+    suspend fun deleteAllWishlist(userId: String) {
+        dao.deleteAllWishlistItem(userId)
     }
 
     suspend fun insertCartMovie(cart: CartEntity) {

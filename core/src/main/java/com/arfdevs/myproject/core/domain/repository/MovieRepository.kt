@@ -31,6 +31,8 @@ interface MovieRepository {
 
     suspend fun deleteWishlistMovie(wishlist: WishlistEntity)
 
+    suspend fun deleteAllWishlistItem(userId: String)
+
     suspend fun insertCartMovie(cart: CartEntity)
 
     fun getCartList(userId: String): LiveData<List<CartEntity?>>
@@ -79,6 +81,10 @@ class MovieRepositoryImpl(
 
     override suspend fun deleteWishlistMovie(wishlist: WishlistEntity) {
         local.deleteWishlistMovie(wishlist)
+    }
+
+    override suspend fun deleteAllWishlistItem(userId: String) {
+        local.deleteAllWishlist(userId)
     }
 
     override suspend fun insertCartMovie(cart: CartEntity) {

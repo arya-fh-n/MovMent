@@ -25,8 +25,8 @@ interface Dao {
     @Delete
     suspend fun deleteWishlistMovie(wishlist: WishlistEntity)
 
-    @Query("DELETE FROM wishlist")
-    suspend fun deleteWishlistTable()
+    @Query("DELETE FROM wishlist WHERE userId = :userId")
+    suspend fun deleteAllWishlistItem(userId: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCart(cart: CartEntity)

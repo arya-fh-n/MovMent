@@ -52,6 +52,8 @@ interface AppUseCase {
 
     suspend fun deleteWishlistMovie(wishlist: WishlistModel)
 
+    suspend fun deleteAllWishlistItem(userId: String)
+
     suspend fun insertCartMovie(cart: CartModel)
 
     fun getCartList(userId: String): LiveData<List<CartModel?>>
@@ -149,6 +151,10 @@ class AppInteractor(
         movieRepository.deleteWishlistMovie(wishlist.toEntityData())
     }
 
+    override suspend fun deleteAllWishlistItem(userId: String) {
+        movieRepository.deleteAllWishlistItem(userId)
+    }
+
     override suspend fun insertCartMovie(cart: CartModel) {
         movieRepository.insertCartMovie(cart.toEntityData())
     }
@@ -215,7 +221,6 @@ class AppInteractor(
         transactionModel: TokenTransactionModel,
         userId: String
     ): Flow<Boolean> = safeDataCall {
-        Log.d("UseCase", "insertTransaction : $transactionModel")
         firebaseRepository.insertTokenTransaction(transactionModel, userId)
     }
 
@@ -227,7 +232,6 @@ class AppInteractor(
         movieTransaction: MovieTransactionModel,
         userId: String
     ): Flow<Boolean> = safeDataCall {
-        Log.d("UseCase", "insertTransaction : $movieTransaction")
         firebaseRepository.insertMovieTransaction(movieTransaction, userId)
     }
 

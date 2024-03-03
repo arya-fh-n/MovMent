@@ -105,7 +105,6 @@ class HomeViewModel(private val useCase: AppUseCase) : ViewModel() {
 
     fun insertToCart(cart: CartModel) {
         viewModelScope.launch {
-            Log.d("Home ViewModel", "insertToCart: $cart")
             useCase.insertCartMovie(cart)
         }
     }

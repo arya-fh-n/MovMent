@@ -70,6 +70,7 @@ class DashboardFragment :
                     dialog.dismiss()
                 }
                 .setPositiveButton(getString(R.string.option_positive)) { dialog, which ->
+                    viewModel.deleteAllWishlistItem(viewModel.getUID())
                     viewModel.logoutUser()
                     activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
                         ?.findNavController()

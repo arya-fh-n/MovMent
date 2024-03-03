@@ -123,10 +123,8 @@ class FirebaseRepositoryImpl(
             realtime.database.reference.child("token_transaction").child(userId).push()
                 .setValue(transaction)
                 .addOnCompleteListener { task ->
-                    Log.d("Repo", "insertTokenTransaction : isSuccess: $task")
                     trySend(task.isSuccessful)
                 }.addOnFailureListener { e ->
-                    Log.d("Repo", "insertTokenTransaction : failure: $e")
                     trySend(e.message!!.isNotEmpty())
                 }
 
@@ -167,10 +165,8 @@ class FirebaseRepositoryImpl(
 
         realtime.database.reference.child("movie_transaction").child(userId).push()
             .setValue(movieTransaction).addOnCompleteListener { task ->
-                Log.d("Repo", "insertTransaction : isSuccess: $task")
                 trySend(task.isSuccessful)
             }.addOnFailureListener { e ->
-                Log.d("Repo", "insertTransaction : failure: $e")
                 trySend(e.message!!.isNotEmpty())
             }
 

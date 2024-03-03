@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import coil.load
@@ -14,7 +13,6 @@ import com.arfdevs.myproject.core.helper.SplashState
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentSplashBinding
 import com.arfdevs.myproject.movment.presentation.viewmodel.HomeViewModel
-import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding::inflate) {

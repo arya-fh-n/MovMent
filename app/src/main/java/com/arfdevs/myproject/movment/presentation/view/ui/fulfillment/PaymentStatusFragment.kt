@@ -1,18 +1,13 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.fulfillment
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.movment.R
-import com.arfdevs.myproject.movment.databinding.FragmentPaymentMethodBinding
 import com.arfdevs.myproject.movment.databinding.FragmentPaymentStatusBinding
 
-class PaymentStatusFragment : BaseFragment<FragmentPaymentStatusBinding>(FragmentPaymentStatusBinding::inflate) {
+class PaymentStatusFragment :
+    BaseFragment<FragmentPaymentStatusBinding>(FragmentPaymentStatusBinding::inflate) {
 
     private val safeArgs: PaymentStatusFragmentArgs by navArgs()
 

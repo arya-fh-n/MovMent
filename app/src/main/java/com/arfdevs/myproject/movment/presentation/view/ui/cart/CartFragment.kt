@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.CartModel
-import com.arfdevs.myproject.core.domain.model.CheckoutModel
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentCartBinding
@@ -16,7 +15,6 @@ import com.arfdevs.myproject.movment.presentation.view.adapter.CartAdapter
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.MovieViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::inflate) {

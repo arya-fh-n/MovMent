@@ -131,7 +131,6 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
                 transactionModel,
                 userId
             ).launchAndCollectIn(viewLifecycleOwner) { success ->
-                Log.d("Fragment", "collectCheckout: $success")
                 if (success) {
                     findNavController().navigate(R.id.action_checkoutFragment_to_paymentStatusFragment, bundleOf("movieTransactionModel" to transactionModel))
                 }
