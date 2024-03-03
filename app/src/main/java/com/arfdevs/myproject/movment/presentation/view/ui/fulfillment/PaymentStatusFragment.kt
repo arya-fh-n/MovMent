@@ -1,6 +1,5 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.fulfillment
 
-import android.util.Log
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.work.Data
