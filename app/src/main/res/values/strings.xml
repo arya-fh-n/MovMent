@@ -59,11 +59,14 @@
     <string name="error_description" translatable="false">Error Description</string>
     <string name="error_btn" translatable="false">Error Button</string>
     <string name="ev_wishlist_empty_desc">You don\'t have any favorited movies. Start adding!</string>
+    <string name="ev_cart_empty_desc">You don\'t have any movies in your cart. Start adding!</string>
     <string name="ev_wishlist_empty_title">Wishlist is empty</string>
+    <string name="ev_cart_empty_title">Cart is empty</string>
     <string name="ob_title_1">Your favorite movies, in one app.</string>
     <string name="ob_title_2">All great selections, from all genres</string>
     <string name="ob_title_3">Join our MovMent!</string>
-    <string name="ad_msg">Are you sure you want to log out of the app?</string>
+    <string name="ad_msg_logout">Are you sure you want to log out of the app?</string>
+    <string name="ad_msg_remove_cart">Are you sure you remove this item?</string>
     <string name="option_negative">No</string>
     <string name="option_positive">Yes</string>
     <string name="loc_english" translatable="false">EN</string>
@@ -81,6 +84,7 @@
     <string name="tv_topup_payment_title">Payment</string>
     <string name="tv_amount" translatable="false">%1$d Token</string>
     <string name="tv_amount_ph" translatable="false">200 Token</string>
+    <string name="tv_movie_price_ph" translatable="false">200 Token</string>
     <string name="tv_price_title">Price</string>
     <string name="tv_price_ph" translatable="false">Rp30.000</string>
     <string name="tv_price" translatable="false">Rp%1$d</string>
@@ -98,4 +102,23 @@
     <string name="btn_go_back_to_home">Go back to Home</string>
     <string name="tv_topup_status_title">Payment Successful!</string>
     <string name="tv_payment_date_ph" translatable="false">01-01-2024 12:00:00</string>
+    <string name="toolbar_title_cart">Cart</string>
+    <string name="tv_payment_total_title" translatable="false">Total</string>
+    <string name="btn_buy_cart">Buy</string>
+    <string name="tv_payment_total" translatable="false">%1$d Token</string>
+    <string name="toolbar_title_checkout">Checkout</string>
+    <string name="btn_checkout">Checkout</string>
+    <string name="ad_msg_checkout">Are you sure you want to checkout?</string>
+    <string name="tv_payment_status_detail_title">Transaction Detail</string>
+    <string name="tv_payment_status_title">Purchase Successful!</string>
+    <string name="tv_payment_status_transaction_id_title">Transaction ID</string>
+    <string name="tv_item_transaction_total">%1$d movies</string>
+    <string name="tv_item_transaction_total_notif">%1$d movie(s) successfully checked out!</string>
+    <string name="tv_item_transaction_id">Transaction ID: %1$s</string>
+    <string name="ev_transaction_empty_title">No transaction history</string>
+    <string name="ev_transaction_empty_desc">No transaction history found. Start buying movies!</string>
+    <string name="csb_transaction_detail_title" translatable="false">Transaction Detail Clicked</string>
+    <string name="csb_transaction_detail_msg" translatable="false">This feature is not available yet!</string>
+    <string name="notify_content">Movie checkout success!</string>
+    <string name="notify_channel_name">MovMent Movie Rent</string>
 </resources>

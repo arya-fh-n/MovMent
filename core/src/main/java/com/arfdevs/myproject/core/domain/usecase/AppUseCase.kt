@@ -6,7 +6,9 @@ import androidx.lifecycle.map
 import androidx.paging.PagingData
 import com.arfdevs.myproject.core.data.remote.responses.PaymentMethodsResponse
 import com.arfdevs.myproject.core.data.remote.responses.TokenTopupResponse
+import com.arfdevs.myproject.core.domain.model.CartModel
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
+import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PaymentTypeModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
@@ -20,7 +22,8 @@ import com.arfdevs.myproject.core.domain.repository.FirebaseRepository
 import com.arfdevs.myproject.core.domain.repository.MovieRepository
 import com.arfdevs.myproject.core.domain.repository.UserRepository
 import com.arfdevs.myproject.core.helper.DataMapper.toEntityData
-import com.arfdevs.myproject.core.helper.DataMapper.toLocalList
+import com.arfdevs.myproject.core.helper.DataMapper.toLocalCartList
+import com.arfdevs.myproject.core.helper.DataMapper.toLocalWishlistList
 import com.arfdevs.myproject.core.helper.DataMapper.toNowPlayingList
 import com.arfdevs.myproject.core.helper.DataMapper.toPopularList
 import com.arfdevs.myproject.core.helper.DataMapper.toUIData
@@ -48,6 +51,18 @@ interface AppUseCase {
 
     suspend fun deleteWishlistMovie(wishlist: WishlistModel)
 
+    suspend fun deleteAllWishlistItem(userId: String)
+
+    suspend fun insertCartMovie(cart: CartModel)
+
+    fun getCartList(userId: String): LiveData<List<CartModel?>>
+
+    fun getCartItemById(movieId: Int, userId: String): Flow<CartModel?>
+
+    suspend fun deleteCartItem(cart: CartModel)
+
+    suspend fun deleteAllCartItem()
+
     suspend fun fetchSearch(query: String): LiveData<PagingData<SearchModel>>
 
     suspend fun getConfigTokenTopupList(): Flow<List<TokenTopupModel>>
@@ -60,9 +75,19 @@ interface AppUseCase {
 
     fun logEvent(eventName: String, bundle: Bundle)
 
-    suspend fun insertTokenTransaction(transactionModel: TokenTransactionModel, userId: String): Flow<Boolean>
+    suspend fun insertTokenTransaction(
+        transactionModel: TokenTransactionModel,
+        userId: String
+    ): Flow<Boolean>
 
     suspend fun getTokenBalance(userId: String): Flow<Int>
+
+    suspend fun insertMovieTransaction(
+        movieTransaction: MovieTransactionModel,
+        userId: String
+    ): Flow<Boolean>
+
+    suspend fun getMovieTransaction(userId: String): Flow<List<MovieTransactionModel?>>
 
     suspend fun createUser(user: User): Flow<UiState<Boolean>>
 
@@ -116,7 +141,7 @@ class AppInteractor(
 
     override fun getWishlist(userId: String): LiveData<List<WishlistModel>> =
         movieRepository.getWishlist(userId).map { list ->
-            list.toLocalList()
+            list.toLocalWishlistList()
         }
 
     override suspend fun checkFavorite(movieId: Int): Int = safeDataCall {
@@ -125,6 +150,33 @@ class AppInteractor(
 
     override suspend fun deleteWishlistMovie(wishlist: WishlistModel) {
         movieRepository.deleteWishlistMovie(wishlist.toEntityData())
+    }
+
+    override suspend fun deleteAllWishlistItem(userId: String) {
+        movieRepository.deleteAllWishlistItem(userId)
+    }
+
+    override suspend fun insertCartMovie(cart: CartModel) {
+        movieRepository.insertCartMovie(cart.toEntityData())
+    }
+
+    override fun getCartList(userId: String): LiveData<List<CartModel?>> =
+        movieRepository.getCartList(userId).map { cartList ->
+            cartList.toLocalCartList()
+        }
+
+    override fun getCartItemById(movieId: Int, userId: String): Flow<CartModel?> =
+        movieRepository.getCartItemById(movieId, userId).map { cart ->
+            cart?.toUIData()
+        }
+
+
+    override suspend fun deleteCartItem(cart: CartModel) {
+        movieRepository.deleteCartItem(cart.toEntityData())
+    }
+
+    override suspend fun deleteAllCartItem() {
+        movieRepository.deleteAllCartItem()
     }
 
     override suspend fun fetchSearch(query: String): LiveData<PagingData<SearchModel>> =
@@ -166,13 +218,28 @@ class AppInteractor(
         firebaseRepository.logEvent(eventName, bundle)
     }
 
-    override suspend fun insertTokenTransaction(transactionModel: TokenTransactionModel, userId: String): Flow<Boolean> = safeDataCall {
+    override suspend fun insertTokenTransaction(
+        transactionModel: TokenTransactionModel,
+        userId: String
+    ): Flow<Boolean> = safeDataCall {
         firebaseRepository.insertTokenTransaction(transactionModel, userId)
     }
 
     override suspend fun getTokenBalance(userId: String): Flow<Int> = safeDataCall {
         firebaseRepository.getTokenBalance(userId)
     }
+
+    override suspend fun insertMovieTransaction(
+        movieTransaction: MovieTransactionModel,
+        userId: String
+    ): Flow<Boolean> = safeDataCall {
+        firebaseRepository.insertMovieTransaction(movieTransaction, userId)
+    }
+
+    override suspend fun getMovieTransaction(userId: String): Flow<List<MovieTransactionModel?>> =
+        safeDataCall {
+            firebaseRepository.getMovieTransaction(userId)
+        }
 
     override suspend fun createUser(user: User): Flow<UiState<Boolean>> = safeDataCall {
         userRepository.createUser(user).map {

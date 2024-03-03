@@ -1,16 +1,16 @@
 package com.arfdevs.myproject.movment.presentation.viewmodel
 
 import android.os.Bundle
-import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.arfdevs.myproject.core.domain.model.CartModel
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
+import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
 import com.arfdevs.myproject.core.domain.model.WishlistModel
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
 import com.arfdevs.myproject.core.helper.UiState
-import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -23,6 +23,10 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
     val isFavorite: LiveData<Int> = _isFavorite
 
     private var wishlistModel: WishlistModel? = null
+    private var cartModel: CartModel? = null
+
+    private val _cartItemById = MutableLiveData<CartModel?>()
+    val cartItemById: LiveData<CartModel?> = _cartItemById
 
     fun getMovieDetails(movieId: Int) {
         _responseDetails.value = UiState.Loading
@@ -30,7 +34,6 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
         viewModelScope.launch {
             try {
                 val details = useCase.getMovieDetails(movieId)
-                useCase.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundleOf("Movie Details" to details))
                 _responseDetails.value = UiState.Success(details)
             } catch (e: Throwable) {
                 _responseDetails.value = UiState.Error(e)
@@ -48,7 +51,6 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
         viewModelScope.launch {
             wishlistModel?.let { wishlist ->
                 useCase.insertWishlistMovie(wishlist)
-                useCase.logEvent(FirebaseAnalytics.Event.ADD_TO_WISHLIST, bundleOf("Movie Wishlisted" to wishlist))
             }
         }
     }
@@ -73,10 +75,61 @@ class MovieViewModel(private val useCase: AppUseCase) : ViewModel() {
         this.wishlistModel = wishlistModel
     }
 
+    fun setCartModel(cart: CartModel) {
+        cartModel = cart
+    }
+
+    fun insertToCart(cart: CartModel) {
+        viewModelScope.launch {
+            useCase.insertCartMovie(cart)
+        }
+    }
+
+    fun insertToCartFromDetail() {
+        viewModelScope.launch {
+            cartModel?.let { cart ->
+                useCase.insertCartMovie(cart)
+            }
+        }
+    }
+
+    fun getCartList(userId: String) = useCase.getCartList(userId)
+
+    fun getCartById(movieId: Int, userId: String) {
+        viewModelScope.launch {
+            useCase.getCartItemById(movieId, userId).collect { cartById ->
+                _cartItemById.postValue(cartById)
+            }
+        }
+    }
+
+    fun deleteCart(cart: CartModel) {
+        viewModelScope.launch {
+            useCase.deleteCartItem(cart)
+        }
+    }
+
+    fun removeAllCartItem() {
+        viewModelScope.launch {
+            useCase.deleteAllCartItem()
+        }
+    }
+
+    fun getTokenBalance(userId: String) = runBlocking {
+        useCase.getTokenBalance(userId)
+    }
+
+    fun insertTransactionModel(transaction: MovieTransactionModel, userId: String) = runBlocking {
+        useCase.insertMovieTransaction(transaction, userId)
+    }
+
+    fun getTransactionHistory(userId: String) = runBlocking {
+        useCase.getMovieTransaction(userId)
+    }
+
     fun getUID(): String = useCase.getUID()
 
     fun searchMovies(query: String) = runBlocking {
-        useCase.logEvent(FirebaseAnalytics.Event.SEARCH, bundleOf("Movie Searched" to query))
         useCase.fetchSearch(query)
     }
 

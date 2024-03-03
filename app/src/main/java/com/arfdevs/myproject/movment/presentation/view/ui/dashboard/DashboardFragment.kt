@@ -65,11 +65,12 @@ class DashboardFragment :
     private fun logOut() {
         context?.let {
             MaterialAlertDialogBuilder(it)
-                .setMessage(getString(R.string.ad_msg))
+                .setMessage(getString(R.string.ad_msg_logout))
                 .setNegativeButton(getString(R.string.option_negative)) { dialog, which ->
                     dialog.dismiss()
                 }
                 .setPositiveButton(getString(R.string.option_positive)) { dialog, which ->
+                    viewModel.deleteAllWishlistItem(viewModel.getUID())
                     viewModel.logoutUser()
                     activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
                         ?.findNavController()

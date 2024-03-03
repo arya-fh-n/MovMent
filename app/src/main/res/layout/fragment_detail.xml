@@ -154,7 +154,7 @@
                 android:id="@+id/detail_btn_row"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginTop="75dp"
+                android:layout_marginTop="25dp"
                 android:background="@android:color/transparent"
                 android:gravity="center"
                 android:padding="8dp"

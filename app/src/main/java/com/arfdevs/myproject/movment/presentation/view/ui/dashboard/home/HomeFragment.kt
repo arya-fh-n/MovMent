@@ -9,6 +9,7 @@ import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
+import com.arfdevs.myproject.core.helper.DataMapper.toCartModel
 import com.arfdevs.myproject.core.helper.launchAndCollectIn
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentHomeBinding
@@ -39,13 +40,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         onItemClickListener = { nowPlaying ->
             navigateToDetailFromNowPlaying(nowPlaying)
         },
-        onAddToCartClickListener = {
+        onAddToCartClickListener = { movie ->
+            viewModel.insertToCart(movie.toCartModel().copy(userId = userId))
             context?.let { it1 ->
                 CustomSnackbar.show(
                     it1,
                     binding.root,
-                    "Add to cart clicked!",
-                    "Movie is added to cart"
+                    "Added to Cart",
+                    "Movie is added to cart!"
                 )
             }
         }

@@ -1,6 +1,7 @@
 package com.arfdevs.myproject.core.domain.repository
 
 import android.os.Bundle
+import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
 import com.arfdevs.myproject.core.domain.model.TokenTransactionModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.database.DataSnapshot
@@ -33,6 +34,13 @@ interface FirebaseRepository {
     ): Flow<Boolean>
 
     fun getTokenBalance(userId: String): Flow<Int>
+
+    fun insertMovieTransaction(
+        movieTransaction: MovieTransactionModel,
+        userId: String
+    ): Flow<Boolean>
+
+    fun getMovieTransaction(userId: String): Flow<List<MovieTransactionModel>>
 
 }
 
@@ -128,6 +136,7 @@ class FirebaseRepositoryImpl(
         realtime.database.reference.child("token_transaction").child(userId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    var remainingBalance = 0
                     var currentBalance = 0
 
                     for (transactions in snapshot.children) {
@@ -135,8 +144,36 @@ class FirebaseRepositoryImpl(
                         if (token != null) {
                             currentBalance += token
                         }
+                        remainingBalance = currentBalance
+                        trySend(remainingBalance)
                     }
-                    trySend(currentBalance)
+
+                    realtime.database.reference.child("movie_transaction").child(userId)
+                        .addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                var totalSpent = 0
+
+                                if (snapshot.exists()) {
+                                    for (transactionSnapshot in snapshot.children) {
+                                        val transaction =
+                                            transactionSnapshot.getValue(MovieTransactionModel::class.java)
+                                        transaction?.movies?.forEach { movie ->
+                                            totalSpent += movie?.price ?: 0
+                                        }
+                                    }
+                                    if (remainingBalance != 0) {
+                                        remainingBalance = currentBalance - totalSpent
+                                        trySend(remainingBalance)
+                                    }
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                close(error.toException())
+                            }
+
+                        })
+
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -147,5 +184,52 @@ class FirebaseRepositoryImpl(
 
         awaitClose()
     }
+
+    override fun insertMovieTransaction(
+        movieTransaction: MovieTransactionModel,
+        userId: String
+    ): Flow<Boolean> = callbackFlow {
+        trySend(false)
+
+        realtime.database.reference.child("movie_transaction").child(userId).push()
+            .setValue(movieTransaction).addOnCompleteListener { task ->
+                trySend(task.isSuccessful)
+            }.addOnFailureListener { e ->
+                trySend(e.message!!.isNotEmpty())
+            }
+
+        awaitClose()
+    }
+
+    override fun getMovieTransaction(userId: String): Flow<List<MovieTransactionModel>> =
+        callbackFlow {
+            trySend(listOf())
+
+            realtime.database.reference.child("movie_transaction").child(userId)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val movieTransactions = mutableListOf<MovieTransactionModel>()
+
+                        if (snapshot.exists()) {
+                            for (transactionSnapshot in snapshot.children) {
+                                val transaction =
+                                    transactionSnapshot.getValue(MovieTransactionModel::class.java)
+                                transaction?.let {
+                                    movieTransactions.add(it)
+                                }
+                            }
+
+                            trySend(movieTransactions)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        close(error.toException())
+                    }
+
+                })
+
+            awaitClose()
+        }
 
 }

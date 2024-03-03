@@ -1,10 +1,12 @@
 package com.arfdevs.myproject.movment.presentation.viewmodel
 
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.arfdevs.myproject.core.domain.model.CartModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
 import com.arfdevs.myproject.core.domain.model.SessionModel
@@ -99,6 +101,12 @@ class HomeViewModel(private val useCase: AppUseCase) : ViewModel() {
 
     fun getTokenBalance(userId: String) = runBlocking {
         useCase.getTokenBalance(userId)
+    }
+
+    fun insertToCart(cart: CartModel) {
+        viewModelScope.launch {
+            useCase.insertCartMovie(cart)
+        }
     }
 
 }

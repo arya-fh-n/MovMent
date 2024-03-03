@@ -3,6 +3,7 @@ package com.arfdevs.myproject.core.domain.repository
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingData
 import com.arfdevs.myproject.core.data.local.datasource.LocalDataSource
+import com.arfdevs.myproject.core.data.local.db.entity.CartEntity
 import com.arfdevs.myproject.core.data.local.db.entity.WishlistEntity
 import com.arfdevs.myproject.core.data.remote.datasource.RemoteDataSource
 import com.arfdevs.myproject.core.data.remote.responses.MovieDetailsResponse
@@ -10,6 +11,7 @@ import com.arfdevs.myproject.core.data.remote.responses.NowPlayingResponse
 import com.arfdevs.myproject.core.data.remote.responses.PopularResponse
 import com.arfdevs.myproject.core.domain.model.SearchModel
 import com.arfdevs.myproject.core.helper.safeDataCall
+import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
 
@@ -28,6 +30,18 @@ interface MovieRepository {
     suspend fun checkFavorite(movieId: Int): Int
 
     suspend fun deleteWishlistMovie(wishlist: WishlistEntity)
+
+    suspend fun deleteAllWishlistItem(userId: String)
+
+    suspend fun insertCartMovie(cart: CartEntity)
+
+    fun getCartList(userId: String): LiveData<List<CartEntity?>>
+
+    fun getCartItemById(movieId: Int, userId: String): Flow<CartEntity?>
+
+    suspend fun deleteCartItem(cart: CartEntity)
+
+    suspend fun deleteAllCartItem()
 
 }
 
@@ -58,7 +72,7 @@ class MovieRepositoryImpl(
     }
 
     override fun getWishlist(userId: String): LiveData<List<WishlistEntity>> =
-        local.gethWishlistMovie(userId)
+        local.getWishlistMovie(userId)
 
 
     override suspend fun checkFavorite(movieId: Int): Int = safeDataCall {
@@ -68,5 +82,29 @@ class MovieRepositoryImpl(
     override suspend fun deleteWishlistMovie(wishlist: WishlistEntity) {
         local.deleteWishlistMovie(wishlist)
     }
+
+    override suspend fun deleteAllWishlistItem(userId: String) {
+        local.deleteAllWishlist(userId)
+    }
+
+    override suspend fun insertCartMovie(cart: CartEntity) {
+        local.insertCartMovie(cart)
+    }
+
+    override fun getCartList(userId: String): LiveData<List<CartEntity?>> =
+        local.getCartList(userId)
+
+    override fun getCartItemById(movieId: Int, userId: String): Flow<CartEntity?> =
+        local.getCartItemById(movieId, userId)
+
+
+    override suspend fun deleteCartItem(cart: CartEntity) {
+        local.deleteCartItem(cart)
+    }
+
+    override suspend fun deleteAllCartItem() {
+        local.deleteAllCart()
+    }
+
 
 }

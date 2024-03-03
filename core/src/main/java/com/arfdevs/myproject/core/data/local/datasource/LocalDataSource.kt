@@ -2,9 +2,11 @@ package com.arfdevs.myproject.core.data.local.datasource
 
 import androidx.lifecycle.LiveData
 import com.arfdevs.myproject.core.data.local.db.Dao
+import com.arfdevs.myproject.core.data.local.db.entity.CartEntity
 import com.arfdevs.myproject.core.data.local.db.entity.WishlistEntity
 import com.arfdevs.myproject.core.data.local.sharedpref.SharedPreferencesHelper
 import com.arfdevs.myproject.core.helper.safeDataCall
+import kotlinx.coroutines.flow.Flow
 
 class LocalDataSource(
     private val dao: Dao,
@@ -15,7 +17,7 @@ class LocalDataSource(
         dao.insertWishlistMovie(wishlist)
     }
 
-    fun gethWishlistMovie(userId: String): LiveData<List<WishlistEntity>> = dao.getWishlistMovie(userId)
+    fun getWishlistMovie(userId: String): LiveData<List<WishlistEntity>> = dao.getWishlistMovie(userId)
 
     suspend fun checkFavorite(movieId: Int): Int = safeDataCall {
         dao.checkFavorite(movieId)
@@ -25,9 +27,25 @@ class LocalDataSource(
         dao.deleteWishlistMovie(wishlist)
     }
 
-    suspend fun deleteWishlistTable() {
-        dao.deleteWishlistTable()
+    suspend fun deleteAllWishlist(userId: String) {
+        dao.deleteAllWishlistItem(userId)
     }
+
+    suspend fun insertCartMovie(cart: CartEntity) {
+        dao.insertCart(cart)
+    }
+
+    fun getCartList(userId: String): LiveData<List<CartEntity?>> {
+        return dao.getCartList(userId)
+    }
+
+    fun getCartItemById(movieId: Int, userId: String): Flow<CartEntity?> {
+        return dao.getCartItemById(movieId, userId)
+    }
+
+    suspend fun deleteCartItem(cart: CartEntity) = dao.deleteCartItem(cart)
+
+    suspend fun deleteAllCart() = dao.deleteAllCartItem()
 
     fun getOnboardingState(): Boolean =
         sharedPreferencesHelper.getOnboardingState()

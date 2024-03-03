@@ -13,6 +13,7 @@ object Constants {
     const val USER_ID = "user_id"
 
     const val WISHLIST_TABLE = "wishlist"
+    const val CART_TABLE = "cart"
 
     const val BACKDROP_PATH = "https://image.tmdb.org/t/p/w500"
 

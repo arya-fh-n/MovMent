@@ -9,17 +9,22 @@ import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.ItemWishlistBinding
 
 class WishlistAdapter(
+    private val onItemSet: (WishlistModel) -> Unit,
     private val onItemClickListener: (WishlistModel) -> Unit,
     private val onAddToCartClickListener: (WishlistModel) -> Unit = {},
     private val onRemoveFavoriteListener: (WishlistModel) -> Unit = {}
 ) : BaseListAdapter<WishlistModel, ItemWishlistBinding>(ItemWishlistBinding::inflate) {
 
+    private var isInCart = false
+
     override fun onItemBind(): (WishlistModel, ItemWishlistBinding, View, Int) -> Unit =
         { item, binding, view, _ ->
             with(binding) {
+                onItemSet(item)
                 ivMovieWishlistBanner.load(Constants.BACKDROP_PATH + item.posterPath)
                 tvMovieWishlistTitle.text = item.originalTitle
-                tvMovieWishlistPrice.text = view.context.getString(R.string.tv_movie_price, item.price)
+                tvMovieWishlistPrice.text =
+                    view.context.getString(R.string.tv_movie_price, item.price)
                 icRating.load(R.drawable.ic_star)
                 tvRating.text = String.format("%.1f", item.voteAverage)
 
@@ -36,8 +41,13 @@ class WishlistAdapter(
                 root.setOnClickListener {
                     onItemClickListener(item)
                 }
+
             }
 
         }
+
+    fun itemIsInCart(state: Boolean) {
+        isInCart = state
+    }
 
 }

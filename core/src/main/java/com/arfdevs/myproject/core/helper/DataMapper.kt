@@ -1,5 +1,6 @@
 package com.arfdevs.myproject.core.helper
 
+import com.arfdevs.myproject.core.data.local.db.entity.CartEntity
 import com.arfdevs.myproject.core.data.local.db.entity.WishlistEntity
 import com.arfdevs.myproject.core.data.remote.responses.GenresItem
 import com.arfdevs.myproject.core.data.remote.responses.MovieDetailsResponse
@@ -9,7 +10,10 @@ import com.arfdevs.myproject.core.data.remote.responses.PaymentType
 import com.arfdevs.myproject.core.data.remote.responses.PopularItem
 import com.arfdevs.myproject.core.data.remote.responses.SearchItem
 import com.arfdevs.myproject.core.data.remote.responses.TokenTopupResponse
+import com.arfdevs.myproject.core.domain.model.CartModel
+import com.arfdevs.myproject.core.domain.model.CheckoutModel
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
+import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PaymentMethodModel
 import com.arfdevs.myproject.core.domain.model.PaymentTypeModel
@@ -43,6 +47,30 @@ object DataMapper {
     fun List<NowPlayingItem>.toNowPlayingList() = map {
         it.toUIData()
     }.toList()
+
+    fun NowPlayingModel.toCartModel() = CartModel(
+        movieId = id,
+        originalTitle = originalTitle,
+        posterPath = Constants.BACKDROP_PATH + posterPath,
+        voteAverage = voteAverage,
+        price = price
+    )
+
+    fun SearchModel.toCartModel(): CartModel {
+        val movieId = id ?: 0
+        val originalTitle = originalTitle ?: ""
+        val posterPath = Constants.BACKDROP_PATH + (posterPath)
+        val voteAverage = voteAverage ?: 0.0
+        val price = price ?: 0
+
+        return CartModel(
+            movieId = movieId,
+            originalTitle = originalTitle,
+            posterPath = posterPath,
+            voteAverage = voteAverage,
+            price = price
+        )
+    }
 
     fun MovieDetailsResponse.toUIData() = MovieDetailsModel(
         id = id,
@@ -81,7 +109,7 @@ object DataMapper {
         price = price
     )
 
-    fun List<WishlistEntity>.toLocalList() = this.map { wishlist ->
+    fun List<WishlistEntity>.toLocalWishlistList() = this.map { wishlist ->
         wishlist.toUIData()
     }
 
@@ -93,6 +121,54 @@ object DataMapper {
         voteAverage = voteAverage,
         price = price
     )
+
+    fun WishlistModel.toCartModel() = CartModel(
+        movieId = movieId,
+        userId = userId,
+        originalTitle = originalTitle,
+        posterPath = posterPath,
+        voteAverage = voteAverage,
+        price = price
+    )
+
+    fun CartEntity.toUIData() = CartModel(
+        movieId = movieId,
+        userId = userId,
+        originalTitle = originalTitle,
+        posterPath = posterPath,
+        voteAverage = voteAverage,
+        price = price
+    )
+
+    fun List<CartEntity?>.toLocalCartList() = this.map { cart ->
+        cart?.toUIData()
+    }
+
+    fun CartModel.toEntityData() = CartEntity(
+        movieId = movieId,
+        userId = userId,
+        originalTitle = originalTitle,
+        posterPath = posterPath,
+        voteAverage = voteAverage,
+        price = price
+    )
+
+    private fun CartModel.toCheckoutModel() = CheckoutModel(
+        movieId = movieId,
+        userId = userId,
+        originalTitle = originalTitle,
+        posterPath = posterPath,
+        voteAverage = voteAverage,
+        price = price
+    )
+
+    fun List<CartModel?>.toCheckoutModelList() = this.map { cart ->
+        cart?.toCheckoutModel()
+    }
+
+    fun List<CheckoutModel?>.toMovieTransactionModel(uid: String, total: Int, date: String) =
+        MovieTransactionModel(uid = uid, movies = this, total = total, date = date)
+
 
     fun SessionModel.toSplashState() = when {
         this.displayName.isEmpty() && this.uid.isEmpty().not() && this.onboardingState -> {

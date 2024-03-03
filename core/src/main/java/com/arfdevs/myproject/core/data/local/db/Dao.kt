@@ -6,7 +6,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.arfdevs.myproject.core.data.local.db.entity.CartEntity
 import com.arfdevs.myproject.core.data.local.db.entity.WishlistEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface Dao {
@@ -23,7 +25,22 @@ interface Dao {
     @Delete
     suspend fun deleteWishlistMovie(wishlist: WishlistEntity)
 
-    @Query("DELETE FROM wishlist")
-    suspend fun deleteWishlistTable()
+    @Query("DELETE FROM wishlist WHERE userId = :userId")
+    suspend fun deleteAllWishlistItem(userId: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCart(cart: CartEntity)
+
+    @Query("SELECT * FROM cart WHERE userId = :userId")
+    fun getCartList(userId: String): LiveData<List<CartEntity?>>
+
+    @Query("SELECT * FROM cart WHERE movieId = :movieId AND userId = :userId")
+    fun getCartItemById(movieId: Int, userId: String): Flow<CartEntity?>
+
+    @Delete
+    suspend fun deleteCartItem(cart: CartEntity)
+
+    @Query("DELETE FROM cart")
+    suspend fun deleteAllCartItem()
 
 }
