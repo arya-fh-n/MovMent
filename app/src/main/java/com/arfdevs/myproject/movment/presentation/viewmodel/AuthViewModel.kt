@@ -1,7 +1,6 @@
 package com.arfdevs.myproject.movment.presentation.viewmodel
 
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arfdevs.myproject.core.domain.model.User

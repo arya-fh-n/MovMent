@@ -129,7 +129,11 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
                 userId
             ).launchAndCollectIn(viewLifecycleOwner) { success ->
                 if (success) {
-                    findNavController().navigate(R.id.action_checkoutFragment_to_paymentStatusFragment, bundleOf("movieTransactionModel" to transactionModel))
+                    findNavController()
+                        .navigate(
+                            R.id.action_checkoutFragment_to_paymentStatusFragment,
+                            bundleOf("movieTransactionModel" to transactionModel)
+                        )
                 }
             }
         }

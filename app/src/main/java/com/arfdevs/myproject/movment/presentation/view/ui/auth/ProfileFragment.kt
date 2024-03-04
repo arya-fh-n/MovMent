@@ -51,7 +51,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                 loadingAnim.visible(false)
 
                 if (success) {
-                    viewModel.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundleOf("New User Profile Name" to username))
+                    viewModel.logEvent(
+                        FirebaseAnalytics.Event.SCREEN_VIEW,
+                        bundleOf("New User Profile Name" to username)
+                    )
                     context?.let {
                         CustomSnackbar.show(
                             it,

@@ -30,7 +30,7 @@ interface ApiEndpoint {
     @GET("search/movie")
     suspend fun fetchSearch(
         @Query("query") query: String = "",
-        @Query("include_adult") includeAdult: Boolean? = true,
+        @Query("include_adult") includeAdult: Boolean? = false,
         @Query("page") page: Int? = null,
         @Query("region") region: String? = "ID"
     ): MovieSearchResponse

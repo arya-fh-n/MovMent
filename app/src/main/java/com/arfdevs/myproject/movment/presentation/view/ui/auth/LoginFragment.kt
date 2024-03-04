@@ -14,6 +14,7 @@ import com.arfdevs.myproject.core.helper.onSuccess
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentLoginBinding
+import com.arfdevs.myproject.movment.presentation.helper.Constants.PASSWORD_MAX_LENGTH
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.AuthViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -128,7 +129,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(email).matches() && email.isNotBlank()
 
             val isPasswordBlank = password.isBlank()
-            val isPasswordValid = password.length >= 8 && password.isNotBlank()
+            val isPasswordValid = password.length >= PASSWORD_MAX_LENGTH && password.isNotBlank()
 
             when {
                 isEmailBlank -> {
@@ -175,6 +176,5 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             }
         }
     }
-
 
 }
