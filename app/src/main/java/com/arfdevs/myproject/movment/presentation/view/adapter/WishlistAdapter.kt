@@ -4,7 +4,6 @@ import android.view.View
 import coil.load
 import com.arfdevs.myproject.core.base.BaseListAdapter
 import com.arfdevs.myproject.core.domain.model.WishlistModel
-import com.arfdevs.myproject.core.helper.Constants
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.ItemWishlistBinding
 
@@ -21,7 +20,12 @@ class WishlistAdapter(
         { item, binding, view, _ ->
             with(binding) {
                 onItemSet(item)
-                ivMovieWishlistBanner.load(Constants.BACKDROP_PATH + item.posterPath)
+                if (item.posterPath != "") {
+                    ivMovieWishlistBanner.load(item.posterPath)
+                } else {
+                    ivMovieWishlistBanner.load(R.drawable.product_thumbnail)
+                }
+
                 tvMovieWishlistTitle.text = item.originalTitle
                 tvMovieWishlistPrice.text =
                     view.context.getString(R.string.tv_movie_price, item.price)

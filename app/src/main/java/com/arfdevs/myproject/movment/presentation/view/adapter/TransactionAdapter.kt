@@ -22,7 +22,11 @@ class TransactionAdapter(
                 tvItemTransactionDate.text = item.date.convertToDateInDDMMYYYYFormat()
 
                 item.movies.first()?.let {
-                    ivMovieBanner.load(it.posterPath)
+                    if (it.posterPath != "") {
+                        ivMovieBanner.load(it.posterPath)
+                    } else {
+                        ivMovieBanner.load(R.drawable.product_thumbnail)
+                    }
                     tvItemFirstMovieTitle.text = it.originalTitle
                 }
 

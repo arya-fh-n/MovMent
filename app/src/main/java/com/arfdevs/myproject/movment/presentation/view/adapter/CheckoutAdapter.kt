@@ -15,7 +15,11 @@ class CheckoutAdapter(
     override fun onItemBind(): (CheckoutModel, ItemCheckoutBinding, View, Int) -> Unit =
         { item, binding, view, _ ->
             with(binding) {
-                ivMovieBanner.load(Constants.BACKDROP_PATH + item.posterPath)
+                if (item.posterPath != "") {
+                    ivMovieBanner.load(Constants.BACKDROP_PATH + item.posterPath)
+                } else {
+                    ivMovieBanner.load(R.drawable.product_thumbnail)
+                }
 
                 tvItemCartMovieTitle.text = item.originalTitle
 

@@ -20,7 +20,11 @@ class SearchAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: SearchModel) {
             with(binding) {
-                ivMovieSearchBanner.load(Constants.BACKDROP_PATH + item.posterPath)
+                if (item.posterPath != null) {
+                    ivMovieSearchBanner.load(Constants.BACKDROP_PATH + item.posterPath)
+                } else {
+                    ivMovieSearchBanner.load(R.drawable.product_thumbnail)
+                }
                 icRating.load(R.drawable.ic_star)
 
                 tvMovieSearchTitle.text = item.originalTitle

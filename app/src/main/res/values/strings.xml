@@ -123,4 +123,5 @@
     <string name="notify_channel_name">MovMent Movie Rent</string>
     <string name="btn_crash_app">Crash app!</string>
     <string name="exception_btn_crash">App crashed because crash button is clicked!</string>
+    <string name="err_detail_load_failed">Detail Load Failed</string>
 </resources>

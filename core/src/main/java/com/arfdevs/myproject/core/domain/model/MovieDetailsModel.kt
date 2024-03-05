@@ -14,7 +14,7 @@ data class MovieDetailsModel(
 
     var overview: String = "",
 
-    var posterPath: String = "",
+    var posterPath: String? = "",
 
     var backdropPath: String? = "",
 

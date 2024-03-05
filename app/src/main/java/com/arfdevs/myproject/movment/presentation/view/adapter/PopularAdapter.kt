@@ -13,7 +13,11 @@ class PopularAdapter(
 ): BaseListAdapter<PopularModel, ItemPopularBinding>(ItemPopularBinding::inflate) {
     override fun onItemBind(): (PopularModel, ItemPopularBinding, View, Int) -> Unit = { item, binding, view, _ ->
         with(binding) {
-            ivMoviePopularBanner.load(Constants.BACKDROP_PATH + item.posterPath)
+            if (item.posterPath != null) {
+                ivMoviePopularBanner.load(Constants.BACKDROP_PATH + item.posterPath)
+            } else {
+                ivMoviePopularBanner.load(R.drawable.product_thumbnail)
+            }
             icRating.load(R.drawable.ic_star)
             tvMoviePopularTitle.text = item.originalTitle
             tvRating.text = String.format("%.1f", item.voteAverage)

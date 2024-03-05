@@ -10,6 +10,7 @@ import com.arfdevs.myproject.core.helper.Constants
 import com.arfdevs.myproject.core.helper.onError
 import com.arfdevs.myproject.core.helper.onLoading
 import com.arfdevs.myproject.core.helper.onSuccess
+import com.arfdevs.myproject.core.helper.posterPathNullHandling
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentDetailBinding
@@ -99,7 +100,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                             movieId = detail.id,
                             userId = userId,
                             originalTitle = detail.originalTitle,
-                            posterPath = Constants.BACKDROP_PATH + detail.posterPath,
+                            posterPath = detail.posterPath.posterPathNullHandling(),
                             voteAverage = detail.voteAverage,
                             price = detail.price
                         )
@@ -110,7 +111,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                             movieId = detail.id,
                             userId = userId,
                             originalTitle = detail.originalTitle,
-                            posterPath = Constants.BACKDROP_PATH + detail.posterPath,
+                            posterPath = detail.posterPath.posterPathNullHandling(),
                             voteAverage = detail.voteAverage,
                             price = detail.price
                         )
@@ -138,7 +139,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                     context?.let {
                         CustomSnackbar.show(
                             it, binding.root,
-                            getString(R.string.err_title_login_failed),
+                            getString(R.string.err_detail_load_failed),
                             e.localizedMessage?.toString() ?: ERROR
                         )
                     }
@@ -199,6 +200,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                             btnAddToCart.isEnabled = true
                             btnRent.isEnabled = true
                         }
+
                         else -> {
                             btnAddToCart.isEnabled = false
                             btnRent.isEnabled = false
