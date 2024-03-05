@@ -78,10 +78,26 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
         getConfig()
         updateConfig()
 
-        observeAmount()
-        observePrice()
-        observeTokenModel()
-        observeTokenBalance()
+        observeTokenPage()
+    }
+
+    private fun observeTokenPage() = with(viewModel) {
+        tokenAmount.observe(viewLifecycleOwner) {
+            amount = it
+        }
+
+        tokenPrice.observe(viewLifecycleOwner) {
+            price = it
+        }
+
+        tokenModel.observe(viewLifecycleOwner) {
+            this@TokenFragment.tokenModel = it
+        }
+
+        getTokenBalance(getUID()).launchAndCollectIn(viewLifecycleOwner) { balance ->
+            binding.tvBalance.text = getString(R.string.tv_balance, balance)
+        }
+
     }
 
     private fun getConfig() = with(viewModel) {
@@ -107,30 +123,6 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
             "Token topup amount cannot be fetched."
         ) {
             getConfig()
-        }
-    }
-
-    private fun observeTokenModel() = with(viewModel) {
-        tokenModel.observe(viewLifecycleOwner) {
-            this@TokenFragment.tokenModel = it
-        }
-    }
-
-    private fun observeAmount() = with(viewModel) {
-        tokenAmount.observe(viewLifecycleOwner) {
-            amount = it
-        }
-    }
-
-    private fun observePrice() = with(viewModel) {
-        tokenPrice.observe(viewLifecycleOwner) {
-            price = it
-        }
-    }
-
-    private fun observeTokenBalance() = with(viewModel) {
-        getTokenBalance(getUID()).launchAndCollectIn(viewLifecycleOwner) { balance ->
-            binding.tvBalance.text = getString(R.string.tv_balance, balance)
         }
     }
 

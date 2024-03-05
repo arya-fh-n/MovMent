@@ -9,6 +9,8 @@ object Constants {
     const val SPLASH_DELAY = 3000L
     const val HOME_TOKEN_FETCH_DELAY = 5L
     const val TOKEN_PRICE_PER_RUPIAH = 150
+
+    const val USERNAME_MIN_LENGTH = 3
     const val PASSWORD_MAX_LENGTH = 8
 
     const val USERNAME = "Username"
@@ -18,6 +20,11 @@ object Constants {
     const val ENGLISH = "en"
 
     const val VIEW_ALPHA = 0.4f
+
+    const val VIBRATE_1000 = 1000L
+    const val VIBRATE_2000 = 2000L
+
+    const val DELAY_500 = 500L
 
     const val NOTIFICATION_CHANNEL_ID = "notify-channel"
 
