@@ -7,7 +7,8 @@ import java.util.Locale
 object Constants {
 
     const val SPLASH_DELAY = 3000L
-    const val TOKEN_PRICE_PER_RUPIAH  =150
+    const val HOME_TOKEN_FETCH_DELAY = 5L
+    const val TOKEN_PRICE_PER_RUPIAH = 150
     const val PASSWORD_MAX_LENGTH = 8
 
     const val USERNAME = "Username"

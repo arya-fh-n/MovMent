@@ -117,8 +117,6 @@ class FirebaseRepositoryImpl(
         userId: String
     ): Flow<Boolean> =
         callbackFlow {
-            trySend(false)
-
             realtime.database.reference.child("token_transaction").child(userId).push()
                 .setValue(transaction)
                 .addOnCompleteListener { task ->
@@ -131,8 +129,6 @@ class FirebaseRepositoryImpl(
         }
 
     override fun getTokenBalance(userId: String): Flow<Int> = callbackFlow {
-        trySend(0)
-
         realtime.database.reference.child("token_transaction").child(userId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -189,8 +185,6 @@ class FirebaseRepositoryImpl(
         movieTransaction: MovieTransactionModel,
         userId: String
     ): Flow<Boolean> = callbackFlow {
-        trySend(false)
-
         realtime.database.reference.child("movie_transaction").child(userId).push()
             .setValue(movieTransaction).addOnCompleteListener { task ->
                 trySend(task.isSuccessful)
@@ -203,8 +197,6 @@ class FirebaseRepositoryImpl(
 
     override fun getMovieTransaction(userId: String): Flow<List<MovieTransactionModel>> =
         callbackFlow {
-            trySend(listOf())
-
             realtime.database.reference.child("movie_transaction").child(userId)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {

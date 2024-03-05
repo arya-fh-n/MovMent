@@ -23,7 +23,7 @@ class CheckoutAdapter(
 
                 tvItemCartMovieTitle.text = item.originalTitle
 
-                icRating.load(R.drawable.ic_star)
+                icRating.setImageResource(R.drawable.ic_star)
                 tvRating.text = String.format("%.1f", item.voteAverage)
 
                 tvPriceTitle.text = view.context.getString(R.string.tv_price_title)

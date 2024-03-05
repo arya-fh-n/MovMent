@@ -1,11 +1,12 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.dashboard.home
 
+import android.os.Handler
+import android.os.Looper
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
@@ -13,6 +14,7 @@ import com.arfdevs.myproject.core.helper.DataMapper.toCartModel
 import com.arfdevs.myproject.core.helper.launchAndCollectIn
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentHomeBinding
+import com.arfdevs.myproject.movment.presentation.helper.Constants.HOME_TOKEN_FETCH_DELAY
 import com.arfdevs.myproject.movment.presentation.helper.Constants.USERNAME
 import com.arfdevs.myproject.movment.presentation.view.adapter.NowPlayingAdapter
 import com.arfdevs.myproject.movment.presentation.view.adapter.PopularAdapter
@@ -56,7 +58,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     override fun initView() = with(binding) {
         tvUsername.text = getString(R.string.tv_username_ph, USERNAME)
         tvBalanceIs.text = getString(R.string.tv_balance_is)
-        ivBalance.load(R.drawable.ic_balance)
+        ivBalance.setImageResource(R.drawable.ic_balance)
 
         tvSectionPopular.text = getString(R.string.tv_section_popular)
         tvSectionNowPlaying.text = getString(R.string.tv_section_now_playing)
@@ -115,9 +117,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         getNowPlaying(1)
         getCurrentUser()
 
-        getTokenBalance(userId).launchAndCollectIn(viewLifecycleOwner) { balance ->
-            binding.tvBalance.text = getString(R.string.tv_balance, balance)
-        }
+        Handler(Looper.getMainLooper()).postDelayed({
+            getTokenBalance(userId).launchAndCollectIn(viewLifecycleOwner) { balance ->
+                binding.tvBalance.text = getString(R.string.tv_balance, balance)
+            }
+        }, HOME_TOKEN_FETCH_DELAY)
     }
 
     private fun navigateToDetailFromPopular(popular: PopularModel) {

@@ -25,7 +25,7 @@ class SearchAdapter(
                 } else {
                     ivMovieSearchBanner.load(R.drawable.product_thumbnail)
                 }
-                icRating.load(R.drawable.ic_star)
+                icRating.setImageResource(R.drawable.ic_star)
 
                 tvMovieSearchTitle.text = item.originalTitle
                 tvMovieSearchPrice.text =

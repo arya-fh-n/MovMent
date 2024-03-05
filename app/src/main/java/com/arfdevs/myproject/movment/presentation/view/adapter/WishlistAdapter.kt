@@ -29,7 +29,7 @@ class WishlistAdapter(
                 tvMovieWishlistTitle.text = item.originalTitle
                 tvMovieWishlistPrice.text =
                     view.context.getString(R.string.tv_movie_price, item.price)
-                icRating.load(R.drawable.ic_star)
+                icRating.setImageResource(R.drawable.ic_star)
                 tvRating.text = String.format("%.1f", item.voteAverage)
 
                 btnAddToCart.text = view.context.getString(R.string.btn_add_to_cart)

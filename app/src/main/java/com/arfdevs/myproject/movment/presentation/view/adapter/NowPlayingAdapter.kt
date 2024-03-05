@@ -21,7 +21,7 @@ class NowPlayingAdapter(
                 } else {
                     ivMovieNowPlayingBanner.load(R.drawable.product_thumbnail)
                 }
-                icRating.load(R.drawable.ic_star)
+                icRating.setImageResource(R.drawable.ic_star)
                 tvMovieNowPlayingTitle.text = item.originalTitle
                 tvMovieNowPlayingPrice.text =
                     view.context.getString(R.string.tv_movie_price, item.price)

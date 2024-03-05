@@ -18,7 +18,7 @@ class PopularAdapter(
             } else {
                 ivMoviePopularBanner.load(R.drawable.product_thumbnail)
             }
-            icRating.load(R.drawable.ic_star)
+            icRating.setImageResource(R.drawable.ic_star)
             tvMoviePopularTitle.text = item.originalTitle
             tvRating.text = String.format("%.1f", item.voteAverage)
 
