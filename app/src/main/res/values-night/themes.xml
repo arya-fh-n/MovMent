@@ -27,5 +27,29 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
+
+        <item name="android:fontFamily">@font/poppins_regular</item>
     </style>
+
+    <style name="Toolbar.Title" parent="Theme.Material3.Dark">
+        <item name="android:textSize">22sp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Toolbar.Title.Medium" parent="Theme.Material3.Dark">
+        <item name="android:textSize">20sp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <style name="TextAppearance.AuthLabel.Normal" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.CornerSize50" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="Theme.MovMent" parent="Base.Theme.MovMent" />
 </resources>

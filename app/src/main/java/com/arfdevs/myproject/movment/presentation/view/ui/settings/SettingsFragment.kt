@@ -25,6 +25,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
         tvLight.setText(R.string.theme_light)
         tvDark.setText(R.string.theme_dark)
 
+        btnCrashApp.text = getString(R.string.btn_crash_app)
+
         viewModel.getLanguage()
         viewModel.getTheme()
     }
@@ -61,6 +63,10 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
                     viewModel.saveTheme(false)
                 }
             }
+        }
+
+        btnCrashApp.setOnClickListener {
+            throw RuntimeException(getString(R.string.exception_btn_crash)) // Force a crash
         }
     }
 
