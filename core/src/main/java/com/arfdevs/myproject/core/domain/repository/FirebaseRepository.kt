@@ -100,7 +100,7 @@ class FirebaseRepositoryImpl(
             }
 
             override fun onError(error: FirebaseRemoteConfigException) {
-                trySend(error.message?.isNotEmpty() ?: false)
+                trySend(error.localizedMessage?.isEmpty() ?: false)
             }
 
         })

@@ -3,14 +3,13 @@ package com.arfdevs.myproject.movment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
 @ExperimentalCoroutinesApi
-class MainCoroutineRule : TestWatcher(), TestCoroutineScope by TestCoroutineScope() {
+class MainCoroutineRule : TestWatcher() {
 
     private val testDispatcher = StandardTestDispatcher()
 
@@ -22,6 +21,5 @@ class MainCoroutineRule : TestWatcher(), TestCoroutineScope by TestCoroutineScop
     override fun finished(description: Description?) {
         super.finished(description)
         Dispatchers.resetMain()
-        cleanupTestCoroutines()
     }
 }

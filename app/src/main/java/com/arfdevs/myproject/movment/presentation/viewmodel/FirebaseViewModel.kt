@@ -36,7 +36,7 @@ class FirebaseViewModel(private val useCase: AppUseCase): ViewModel() {
     }
 
     fun updateConfigTokenTopupList() = runBlocking {
-        useCase.updateConfigPaymentMethodsList()
+        useCase.updateConfigTokenTopupList()
     }
 
     fun getConfigPaymentMethodsList() = runBlocking {
