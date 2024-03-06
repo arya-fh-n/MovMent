@@ -16,8 +16,12 @@ class NowPlayingAdapter(
     override fun onItemBind(): (NowPlayingModel, ItemNowPlayingBinding, View, Int) -> Unit =
         { item, binding, view, _ ->
             with(binding) {
-                ivMovieNowPlayingBanner.load(Constants.BACKDROP_PATH + item.posterPath)
-                icRating.load(R.drawable.ic_star)
+                if (item.posterPath != null) {
+                    ivMovieNowPlayingBanner.load(Constants.BACKDROP_PATH + item.posterPath)
+                } else {
+                    ivMovieNowPlayingBanner.load(R.drawable.product_thumbnail)
+                }
+                icRating.setImageResource(R.drawable.ic_star)
                 tvMovieNowPlayingTitle.text = item.originalTitle
                 tvMovieNowPlayingPrice.text =
                     view.context.getString(R.string.tv_movie_price, item.price)

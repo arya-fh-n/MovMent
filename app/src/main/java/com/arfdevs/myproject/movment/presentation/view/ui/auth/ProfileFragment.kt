@@ -11,6 +11,7 @@ import com.arfdevs.myproject.core.helper.onSuccess
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentProfileBinding
+import com.arfdevs.myproject.movment.presentation.helper.Constants.USERNAME_MIN_LENGTH
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.AuthViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -51,7 +52,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                 loadingAnim.visible(false)
 
                 if (success) {
-                    viewModel.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundleOf("New User Profile Name" to username))
+                    viewModel.logEvent(
+                        FirebaseAnalytics.Event.SCREEN_VIEW,
+                        bundleOf("New User Profile Name" to username)
+                    )
                     context?.let {
                         CustomSnackbar.show(
                             it,
@@ -87,7 +91,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         val username = etUsername.text.toString()
 
         val isBlank = username.isBlank()
-        val isShort = username.length < 3
+        val isShort = username.length < USERNAME_MIN_LENGTH
 
         when {
             isBlank -> {

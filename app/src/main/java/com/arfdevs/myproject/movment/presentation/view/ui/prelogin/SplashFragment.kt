@@ -12,6 +12,7 @@ import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.helper.SplashState
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentSplashBinding
+import com.arfdevs.myproject.movment.presentation.helper.Constants.SPLASH_DELAY
 import com.arfdevs.myproject.movment.presentation.viewmodel.HomeViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -54,7 +55,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
                             navController?.navigate(R.id.action_splashFragment_to_loginFragment)
                         }
                     }
-                }, 3000L)
+                }, SPLASH_DELAY)
             }
         }
     }

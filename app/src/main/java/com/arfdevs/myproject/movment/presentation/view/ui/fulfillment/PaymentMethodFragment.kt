@@ -21,7 +21,11 @@ class PaymentMethodFragment : BottomSheetDialogFragment() {
 
     private val paymentList: MutableList<PaymentTypeModel> = mutableListOf()
 
-    private lateinit var paymentTypeAdapter: PaymentTypeAdapter
+    private var paymentTypeAdapter = PaymentTypeAdapter(paymentList,
+        onPaymentMethodClickListener = {
+            paymentMethodListener?.onPaymentMethodClick(it.image, it.label)
+            dismiss()
+        })
 
     private val viewModel: FirebaseViewModel by viewModel()
 
@@ -36,7 +40,7 @@ class PaymentMethodFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentPaymentMethodBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -48,22 +52,15 @@ class PaymentMethodFragment : BottomSheetDialogFragment() {
     }
 
     private fun initObserver() {
+        getPaymentMethods()
         updatePaymentMethods()
     }
 
     private fun initView() = with(binding) {
-        paymentTypeAdapter = PaymentTypeAdapter(paymentList,
-            onPaymentMethodClickListener = {
-                paymentMethodListener?.onPaymentMethodClick(it.image, it.label)
-                dismiss()
-            })
-
         rvPaymentType.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = paymentTypeAdapter
         }
-
-        getPaymentMethods()
     }
 
     fun setPaymentMethodListener(listener: OnPaymentMethodListener) {

@@ -13,6 +13,8 @@ import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.presentation.helper.Constants.NOTIFICATION_CHANNEL_ID
 import com.arfdevs.myproject.movment.presentation.helper.Constants.TRANSACTION_ID
 import com.arfdevs.myproject.movment.presentation.helper.Constants.TRANSACTION_MOVIE_COUNT
+import com.arfdevs.myproject.movment.presentation.helper.Constants.VIBRATE_1000
+import com.arfdevs.myproject.movment.presentation.helper.Constants.VIBRATE_2000
 
 class NotificationWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params) {
 
@@ -39,7 +41,7 @@ class NotificationWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, p
                 .setContentTitle(transactionTitle)
                 .setContentText(contentText)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setVibrate(longArrayOf(1000, 1000, 2000))
+                .setVibrate(longArrayOf(VIBRATE_1000, VIBRATE_1000, VIBRATE_2000))
                 .setSound(alarmSound)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -50,7 +52,7 @@ class NotificationWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, p
             )
 
             channel.enableVibration(true)
-            channel.vibrationPattern = longArrayOf(1000, 1000, 2000)
+            channel.vibrationPattern = longArrayOf(VIBRATE_1000, VIBRATE_1000, VIBRATE_2000)
             builder.setChannelId(NOTIFICATION_CHANNEL_ID)
             notificationManager.createNotificationChannel(channel)
         }

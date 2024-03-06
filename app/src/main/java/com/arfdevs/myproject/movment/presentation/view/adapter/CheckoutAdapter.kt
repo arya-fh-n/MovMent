@@ -15,11 +15,15 @@ class CheckoutAdapter(
     override fun onItemBind(): (CheckoutModel, ItemCheckoutBinding, View, Int) -> Unit =
         { item, binding, view, _ ->
             with(binding) {
-                ivMovieBanner.load(Constants.BACKDROP_PATH + item.posterPath)
+                if (item.posterPath != "") {
+                    ivMovieBanner.load(Constants.BACKDROP_PATH + item.posterPath)
+                } else {
+                    ivMovieBanner.load(R.drawable.product_thumbnail)
+                }
 
                 tvItemCartMovieTitle.text = item.originalTitle
 
-                icRating.load(R.drawable.ic_star)
+                icRating.setImageResource(R.drawable.ic_star)
                 tvRating.text = String.format("%.1f", item.voteAverage)
 
                 tvPriceTitle.text = view.context.getString(R.string.tv_price_title)

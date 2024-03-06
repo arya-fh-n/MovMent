@@ -117,7 +117,7 @@ object DataMapper {
         movieId = movieId,
         userId = userId,
         originalTitle = originalTitle,
-        posterPath = posterPath,
+        posterPath = posterPath ?: "",
         voteAverage = voteAverage,
         price = price
     )
@@ -148,7 +148,7 @@ object DataMapper {
         movieId = movieId,
         userId = userId,
         originalTitle = originalTitle,
-        posterPath = posterPath,
+        posterPath = posterPath ?: "",
         voteAverage = voteAverage,
         price = price
     )

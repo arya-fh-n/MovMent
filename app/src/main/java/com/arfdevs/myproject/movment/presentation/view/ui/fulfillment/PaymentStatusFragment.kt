@@ -10,6 +10,7 @@ import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentPaymentStatusBinding
+import com.arfdevs.myproject.movment.presentation.helper.Constants.DELAY_500
 import com.arfdevs.myproject.movment.presentation.helper.Constants.NOTIFICATION_CHANNEL_ID
 import com.arfdevs.myproject.movment.presentation.helper.Constants.NOTIF_UNIQUE_WORK
 import com.arfdevs.myproject.movment.presentation.helper.Constants.TRANSACTION_ID
@@ -73,7 +74,7 @@ class PaymentStatusFragment :
         CoroutineScope(Dispatchers.Default).launch {
             workManager.enqueueUniqueWork(NOTIF_UNIQUE_WORK,
                 ExistingWorkPolicy.APPEND_OR_REPLACE, oneTimeWorkRequest)
-            delay(500)
+            delay(DELAY_500)
             workManager.cancelUniqueWork(NOTIF_UNIQUE_WORK)
         }
     }

@@ -86,4 +86,7 @@
     <string name="notify_content">Movie checkout success!</string>
     <string name="notify_channel_name">MovMent Sewa Film</string>
     <string name="tv_item_transaction_total_notif">%1$d film berhasil checkout!</string>
+    <string name="btn_crash_app">Crash aplikasi!</string>
+    <string name="exception_btn_crash">Aplikasi tertutup karena crash button diklik!</string>
+    <string name="err_detail_load_failed">Gagal Load Detail</string>
 </resources>

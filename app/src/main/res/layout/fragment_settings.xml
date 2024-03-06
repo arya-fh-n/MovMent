@@ -104,4 +104,17 @@
         app:layout_constraintTop_toTopOf="@+id/switch_theme"
         tools:text="@string/theme_dark" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_crash_app"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="55dp"
+        android:backgroundTint="@color/red_error"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/btn_crash_app" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

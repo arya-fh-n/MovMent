@@ -6,6 +6,13 @@ import java.util.Locale
 
 object Constants {
 
+    const val SPLASH_DELAY = 3000L
+    const val HOME_TOKEN_FETCH_DELAY = 5L
+    const val TOKEN_PRICE_PER_RUPIAH = 150
+
+    const val USERNAME_MIN_LENGTH = 3
+    const val PASSWORD_MAX_LENGTH = 8
+
     const val USERNAME = "Username"
     const val ERROR = "Error"
 
@@ -13,6 +20,11 @@ object Constants {
     const val ENGLISH = "en"
 
     const val VIEW_ALPHA = 0.4f
+
+    const val VIBRATE_1000 = 1000L
+    const val VIBRATE_2000 = 2000L
+
+    const val DELAY_500 = 500L
 
     const val NOTIFICATION_CHANNEL_ID = "notify-channel"
 
@@ -28,8 +40,8 @@ object Constants {
     }
 
     fun String.convertTotransactionID(): String {
-        val parts = this.split(" ")[0].split("-") + this.split(" ")[1].split(":")
-        return "TR-${parts[0]}${parts[1]}${parts[2]}${parts[3]}${parts[4]}${parts[5]}"
+        val stringPart = this.split(" ")[0].split("-") + this.split(" ")[1].split(":")
+        return "TR-${stringPart[0]}${stringPart[1]}${stringPart[2]}${stringPart[3]}${stringPart[4]}${stringPart[5]}"
     }
 
     fun String.convertToDateInDDMMYYYYFormat(): String {
@@ -39,4 +51,5 @@ object Constants {
         val date = inputFormat.parse(this)
         return outputFormat.format(date)
     }
+
 }
