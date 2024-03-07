@@ -27,6 +27,7 @@ import com.arfdevs.myproject.core.helper.DataMapper.toLocalWishlistList
 import com.arfdevs.myproject.core.helper.DataMapper.toNowPlayingList
 import com.arfdevs.myproject.core.helper.DataMapper.toPopularList
 import com.arfdevs.myproject.core.helper.DataMapper.toUIData
+import com.arfdevs.myproject.core.helper.NoConnectivityException
 import com.arfdevs.myproject.core.helper.SourceResult
 import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.core.helper.safeDataCall
@@ -123,8 +124,14 @@ class AppInteractor(
     private val firebaseRepository: FirebaseRepository
 ) : AppUseCase {
 
-    override suspend fun getPopular(page: Int): List<PopularModel> = safeDataCall {
-        movieRepository.fetchPopular(page).results.toPopularList()
+    override suspend fun getPopular(page: Int): List<PopularModel> {
+        return try {
+            safeDataCall {
+                movieRepository.fetchPopular(page).results.toPopularList()
+            }
+        } catch (e: NoConnectivityException) {
+            throw e
+        }
     }
 
     override suspend fun getNowPlaying(page: Int): List<NowPlayingModel> = safeDataCall {

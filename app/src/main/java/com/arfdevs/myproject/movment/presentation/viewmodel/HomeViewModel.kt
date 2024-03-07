@@ -11,6 +11,7 @@ import com.arfdevs.myproject.core.domain.model.PopularModel
 import com.arfdevs.myproject.core.domain.model.SessionModel
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
 import com.arfdevs.myproject.core.helper.DataMapper.toSplashState
+import com.arfdevs.myproject.core.helper.NoConnectivityException
 import com.arfdevs.myproject.core.helper.SplashState
 import com.arfdevs.myproject.movment.presentation.helper.Constants.INDONESIAN
 import com.google.firebase.auth.FirebaseUser
@@ -40,7 +41,12 @@ class HomeViewModel(private val useCase: AppUseCase) : ViewModel() {
 
     fun getPopularMovies(page: Int) {
         viewModelScope.launch {
-            _responsePopular.value = useCase.getPopular(page)
+            try {
+                _responsePopular.value = useCase.getPopular(page)
+            } catch (e: NoConnectivityException) {
+                e.printStackTrace()
+                _responsePopular.value = emptyList()
+            }
         }
     }
 

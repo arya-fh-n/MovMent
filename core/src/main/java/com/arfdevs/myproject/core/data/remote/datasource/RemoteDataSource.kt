@@ -11,6 +11,7 @@ import com.arfdevs.myproject.core.data.remote.responses.NowPlayingResponse
 import com.arfdevs.myproject.core.data.remote.responses.PopularResponse
 import com.arfdevs.myproject.core.domain.model.SearchModel
 import com.arfdevs.myproject.core.domain.model.User
+import com.arfdevs.myproject.core.helper.NoConnectivityException
 import com.arfdevs.myproject.core.helper.SourceResult
 import com.arfdevs.myproject.core.helper.safeApiCall
 import com.google.firebase.auth.FirebaseAuth
@@ -23,8 +24,12 @@ import kotlinx.coroutines.flow.callbackFlow
 class RemoteDataSource(private val endpoint: ApiEndpoint, private val auth: FirebaseAuth) {
 
     suspend fun fetchPopular(page: Int): PopularResponse {
-        return safeApiCall {
-            endpoint.fetchPopularMovies(page = page)
+        return try {
+            safeApiCall {
+                endpoint.fetchPopularMovies(page = page)
+            }
+        } catch (e: NoConnectivityException) {
+            throw e
         }
     }
 

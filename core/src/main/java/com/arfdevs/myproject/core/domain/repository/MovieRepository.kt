@@ -10,6 +10,7 @@ import com.arfdevs.myproject.core.data.remote.responses.MovieDetailsResponse
 import com.arfdevs.myproject.core.data.remote.responses.NowPlayingResponse
 import com.arfdevs.myproject.core.data.remote.responses.PopularResponse
 import com.arfdevs.myproject.core.domain.model.SearchModel
+import com.arfdevs.myproject.core.helper.NoConnectivityException
 import com.arfdevs.myproject.core.helper.safeDataCall
 import kotlinx.coroutines.flow.Flow
 
@@ -50,8 +51,14 @@ class MovieRepositoryImpl(
     private val local: LocalDataSource,
 ) : MovieRepository {
 
-    override suspend fun fetchPopular(page: Int): PopularResponse = safeDataCall {
-        remote.fetchPopular(page)
+    override suspend fun fetchPopular(page: Int): PopularResponse {
+        return try {
+            safeDataCall {
+                remote.fetchPopular(page)
+            }
+        } catch (e: NoConnectivityException) {
+            throw e
+        }
     }
 
     override suspend fun fetchNowPlaying(page: Int): NowPlayingResponse = safeDataCall {

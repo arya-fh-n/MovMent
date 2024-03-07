@@ -2,6 +2,7 @@ package com.arfdevs.myproject.core.data.remote
 
 import com.arfdevs.myproject.core.BuildConfig.BASE_URL
 import com.arfdevs.myproject.core.BuildConfig.Bearer
+import com.arfdevs.myproject.core.helper.NoInternetInterceptor
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -11,17 +12,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class ApiClient(
-    val chuckerInterceptor: ChuckerInterceptor
+    val chuckerInterceptor: ChuckerInterceptor,
+    val noInternetInterceptor: NoInternetInterceptor
 ) {
 
     inner class AuthInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request = chain.request()
 
-            val newRequest = request.newBuilder()
-                .addHeader("accept", "application/json")
-                .addHeader("Authorization", "Bearer $Bearer")
-                .build()
+            val newRequest = request.newBuilder().addHeader("accept", "application/json")
+                .addHeader("Authorization", "Bearer $Bearer").build()
 
             return chain.proceed(newRequest)
         }
@@ -30,17 +30,14 @@ class ApiClient(
 
     inline fun <reified I> create(): I {
         val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(noInternetInterceptor)
             .addInterceptor(AuthInterceptor())
-            .addInterceptor(chuckerInterceptor)
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .build()
+            .addInterceptor(chuckerInterceptor).connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS).build()
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
-            .build()
+        val retrofit =
+            Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient).build()
 
         return retrofit.create(I::class.java)
     }

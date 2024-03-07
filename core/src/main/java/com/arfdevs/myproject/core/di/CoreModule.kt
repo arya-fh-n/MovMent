@@ -19,6 +19,7 @@ import com.arfdevs.myproject.core.domain.repository.UserRepositoryImpl
 import com.arfdevs.myproject.core.domain.usecase.AppInteractor
 import com.arfdevs.myproject.core.domain.usecase.AppUseCase
 import com.arfdevs.myproject.core.helper.Constants.SHARED_PREF_FILE
+import com.arfdevs.myproject.core.helper.NoInternetInterceptor
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.analytics
@@ -112,7 +113,11 @@ object CoreModule : BaseModule {
         }
 
         single {
-            ApiClient(get())
+            NoInternetInterceptor(androidContext())
+        }
+
+        single {
+            ApiClient(get(), get())
         }
 
         single<ApiEndpoint> {
