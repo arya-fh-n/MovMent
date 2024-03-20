@@ -70,11 +70,11 @@ android {
     productFlavors {
         create("development") {
             buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
-            buildConfigField("String", "API_KEY", "\"1a513d843961f39b2b18d9a6e03c3e3a\"")
+            buildConfigField("String", "API_KEY", "your-api-key")
             buildConfigField(
                 "String",
                 "Bearer",
-                "\"eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxYTUxM2Q4NDM5NjFmMzliMmIxOGQ5YTZlMDNjM2UzYSIsInN1YiI6IjY1ZDgwNGU4MTQ5NTY1MDE3YmY1NDM0OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fsMhSnXga0toLwtJltLRLok0DEmNq1TQtAOfv8nvUV0\""
+                "your-api-access-token"
             )
         }
     }

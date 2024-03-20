@@ -1,22 +1,22 @@
 {
   "project_info": {
     "project_number": "175059646772",
-    "firebase_url": "https://movment-fb-default-rtdb.firebaseio.com",
+    "firebase_url": "https://your-firebase-url.com",
     "project_id": "movment-fb",
-    "storage_bucket": "movment-fb.appspot.com"
+    "storage_bucket": "firebase-project.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:175059646772:android:cf93d42f86915c1c944d61",
+        "mobilesdk_app_id": "",
         "android_client_info": {
-          "package_name": "com.arfdevs.myproject.movment"
+          "package_name": "your.project.package.name"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDOZiA2bYOnR1GGi16Nz6dz7y8u2JZ9sYY"
+          "current_key": "firebase_api_key"
         }
       ],
       "services": {
