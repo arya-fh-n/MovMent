@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.User
+import com.arfdevs.myproject.core.helper.enabled
 import com.arfdevs.myproject.core.helper.launchAndCollectIn
 import com.arfdevs.myproject.core.helper.onError
 import com.arfdevs.myproject.core.helper.onLoading
@@ -24,7 +25,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     private val viewModel: AuthViewModel by viewModel()
 
     override fun initView() = with(binding) {
-        btnLogin.isEnabled = false
+        btnLogin.enabled(false)
 
         ivLogo.load(R.drawable.splash_icon)
         tvLoginTitle.text = getString(R.string.tv_login_title)
@@ -138,7 +139,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         error = context.getString(R.string.err_email_empty)
                         isErrorEnabled = true
                     }
-                    btnLogin.isEnabled = false
+                    btnLogin.enabled(false)
                 }
 
                 !isEmailValid -> {
@@ -147,7 +148,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         error = context.getString(R.string.err_email_invalid)
                         isErrorEnabled = true
                     }
-                    btnLogin.isEnabled = false
+                    btnLogin.enabled(false)
                 }
 
                 isPasswordBlank -> {
@@ -156,7 +157,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         error = context.getString(R.string.err_password_empty)
                         isErrorEnabled = true
                     }
-                    btnLogin.isEnabled = false
+                    btnLogin.enabled(false)
                 }
 
                 !isPasswordValid -> {
@@ -165,13 +166,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         error = context.getString(R.string.err_password_invalid)
                         isErrorEnabled = true
                     }
-                    btnLogin.isEnabled = false
+                    btnLogin.enabled(false)
                 }
 
                 else -> {
                     tiEmail.isErrorEnabled = false
                     tiPassword.isErrorEnabled = false
-                    btnLogin.isEnabled = true
+                    btnLogin.enabled(true)
                 }
             }
         }

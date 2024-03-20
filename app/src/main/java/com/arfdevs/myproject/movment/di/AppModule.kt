@@ -5,17 +5,17 @@ import com.arfdevs.myproject.movment.presentation.viewmodel.AuthViewModel
 import com.arfdevs.myproject.movment.presentation.viewmodel.HomeViewModel
 import com.arfdevs.myproject.movment.presentation.viewmodel.FirebaseViewModel
 import com.arfdevs.myproject.movment.presentation.viewmodel.MovieViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
 object AppModule : BaseModule {
 
     val viewModelModule = module {
-        viewModel { HomeViewModel(get()) }
-        viewModel { AuthViewModel(get()) }
-        viewModel { MovieViewModel(get()) }
-        viewModel { FirebaseViewModel(get()) }
+        viewModelOf(::HomeViewModel)
+        viewModelOf(::AuthViewModel)
+        viewModelOf(::MovieViewModel)
+        viewModelOf(::FirebaseViewModel)
     }
 
     override fun getModules(): List<Module> = listOf(

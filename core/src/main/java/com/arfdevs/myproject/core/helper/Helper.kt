@@ -7,6 +7,10 @@ fun View.visible(state: Boolean) {
     this.isVisible = state
 }
 
+fun View.enabled(state: Boolean) {
+    this.isEnabled = state
+}
+
 fun String?.posterPathNullHandling(): String {
     return if (this == null) {
         ""

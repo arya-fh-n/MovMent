@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.User
+import com.arfdevs.myproject.core.helper.enabled
 import com.arfdevs.myproject.core.helper.launchAndCollectIn
 import com.arfdevs.myproject.core.helper.onError
 import com.arfdevs.myproject.core.helper.onLoading
@@ -33,7 +34,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
     private val viewModel: AuthViewModel by viewModel()
 
     override fun initView() = with(binding) {
-        btnRegister.isEnabled = false
+        btnRegister.enabled(false)
         val locale = resources.configuration.locales[0].language
 
         ivLogo.load(R.drawable.splash_icon)
@@ -153,7 +154,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                         error = context.getString(R.string.err_email_empty)
                         isErrorEnabled = true
                     }
-                    btnRegister.isEnabled = false
+                    btnRegister.enabled(false)
                 }
 
                 !isEmailValid -> {
@@ -162,7 +163,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                         error = context.getString(R.string.err_email_invalid)
                         isErrorEnabled = true
                     }
-                    btnRegister.isEnabled = false
+                    btnRegister.enabled(false)
                 }
 
                 isPasswordBlank -> {
@@ -171,7 +172,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                         error = context.getString(R.string.err_password_empty)
                         isErrorEnabled = true
                     }
-                    btnRegister.isEnabled = false
+                    btnRegister.enabled(false)
                 }
 
                 !isPasswordValid -> {
@@ -180,13 +181,13 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                         error = context.getString(R.string.err_password_invalid)
                         isErrorEnabled = true
                     }
-                    btnRegister.isEnabled = false
+                    btnRegister.enabled(false)
                 }
 
                 else -> {
                     tiEmail.isErrorEnabled = false
                     tiPassword.isErrorEnabled = false
-                    btnRegister.isEnabled = true
+                    btnRegister.enabled(true)
                 }
             }
         }

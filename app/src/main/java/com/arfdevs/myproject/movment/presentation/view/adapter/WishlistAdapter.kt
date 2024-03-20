@@ -4,6 +4,7 @@ import android.view.View
 import coil.load
 import com.arfdevs.myproject.core.base.BaseListAdapter
 import com.arfdevs.myproject.core.domain.model.WishlistModel
+import com.arfdevs.myproject.core.helper.enabled
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.ItemWishlistBinding
 
@@ -17,9 +18,11 @@ class WishlistAdapter(
     private var isInCart = false
 
     override fun onItemBind(): (WishlistModel, ItemWishlistBinding, View, Int) -> Unit =
-        { item, binding, view, _ ->
+        { wishlist, binding, view, _ ->
             with(binding) {
-                onItemSet(item)
+                onItemSet(wishlist)
+
+                val item = wishlist.copy(isInCart = isInCart)
                 if (item.posterPath != "") {
                     ivMovieWishlistBanner.load(item.posterPath)
                 } else {
@@ -33,6 +36,16 @@ class WishlistAdapter(
                 tvRating.text = String.format("%.1f", item.voteAverage)
 
                 btnAddToCart.text = view.context.getString(R.string.btn_add_to_cart)
+
+                when (item.isInCart) {
+                    false -> {
+                        btnAddToCart.enabled(true)
+                    }
+
+                    else -> {
+                        btnAddToCart.enabled(false)
+                    }
+                }
 
                 btnAddToCart.setOnClickListener {
                     onAddToCartClickListener.invoke(item)

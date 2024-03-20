@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.arfdevs.myproject.core.domain.model.PaymentMethodModel
+import com.arfdevs.myproject.core.helper.enabled
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.databinding.ItemPaymentMethodBinding
 import com.arfdevs.myproject.movment.presentation.helper.Constants.VIEW_ALPHA
@@ -39,7 +40,7 @@ class PaymentMethodAdapter(
 
                 if (!model.status) {
                     with(clPaymentItem) {
-                        isEnabled = false
+                        enabled(false)
                         isClickable = false
                         alpha = VIEW_ALPHA
                     }

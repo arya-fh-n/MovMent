@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.TokenTopupModel
+import com.arfdevs.myproject.core.helper.enabled
 import com.arfdevs.myproject.core.helper.launchAndCollectIn
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
@@ -31,7 +32,7 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
     private var tokenModel = TokenTopupModel()
 
     override fun initView() = with(binding) {
-        btnContinue.isEnabled = false
+        btnContinue.enabled(false)
         toolbarToken.title = getString(R.string.app_name_movment)
         tvBalanceIs.text = getString(R.string.tv_token_balance_is)
         tvBalance.text = getString(R.string.tv_token_balance, 0)

@@ -16,6 +16,8 @@ data class WishlistModel(
 
     var voteAverage: Double = 0.0,
 
-    var price: Int = 0
+    var price: Int = 0,
+
+    var isInCart: Boolean = false
 
 ) : Parcelable

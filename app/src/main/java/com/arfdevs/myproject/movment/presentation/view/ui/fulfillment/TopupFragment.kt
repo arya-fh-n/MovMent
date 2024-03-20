@@ -6,6 +6,7 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.TokenTransactionModel
+import com.arfdevs.myproject.core.helper.enabled
 import com.arfdevs.myproject.core.helper.launchAndCollectIn
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentTopupBinding
@@ -30,7 +31,7 @@ class TopupFragment : BaseFragment<FragmentTopupBinding>(FragmentTopupBinding::i
     private var currentTIme: String = getCurrentDateInDDMMYYYYFormat()
 
     override fun initView() = with(binding) {
-        btnPay.isEnabled = false
+        btnPay.enabled(false)
 
         safeArgs.tokenModel.let { tokenTopup ->
             tvAmount.text = getString(R.string.tv_amount, tokenTopup.token)
@@ -85,7 +86,7 @@ class TopupFragment : BaseFragment<FragmentTopupBinding>(FragmentTopupBinding::i
             tvPaymentMethodTitle.text = method
             if (method != null) {
                 paymentMethod = method
-                btnPay.isEnabled = true
+                btnPay.enabled(true)
             }
         }
     }
