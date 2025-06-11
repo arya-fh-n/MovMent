@@ -73,9 +73,7 @@ class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::infl
     }
 
     override fun initObserver() = with(viewModel) {
-        val userId = getUID()
-
-        getCartList(userId).observe(viewLifecycleOwner) { list ->
+        cartList.observe(viewLifecycleOwner) { list ->
             showError(list.isEmpty())
             cartAdapter.submitList(list)
             var totalPrice = 0
@@ -84,6 +82,10 @@ class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::infl
             }
             binding.tvPaymentTotal.text = getString(R.string.tv_payment_total, totalPrice)
         }
+    }
+
+    private fun fetchData() {
+        viewModel.getCartList()
     }
 
     private fun showError(state: Boolean) = with(binding) {

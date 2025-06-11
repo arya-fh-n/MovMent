@@ -10,7 +10,6 @@ import com.arfdevs.myproject.core.domain.model.WishlistModel
 import com.arfdevs.myproject.core.helper.Constants
 import com.arfdevs.myproject.core.helper.onError
 import com.arfdevs.myproject.core.helper.onLoading
-import com.arfdevs.myproject.core.helper.onSuccess
 import com.arfdevs.myproject.core.helper.posterPathNullHandling
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
@@ -87,9 +86,8 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                     loadingAnim.visible(false)
                     setupDetails(detail)
 
-                    val userId = getUID()
-                    setupCartAndWishlist(detail, userId)
-                    this@DetailFragment.getCartById(detail.id, userId)
+                    setupCartAndWishlist(detail, uid.value)
+                    this@DetailFragment.getCartById(detail.id, uid.value)
                 }.onError { e ->
                     loadingOverlay.visible(false)
                     loadingAnim.visible(false)

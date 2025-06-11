@@ -17,7 +17,7 @@ interface Dao {
     suspend fun insertWishlistMovie(wishlist: WishlistEntity)
 
     @Query("SELECT * FROM wishlist WHERE userId = :id")
-    fun getWishlistMovie(id: String): LiveData<List<WishlistEntity>>
+    fun getWishlistMovie(id: String): List<WishlistEntity>
 
     @Query("SELECT EXISTS (SELECT * FROM wishlist WHERE movieId = :movieId)")
     suspend fun checkFavorite(movieId: Int): Int
@@ -32,10 +32,10 @@ interface Dao {
     suspend fun insertCart(cart: CartEntity)
 
     @Query("SELECT * FROM cart WHERE userId = :userId")
-    fun getCartList(userId: String): LiveData<List<CartEntity?>>
+    fun getCartList(userId: String): List<CartEntity>
 
     @Query("SELECT * FROM cart WHERE movieId = :movieId AND userId = :userId")
-    fun getCartItemById(movieId: Int, userId: String): Flow<CartEntity?>
+    fun getCartItemById(movieId: Int, userId: String): CartEntity?
 
     @Delete
     suspend fun deleteCartItem(cart: CartEntity)

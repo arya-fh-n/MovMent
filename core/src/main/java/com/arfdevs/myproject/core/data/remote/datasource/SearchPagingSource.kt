@@ -6,26 +6,46 @@ import com.arfdevs.myproject.core.data.remote.ApiEndpoint
 import com.arfdevs.myproject.core.domain.model.SearchModel
 import com.arfdevs.myproject.core.helper.Constants.INITIAL_PAGE_INDEX
 import com.arfdevs.myproject.core.helper.DataMapper.toSearchList
+import com.arfdevs.myproject.core.helper.DomainResult
+import com.arfdevs.myproject.core.helper.processResponse
 
 class SearchPagingSource(
-    private val apiEndpoint: ApiEndpoint,
+    private val api: ApiEndpoint,
     private val query: String
 ) : PagingSource<Int, SearchModel>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, SearchModel> {
-        return try {
-            val position = params.key ?: INITIAL_PAGE_INDEX
-            val response = apiEndpoint.fetchSearch(query = query, page = position)
+        val position = params.key ?: INITIAL_PAGE_INDEX
+        val result = api.fetchSearch(query = query, page = position)
 
-            val movies = response.results.toSearchList()
+        val domain = processResponse(result) {
+            DomainResult.Success(it.results)
+        }
 
-            LoadResult.Page(
-                data = movies,
-                prevKey = if (position == 1) null else position - 1,
-                nextKey = if (movies.isEmpty()) null else position + 1
-            )
-        } catch (e: Exception) {
-            LoadResult.Error(e)
+        return when (domain) {
+            is DomainResult.Success -> {
+                LoadResult.Page(
+                    data = domain.data.toSearchList(),
+                    prevKey = if (position == 1) null else position - 1,
+                    nextKey = if (domain.data.isEmpty()) null else position + 1
+                )
+            }
+
+            is DomainResult.EmptyState -> {
+                LoadResult.Error(Exception(message = domain.message))
+            }
+
+            is DomainResult.ErrorState -> {
+                LoadResult.Error(Exception(message = domain.message))
+            }
+
+            DomainResult.NetworkError -> {
+                LoadResult.Error(Exception(message = "Network error"))
+            }
+
+            is DomainResult.TechnicalError -> {
+                LoadResult.Error(Exception(message = "Technical error"))
+            }
         }
     }
 

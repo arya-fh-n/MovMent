@@ -82,18 +82,22 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding>(FragmentWishlistB
 
             setHasFixedSize(true)
         }
+
+        fetchData()
     }
 
     override fun initListener() {}
 
     override fun initObserver() = with(viewModel) {
-        val userId = getUID()
-
-        getWishlist(userId).observe(viewLifecycleOwner) { list ->
+        wishlist.observe(viewLifecycleOwner) { list ->
             showError(list.isEmpty())
             logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundleOf("Open Wishlist" to list))
             wishlistAdapter.submitList(list)
         }
+    }
+
+    private fun fetchData() {
+        viewModel.getWishlist()
     }
 
     private fun showError(state: Boolean) = with(binding) {

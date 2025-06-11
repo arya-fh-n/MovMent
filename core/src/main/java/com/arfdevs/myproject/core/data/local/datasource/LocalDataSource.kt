@@ -35,7 +35,7 @@ class LocalDataSource(
         dao.insertCart(cart)
     }
 
-    fun getCartList(userId: String): LiveData<List<CartEntity?>> {
+    fun getCartList(userId: String): LiveData<List<CartEntity>> {
         return dao.getCartList(userId)
     }
 

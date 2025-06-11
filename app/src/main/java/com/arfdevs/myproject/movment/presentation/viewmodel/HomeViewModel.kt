@@ -9,16 +9,30 @@ import com.arfdevs.myproject.core.domain.model.CartModel
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
 import com.arfdevs.myproject.core.domain.model.SessionModel
-import com.arfdevs.myproject.core.domain.usecase.AppUseCase
+import com.arfdevs.myproject.core.domain.repository.FirebaseRepository
+import com.arfdevs.myproject.core.domain.repository.MovieRepository
+import com.arfdevs.myproject.core.domain.repository.UserRepository
+import com.arfdevs.myproject.core.domain.usecase.GetSessionUseCase
+import com.arfdevs.myproject.core.helper.CoroutinesDispatcherProvider
+import com.arfdevs.myproject.core.helper.DataMapper.toEntityData
+import com.arfdevs.myproject.core.helper.DataMapper.toNowPlayingList
+import com.arfdevs.myproject.core.helper.DataMapper.toPopularList
 import com.arfdevs.myproject.core.helper.DataMapper.toSplashState
 import com.arfdevs.myproject.core.helper.NoConnectivityException
 import com.arfdevs.myproject.core.helper.SplashState
 import com.arfdevs.myproject.movment.presentation.helper.Constants.INDONESIAN
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class HomeViewModel(private val useCase: AppUseCase) : ViewModel() {
+class HomeViewModel(
+    private val movieRepo: MovieRepository,
+    private val userRepo: UserRepository,
+    private val firebaseRepo: FirebaseRepository,
+    private val sessionUseCase: GetSessionUseCase,
+    private val dispatcher: CoroutinesDispatcherProvider
+) : ViewModel() {
 
     private val _responsePopular: MutableLiveData<List<PopularModel>> = MutableLiveData()
     val responsePopular: LiveData<List<PopularModel>> = _responsePopular
@@ -39,79 +53,67 @@ class HomeViewModel(private val useCase: AppUseCase) : ViewModel() {
         MutableLiveData<SplashState<SessionModel>>()
     val onboardingState: LiveData<SplashState<SessionModel>> = _onboardingState
 
-    fun getPopularMovies(page: Int) {
-        viewModelScope.launch {
-            try {
-                _responsePopular.value = useCase.getPopular(page)
-            } catch (e: NoConnectivityException) {
-                e.printStackTrace()
-                _responsePopular.value = emptyList()
-            }
+    fun getPopularMovies(page: Int) = viewModelScope.launch(dispatcher.io) {
+        try {
+            val result = movieRepo.fetchPopular(page)
+            val mappedResult = result.results.toPopularList()
+            _responsePopular.postValue(mappedResult)
+        } catch (e: NoConnectivityException) {
+            e.printStackTrace()
+            _responsePopular.value = emptyList()
         }
     }
 
-    fun getNowPlaying(page: Int) {
-        viewModelScope.launch {
-            _responseNowPlaying.value = useCase.getNowPlaying(page)
-        }
+    fun getNowPlaying(page: Int) = viewModelScope.launch(dispatcher.io) {
+        val result = movieRepo.fetchNowPlaying(page)
+        val mappedResult = result.results.toNowPlayingList()
+        _responseNowPlaying.postValue(mappedResult)
     }
 
-    fun getCurrentUser() {
-        viewModelScope.launch {
-            _currentUser.value = useCase.getCurrentUser()
-        }
+    fun getCurrentUser() = viewModelScope.launch {
+        val user = async { userRepo.fetchCurrentUser() }
+        _currentUser.value = user.await()
     }
 
-    fun saveOnboardingState(state: Boolean) {
-        useCase.saveOnboardingState(state)
+    fun saveOnboardingState(state: Boolean) = viewModelScope.launch(dispatcher.io) {
+        userRepo.saveOnboardingState(state)
     }
 
-    fun getOnboardingState() {
-        viewModelScope.launch {
-            _onboardingState.value = useCase.sessionModel().toSplashState()
-        }
+    fun getOnboardingState() = viewModelScope.launch(dispatcher.io) {
+        val splashState = sessionUseCase().toSplashState()
+        _onboardingState.postValue(splashState)
     }
 
-    fun saveUID(uid: String) {
-        useCase.saveUID(uid)
+    fun saveUID(uid: String) = viewModelScope.launch(dispatcher.io) {
+        userRepo.saveUID(uid)
     }
 
-    fun saveLanguage(locale: String) {
-        viewModelScope.launch {
-            useCase.saveLanguage(locale)
-        }
+    fun saveLanguage(locale: String) = viewModelScope.launch(dispatcher.io) {
+        userRepo.saveLanguage(locale)
     }
 
-    fun getLanguage() {
-        viewModelScope.launch {
-            _language.value = useCase.getLanguage().equals(INDONESIAN, true)
-        }
+    fun getLanguage() = viewModelScope.launch(dispatcher.io) {
+        _language.postValue(userRepo.getLanguage().equals(INDONESIAN, true))
     }
 
-    fun saveTheme(theme: Boolean) {
-        viewModelScope.launch {
-            useCase.saveTheme(theme)
-        }
+    fun saveTheme(theme: Boolean) = viewModelScope.launch(dispatcher.io) {
+        userRepo.saveTheme(theme)
     }
 
-    fun getTheme() {
-        viewModelScope.launch {
-            _theme.value = useCase.getTheme()
-        }
+    fun getTheme() = viewModelScope.launch {
+        _theme.postValue(userRepo.getTheme())
     }
 
-    fun logEvent(eventName: String, bundle: Bundle) {
-        useCase.logEvent(eventName, bundle)
+    fun logEvent(eventName: String, bundle: Bundle) = viewModelScope.launch {
+        firebaseRepo.logEvent(eventName, bundle)
     }
 
-    fun getTokenBalance(userId: String) = runBlocking {
-        useCase.getTokenBalance(userId)
+    fun getTokenBalance(userId: String) = viewModelScope.launch(dispatcher.io) {
+        firebaseRepo.getTokenBalance(userId)
     }
 
-    fun insertToCart(cart: CartModel) {
-        viewModelScope.launch {
-            useCase.insertCartMovie(cart)
-        }
+    fun insertToCart(cart: CartModel) = viewModelScope.launch {
+        movieRepo.insertCartMovie(cart.toEntityData())
     }
 
 }

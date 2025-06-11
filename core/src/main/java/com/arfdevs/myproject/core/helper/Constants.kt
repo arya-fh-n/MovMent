@@ -19,4 +19,8 @@ object Constants {
 
     const val INITIAL_PAGE_INDEX = 1
 
+    const val MSG_NETWORK_ERROR = "Connection error"
+    const val CODE_NETWORK_ERROR = -1
+
+    const val MSG_TECHNICAL_ERROR = "Technical error occurred"
 }

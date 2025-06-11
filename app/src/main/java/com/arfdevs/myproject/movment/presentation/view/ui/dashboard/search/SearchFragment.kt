@@ -54,16 +54,17 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
             etSearch.doAfterTextChanged {
                 parentFragment?.viewLifecycleOwner?.let {
                     viewModel.searchMovies(etSearch.text.toString())
-                        .observe(it) { pagingData ->
-                            searchAdapter.submitData(lifecycle, pagingData)
-                        }
                 }
             }
         }
     }
 
     override fun initObserver() = with(viewModel) {
-        userId = getUID()
+        userId = getUserID()
+
+        movieSearch.observe(viewLifecycleOwner) { pagingData ->
+            searchAdapter.submitData(lifecycle, pagingData)
+        }
     }
 
     private fun navigateToDetailFromSearch(search: SearchModel) {

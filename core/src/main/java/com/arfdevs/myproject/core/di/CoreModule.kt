@@ -9,16 +9,16 @@ import com.arfdevs.myproject.core.data.local.sharedpref.SharedPreferencesHelper
 import com.arfdevs.myproject.core.data.local.sharedpref.SharedPreferencesHelperImpl
 import com.arfdevs.myproject.core.data.remote.ApiClient
 import com.arfdevs.myproject.core.data.remote.ApiEndpoint
-import com.arfdevs.myproject.core.data.remote.datasource.RemoteDataSource
+import com.arfdevs.myproject.core.data.remote.NetworkResponseAdapterFactory
+import com.arfdevs.myproject.core.data.repository.FirebaseRepositoryImpl
 import com.arfdevs.myproject.core.domain.repository.FirebaseRepository
-import com.arfdevs.myproject.core.domain.repository.FirebaseRepositoryImpl
 import com.arfdevs.myproject.core.domain.repository.MovieRepository
-import com.arfdevs.myproject.core.domain.repository.MovieRepositoryImpl
+import com.arfdevs.myproject.core.data.repository.MovieRepositoryImpl
+import com.arfdevs.myproject.core.data.repository.UserRepositoryImpl
 import com.arfdevs.myproject.core.domain.repository.UserRepository
-import com.arfdevs.myproject.core.domain.repository.UserRepositoryImpl
-import com.arfdevs.myproject.core.domain.usecase.AppInteractor
-import com.arfdevs.myproject.core.domain.usecase.AppUseCase
+import com.arfdevs.myproject.core.domain.usecase.GetSessionUseCase
 import com.arfdevs.myproject.core.helper.Constants.SHARED_PREF_FILE
+import com.arfdevs.myproject.core.helper.CoroutinesDispatcherProvider
 import com.arfdevs.myproject.core.helper.NoInternetInterceptor
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.google.firebase.Firebase
@@ -81,19 +81,15 @@ object CoreModule : BaseModule {
         single {
             LocalDataSource(get(), get())
         }
-
-        single {
-            RemoteDataSource(get(), get())
-        }
     }
 
     private val repositoryModule = module {
         single<MovieRepository> {
-            MovieRepositoryImpl(get(), get())
+            MovieRepositoryImpl(get(), get(), get())
         }
 
         single<UserRepository> {
-            UserRepositoryImpl(get(), get())
+            UserRepositoryImpl(get(), get(), get())
         }
 
         single<FirebaseRepository> {
@@ -102,8 +98,8 @@ object CoreModule : BaseModule {
     }
 
     private val useCaseModule = module {
-        single<AppUseCase> {
-            AppInteractor(get(), get(), get())
+        single {
+            GetSessionUseCase(get(), get())
         }
     }
 
@@ -117,12 +113,20 @@ object CoreModule : BaseModule {
         }
 
         single {
-            ApiClient(get(), get())
+            NetworkResponseAdapterFactory()
+        }
+
+        single {
+            ApiClient(get(), get(), get())
         }
 
         single<ApiEndpoint> {
             get<ApiClient>().create()
         }
+    }
+
+    private val dispatchersModule = module {
+        single { CoroutinesDispatcherProvider() }
     }
 
     override fun getModules(): List<Module> = listOf(
@@ -132,7 +136,8 @@ object CoreModule : BaseModule {
         dataSourceModule,
         repositoryModule,
         useCaseModule,
-        networkModule
+        networkModule,
+        dispatchersModule
     )
 
 }

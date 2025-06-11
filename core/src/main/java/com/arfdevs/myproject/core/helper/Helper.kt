@@ -16,3 +16,5 @@ fun String?.posterPathNullHandling(): String {
         ""
     } else Constants.BACKDROP_PATH + this
 }
+
+fun Int?.orZero(): Int = this ?: 0

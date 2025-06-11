@@ -140,8 +140,8 @@ object DataMapper {
         price = price
     )
 
-    fun List<CartEntity?>.toLocalCartList() = this.map { cart ->
-        cart?.toUIData()
+    fun List<CartEntity>.toLocalCartList() = this.map { cart ->
+        cart.toUIData()
     }
 
     fun CartModel.toEntityData() = CartEntity(

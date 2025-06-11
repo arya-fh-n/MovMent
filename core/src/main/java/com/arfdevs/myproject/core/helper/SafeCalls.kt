@@ -15,19 +15,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
-suspend fun <T> safeApiCall(
-    dispatcher: CoroutineContext = Dispatchers.IO,
-    apiCall: suspend () -> T
-): T {
-    return withContext(dispatcher) {
-        try {
-            apiCall()
-        } catch (error: Throwable) {
-            throw error
-        }
-    }
-}
-
 fun <T> safeApiCallFlow(
     dispatcher: CoroutineContext = Dispatchers.IO,
     apiCall: suspend () -> T?
@@ -53,19 +40,6 @@ suspend fun <T> MutableStateFlow<UiState<T>>.asMutableStateFlow(
         this.update { UiState.Success(data) }
     } catch (e: Throwable) {
         this.update { UiState.Error(e) }
-    }
-}
-
-suspend fun <T> safeDataCall(
-    dispatcher: CoroutineContext = Dispatchers.Default,
-    dataCall: suspend () -> T
-): T {
-    return withContext(dispatcher) {
-        try {
-            dataCall()
-        } catch (e: Exception) {
-            throw e
-        }
     }
 }
 

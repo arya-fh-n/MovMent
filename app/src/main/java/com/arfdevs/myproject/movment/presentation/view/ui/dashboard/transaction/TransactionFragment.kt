@@ -3,7 +3,6 @@ package com.arfdevs.myproject.movment.presentation.view.ui.dashboard.transaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arfdevs.myproject.core.base.BaseFragment
-import com.arfdevs.myproject.core.helper.launchAndCollectIn
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentTransactionBinding
@@ -16,8 +15,6 @@ class TransactionFragment :
     BaseFragment<FragmentTransactionBinding>(FragmentTransactionBinding::inflate) {
 
     private val viewModel: MovieViewModel by viewModel()
-
-    private var userId = ""
 
     private val transactionAdapter = TransactionAdapter(
         onItemClickListener = {
@@ -38,19 +35,20 @@ class TransactionFragment :
             adapter = transactionAdapter
             setHasFixedSize(true)
         }
+        fetchData()
     }
 
     override fun initListener() {}
 
     override fun initObserver() {
-        with(viewModel) {
-            userId = getUID()
-
-            getTransactionHistory(userId).launchAndCollectIn(viewLifecycleOwner) { list ->
-                showError(list.isEmpty())
-                transactionAdapter.submitList(list)
-            }
+        viewModel.transactionHistory.observe(viewLifecycleOwner) { list ->
+            showError(list.isEmpty())
+            transactionAdapter.submitList(list)
         }
+    }
+
+    private fun fetchData() {
+        viewModel.getTransactionHistory()
     }
 
     private fun showError(state: Boolean) = with(binding) {

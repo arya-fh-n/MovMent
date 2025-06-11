@@ -11,7 +11,7 @@ import org.koin.dsl.module
 
 object AppModule : BaseModule {
 
-    val viewModelModule = module {
+    private val viewModelModule = module {
         viewModelOf(::HomeViewModel)
         viewModelOf(::AuthViewModel)
         viewModelOf(::MovieViewModel)

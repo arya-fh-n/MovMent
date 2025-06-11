@@ -13,7 +13,8 @@ import java.util.concurrent.TimeUnit
 
 class ApiClient(
     val chuckerInterceptor: ChuckerInterceptor,
-    val noInternetInterceptor: NoInternetInterceptor
+    val noInternetInterceptor: NoInternetInterceptor,
+    val networkAdapterFactory: NetworkResponseAdapterFactory
 ) {
 
     inner class AuthInterceptor : Interceptor {
@@ -35,8 +36,10 @@ class ApiClient(
             .addInterceptor(chuckerInterceptor).connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS).build()
 
-        val retrofit =
-            Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create())
+        val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addCallAdapterFactory(networkAdapterFactory)
+                .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient).build()
 
         return retrofit.create(I::class.java)

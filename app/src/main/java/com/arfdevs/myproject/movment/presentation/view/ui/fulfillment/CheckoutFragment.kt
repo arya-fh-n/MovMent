@@ -44,11 +44,12 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
         tvBalance.text = getString(R.string.tv_token_balance, 0)
         ivBalance.load(R.drawable.ic_balance)
 
-
         rvCheckout.run {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = checkoutAdapter
         }
+
+        fetchData()
     }
 
     override fun initListener() = with(binding) {
@@ -60,7 +61,7 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
             findNavController().navigate(R.id.action_checkoutFragment_to_tokenFragment)
         }
 
-        val userId = viewModel.getUID()
+        val userId = viewModel.getUserID()
 
         btnCheckout.setOnClickListener {
             context?.let {
@@ -88,18 +89,18 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
     }
 
     override fun initObserver() = with(viewModel) {
-        val userId = getUID()
+        val userId = getUserID()
 
-        getCartList(userId).observe(viewLifecycleOwner) { list ->
+        cartList.observe(viewLifecycleOwner) { list ->
             val checkoutList = list.toCheckoutModelList()
             checkoutAdapter.submitList(checkoutList)
             var totalPrice = 0
             for (item in list) {
-                totalPrice += item?.price ?: 0
+                totalPrice += item.price
             }
             binding.tvPaymentTotal.text = getString(R.string.tv_payment_total, totalPrice)
 
-            getTokenBalance(userId).launchAndCollectIn(viewLifecycleOwner) { balance ->
+            tokenBalance.launchAndCollectIn(viewLifecycleOwner) { balance ->
                 with(binding) {
                     tvBalance.text = getString(R.string.tv_balance, balance)
                     btnCheckout.isEnabled = balance >= totalPrice
@@ -114,20 +115,8 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
                     ).copy(transactionId = transactionId)
                 }
             }
-        }
-    }
 
-    private fun navigateToDetailFromCheckout(checkout: CheckoutModel) {
-        val bundle = bundleOf("movieId" to checkout.movieId)
-        findNavController().navigate(R.id.action_checkoutFragment_to_detailFragment, bundle)
-    }
-
-    private fun collectCheckout(transactionModel: MovieTransactionModel, userId: String) =
-        with(viewModel) {
-            insertTransactionModel(
-                transactionModel,
-                userId
-            ).launchAndCollectIn(viewLifecycleOwner) { success ->
+            insertResult.launchAndCollectIn(viewLifecycleOwner) { success ->
                 if (success) {
                     findNavController()
                         .navigate(
@@ -137,5 +126,25 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
                 }
             }
         }
+    }
+
+    private fun fetchData() {
+        viewModel.getTokenBalance()
+    }
+
+    private fun navigateToDetailFromCheckout(checkout: CheckoutModel) {
+        val bundle = bundleOf("movieId" to checkout.movieId)
+        findNavController().navigate(R.id.action_checkoutFragment_to_detailFragment, bundle)
+    }
+
+    private fun collectCheckout(
+        transactionModel: MovieTransactionModel,
+        userId: String
+    ) {
+        viewModel.insertTransactionModel(
+            transactionModel,
+            userId
+        )
+    }
 
 }
