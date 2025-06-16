@@ -93,7 +93,7 @@ object CoreModule : BaseModule {
         }
 
         single<FirebaseRepository> {
-            FirebaseRepositoryImpl(get(), get(), get())
+            FirebaseRepositoryImpl(get(), get(), get(), get())
         }
     }
 

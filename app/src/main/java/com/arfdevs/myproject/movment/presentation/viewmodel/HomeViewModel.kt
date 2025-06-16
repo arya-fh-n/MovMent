@@ -14,17 +14,15 @@ import com.arfdevs.myproject.core.domain.repository.MovieRepository
 import com.arfdevs.myproject.core.domain.repository.UserRepository
 import com.arfdevs.myproject.core.domain.usecase.GetSessionUseCase
 import com.arfdevs.myproject.core.helper.CoroutinesDispatcherProvider
-import com.arfdevs.myproject.core.helper.DataMapper.toEntityData
 import com.arfdevs.myproject.core.helper.DataMapper.toNowPlayingList
 import com.arfdevs.myproject.core.helper.DataMapper.toPopularList
 import com.arfdevs.myproject.core.helper.DataMapper.toSplashState
-import com.arfdevs.myproject.core.helper.NoConnectivityException
+import com.arfdevs.myproject.core.helper.DomainResult
 import com.arfdevs.myproject.core.helper.SplashState
+import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.movment.presentation.helper.Constants.INDONESIAN
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class HomeViewModel(
     private val movieRepo: MovieRepository,
@@ -34,14 +32,14 @@ class HomeViewModel(
     private val dispatcher: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
-    private val _responsePopular: MutableLiveData<List<PopularModel>> = MutableLiveData()
-    val responsePopular: LiveData<List<PopularModel>> = _responsePopular
+    private val _popularList: MutableLiveData<UiState<List<PopularModel>>> = MutableLiveData()
+    val popularList: LiveData<UiState<List<PopularModel>>> = _popularList
 
-    private val _responseNowPlaying: MutableLiveData<List<NowPlayingModel>> = MutableLiveData()
-    val responseNowPlaying: LiveData<List<NowPlayingModel>> = _responseNowPlaying
+    private val _nowPlayingList: MutableLiveData<UiState<List<NowPlayingModel>>> = MutableLiveData()
+    val nowPlayingList: LiveData<UiState<List<NowPlayingModel>>> = _nowPlayingList
 
-    private val _currentUser = MutableLiveData<FirebaseUser>()
-    val currentUser: LiveData<FirebaseUser> = _currentUser
+    private val _currentUser = MutableLiveData<FirebaseUser?>()
+    val currentUser: LiveData<FirebaseUser?> = _currentUser
 
     private val _language: MutableLiveData<Boolean> = MutableLiveData()
     val language: LiveData<Boolean> = _language
@@ -54,25 +52,39 @@ class HomeViewModel(
     val onboardingState: LiveData<SplashState<SessionModel>> = _onboardingState
 
     fun getPopularMovies(page: Int) = viewModelScope.launch(dispatcher.io) {
-        try {
-            val result = movieRepo.fetchPopular(page)
-            val mappedResult = result.results.toPopularList()
-            _responsePopular.postValue(mappedResult)
-        } catch (e: NoConnectivityException) {
-            e.printStackTrace()
-            _responsePopular.value = emptyList()
+        val state = when (val result = movieRepo.fetchPopular(page)) {
+            is DomainResult.Success -> {
+                val mappedResult = result.data.results.toPopularList()
+                UiState.Success(mappedResult)
+            }
+
+            else -> UiState.Error("Something went wrong. Please try again later.")
         }
+        _popularList.postValue(state)
     }
 
     fun getNowPlaying(page: Int) = viewModelScope.launch(dispatcher.io) {
-        val result = movieRepo.fetchNowPlaying(page)
-        val mappedResult = result.results.toNowPlayingList()
-        _responseNowPlaying.postValue(mappedResult)
+        val state = when (val result = movieRepo.fetchNowPlaying(page)) {
+            is DomainResult.Success -> {
+                val mappedResult = result.data.results.toNowPlayingList()
+                UiState.Success(mappedResult)
+            }
+
+            else -> UiState.Error("Something went wrong. Please try again later.")
+        }
+        _nowPlayingList.postValue(state)
     }
 
-    fun getCurrentUser() = viewModelScope.launch {
-        val user = async { userRepo.fetchCurrentUser() }
-        _currentUser.value = user.await()
+    fun getCurrentUser() = viewModelScope.launch(dispatcher.io) {
+        when (val state = userRepo.fetchCurrentUser()) {
+            is DomainResult.Success -> {
+                _currentUser.value = state.data
+            }
+
+            else -> {
+                _currentUser.value = null
+            }
+        }
     }
 
     fun saveOnboardingState(state: Boolean) = viewModelScope.launch(dispatcher.io) {
@@ -113,7 +125,7 @@ class HomeViewModel(
     }
 
     fun insertToCart(cart: CartModel) = viewModelScope.launch {
-        movieRepo.insertCartMovie(cart.toEntityData())
+        movieRepo.insertCartMovie(cart)
     }
 
 }

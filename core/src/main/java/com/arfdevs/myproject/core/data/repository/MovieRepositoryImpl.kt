@@ -5,10 +5,10 @@ import androidx.paging.PagingConfig
 import com.arfdevs.myproject.core.data.local.db.Dao
 import com.arfdevs.myproject.core.data.remote.ApiEndpoint
 import com.arfdevs.myproject.core.data.remote.datasource.SearchPagingSource
+import com.arfdevs.myproject.core.data.remote.responses.MovieDetailsResponse
+import com.arfdevs.myproject.core.data.remote.responses.NowPlayingResponse
+import com.arfdevs.myproject.core.data.remote.responses.PopularResponse
 import com.arfdevs.myproject.core.domain.model.CartModel
-import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
-import com.arfdevs.myproject.core.domain.model.NowPlayingModel
-import com.arfdevs.myproject.core.domain.model.PopularModel
 import com.arfdevs.myproject.core.domain.model.SearchModel
 import com.arfdevs.myproject.core.domain.model.WishlistModel
 import com.arfdevs.myproject.core.domain.repository.MovieRepository
@@ -30,30 +30,30 @@ class MovieRepositoryImpl(
 
     override suspend fun fetchPopular(
         page: Int
-    ): DomainResult<PopularModel> = withContext(dispatcher.io) {
+    ): DomainResult<PopularResponse> = withContext(dispatcher.io) {
         val result = api.fetchPopularMovies(page)
 
         return@withContext processResponse(result) {
-            DomainResult.Success(PopularModel())
+            DomainResult.Success(it)
         }
     }
 
     override suspend fun fetchNowPlaying(
         page: Int
-    ): DomainResult<NowPlayingModel> = withContext(dispatcher.io) {
-        val result = api.fetchPopularMovies(page)
+    ): DomainResult<NowPlayingResponse> = withContext(dispatcher.io) {
+        val result = api.fetchNowPlayingMovies(page)
         return@withContext processResponse(result) {
-            DomainResult.Success(NowPlayingModel())
+            DomainResult.Success(it)
         }
     }
 
     override suspend fun fetchMovieDetails(
         movieId: Int
-    ): DomainResult<MovieDetailsModel> = withContext(dispatcher.io) {
+    ): DomainResult<MovieDetailsResponse> = withContext(dispatcher.io) {
         val result = api.fetchMovieDetails(movieId)
 
         return@withContext processResponse(result) {
-            DomainResult.Success(MovieDetailsModel())
+            DomainResult.Success(it)
         }
     }
 
