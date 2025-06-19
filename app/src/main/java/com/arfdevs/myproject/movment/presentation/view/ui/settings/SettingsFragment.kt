@@ -16,6 +16,9 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
     private val viewModel: HomeViewModel by viewModel()
 
     override fun initView() = with(binding) {
+        viewModel.getLanguage()
+        viewModel.getTheme()
+
         toolbarSettings.title = getString(R.string.app_name)
         tvSettingsTitle.setText(R.string.tv_settings_title)
 
@@ -26,9 +29,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
         tvDark.setText(R.string.theme_dark)
 
         btnCrashApp.text = getString(R.string.btn_crash_app)
-
-        viewModel.getLanguage()
-        viewModel.getTheme()
     }
 
     override fun initListener() = with(binding) {
@@ -75,6 +75,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
             theme.observe(viewLifecycleOwner) {
                 binding.switchTheme.isChecked = it
             }
+
             language.observe(viewLifecycleOwner) {
                 binding.switchLanguage.isChecked = it
             }

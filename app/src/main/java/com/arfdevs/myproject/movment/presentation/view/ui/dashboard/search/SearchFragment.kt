@@ -18,15 +18,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
 
     private val viewModel: MovieViewModel by viewModel()
 
-    private var userId: String = ""
-
     private val searchAdapter: SearchAdapter by lazy {
         SearchAdapter(
             onItemClickListener = { search ->
                 navigateToDetailFromSearch(search)
             },
             onAddToCartClickListener = { search ->
-                viewModel.insertToCart(search.toCartModel().copy(userId = userId))
+                viewModel.insertToCart(search.toCartModel())
                 context?.let {
                     CustomSnackbar.show(
                         it,
@@ -60,8 +58,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
     }
 
     override fun initObserver() = with(viewModel) {
-        userId = getUserID()
-
         movieSearch.observe(viewLifecycleOwner) { pagingData ->
             searchAdapter.submitData(lifecycle, pagingData)
         }

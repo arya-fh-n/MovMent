@@ -3,7 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("kotlin-parcelize")
-    id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("jacoco")
 }
@@ -17,7 +16,7 @@ private val coverageExclusions = listOf(
 
 android {
     namespace = "com.arfdevs.myproject.core"
-    compileSdk = 34
+    compileSdk = 35
 
     configure<JacocoPluginExtension> {
         toolVersion = "0.8.10"
@@ -104,16 +103,16 @@ android {
 dependencies {
 
     //main
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.core:core-ktx:1.16.0")
+    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("com.google.android.material:material:1.12.0")
 
     //paging
-    api("androidx.paging:paging-runtime-ktx:3.2.1")
-    api("androidx.paging:paging-common-ktx:3.2.1")
+    api("androidx.paging:paging-runtime-ktx:3.3.6")
+    api("androidx.paging:paging-common-ktx:3.3.6")
 
     //coroutines
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
     //Retrofit
@@ -123,16 +122,16 @@ dependencies {
     api("com.squareup.okhttp3:okhttp:4.12.0")
 
     //room db
-    api("androidx.room:room-runtime:2.6.1")
-    api("androidx.room:room-ktx:2.6.1")
-    api("androidx.room:room-paging:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
+    api("androidx.room:room-runtime:2.7.2")
+    api("androidx.room:room-ktx:2.7.2")
+    api("androidx.room:room-paging:2.7.2")
+    ksp("androidx.room:room-compiler:2.7.2")
 
     //worker
-    api("androidx.work:work-runtime-ktx:2.9.0")
+    api("androidx.work:work-runtime-ktx:2.10.2")
 
     //firebase
-    api(platform("com.google.firebase:firebase-bom:32.7.2"))
+    api(platform("com.google.firebase:firebase-bom:33.15.0"))
     api("com.google.firebase:firebase-crashlytics")
     api("com.google.firebase:firebase-analytics")
     api("com.google.firebase:firebase-auth")
@@ -153,7 +152,7 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation("org.mockito:mockito-core:5.4.0")
 }

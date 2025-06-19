@@ -7,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.arfdevs.myproject.core.base.BaseFragment
+import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentDashboardBinding
 import com.arfdevs.myproject.movment.presentation.viewmodel.AuthViewModel
@@ -58,8 +59,14 @@ class DashboardFragment :
 
     }
 
-    override fun initObserver() {
-
+    override fun initObserver() = with(viewModel) {
+        logoutState.observe(viewLifecycleOwner) { state ->
+            if (state is UiState.Success) {
+                activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
+                    ?.findNavController()
+                    ?.navigate(R.id.action_dashboardFragment_to_loginFragment)
+            }
+        }
     }
 
     private fun logOut() {
@@ -70,11 +77,8 @@ class DashboardFragment :
                     dialog.dismiss()
                 }
                 .setPositiveButton(getString(R.string.option_positive)) { dialog, which ->
-                    viewModel.deleteAllWishlistItem(viewModel.getUID())
+                    viewModel.deleteAllWishlistItem()
                     viewModel.logoutUser()
-                    activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
-                        ?.findNavController()
-                        ?.navigate(R.id.action_dashboardFragment_to_loginFragment)
                 }
                 .show()
                 .getButton(AlertDialog.BUTTON_POSITIVE)

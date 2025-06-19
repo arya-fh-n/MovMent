@@ -11,7 +11,6 @@ import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.CheckoutModel
 import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
 import com.arfdevs.myproject.core.helper.DataMapper.toCheckoutModelList
-import com.arfdevs.myproject.core.helper.DataMapper.toMovieTransactionModel
 import com.arfdevs.myproject.core.helper.launchAndCollectIn
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentCheckoutBinding
@@ -26,8 +25,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutBinding::inflate) {
 
     private val viewModel: MovieViewModel by viewModel()
-
-    private var transactionModel = MovieTransactionModel()
 
     private val checkoutAdapter = CheckoutAdapter(
         onItemClickListener = { checkout ->
@@ -61,8 +58,6 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
             findNavController().navigate(R.id.action_checkoutFragment_to_tokenFragment)
         }
 
-        val userId = viewModel.getUserID()
-
         btnCheckout.setOnClickListener {
             context?.let {
                 MaterialAlertDialogBuilder(it)
@@ -72,7 +67,7 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
                     }
                     .setPositiveButton(getString(R.string.option_positive)) { dialog, _ ->
                         dialog.dismiss()
-                        collectCheckout(transactionModel, userId)
+                        collectCheckout(viewModel.movieTransactionModel)
                         CustomSnackbar.show(
                             it,
                             binding.root,
@@ -89,8 +84,6 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
     }
 
     override fun initObserver() = with(viewModel) {
-        val userId = getUserID()
-
         cartList.observe(viewLifecycleOwner) { list ->
             val checkoutList = list.toCheckoutModelList()
             checkoutAdapter.submitList(checkoutList)
@@ -108,11 +101,7 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
                     val date = getCurrentDateInDDMMYYYYFormat()
                     val transactionId = date.convertTotransactionID()
 
-                    this@CheckoutFragment.transactionModel = checkoutList.toMovieTransactionModel(
-                        uid = userId,
-                        total = totalPrice,
-                        date = date
-                    ).copy(transactionId = transactionId)
+                    setMovieTransactionModel(checkoutList, totalPrice, date, transactionId)
                 }
             }
 
@@ -121,7 +110,7 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
                     findNavController()
                         .navigate(
                             R.id.action_checkoutFragment_to_paymentStatusFragment,
-                            bundleOf("movieTransactionModel" to transactionModel)
+                            bundleOf("movieTransactionModel" to viewModel.movieTransactionModel)
                         )
                 }
             }
@@ -138,13 +127,9 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
     }
 
     private fun collectCheckout(
-        transactionModel: MovieTransactionModel,
-        userId: String
+        transactionModel: MovieTransactionModel
     ) {
-        viewModel.insertTransactionModel(
-            transactionModel,
-            userId
-        )
+        viewModel.insertTransactionModel(transactionModel)
     }
 
 }

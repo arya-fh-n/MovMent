@@ -1,6 +1,7 @@
 package com.arfdevs.myproject.movment.presentation.viewmodel
 
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import com.arfdevs.myproject.core.domain.repository.UserRepository
 import com.arfdevs.myproject.core.helper.CoroutinesDispatcherProvider
 import com.arfdevs.myproject.core.helper.DomainResult
 import com.arfdevs.myproject.core.helper.UiState
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
@@ -54,6 +56,7 @@ class AuthViewModel(
                 data = null
             )
         }
+        logEvent(FirebaseAnalytics.Event.LOGIN, bundleOf("User Login" to user))
         _loginState.postValue(state)
     }
 
@@ -66,6 +69,7 @@ class AuthViewModel(
                 data = null
             )
         }
+        logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundleOf("New User Profile Name" to username))
         _updateUsernameState.postValue(state)
     }
 
@@ -74,7 +78,7 @@ class AuthViewModel(
         _logoutState.postValue(UiState.Success(true))
     }
 
-    fun logEvent(eventName: String, bundle: Bundle) {
+    private fun logEvent(eventName: String, bundle: Bundle) {
         firebaseRepo.logEvent(eventName, bundle)
     }
 

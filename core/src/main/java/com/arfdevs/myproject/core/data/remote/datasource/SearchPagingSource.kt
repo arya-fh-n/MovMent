@@ -32,19 +32,19 @@ class SearchPagingSource(
             }
 
             is DomainResult.EmptyState -> {
-                LoadResult.Error(Exception(message = domain.message))
+                LoadResult.Error(Throwable(message = domain.message))
             }
 
             is DomainResult.ErrorState -> {
-                LoadResult.Error(Exception(message = domain.message))
+                LoadResult.Error(Throwable(message = domain.message))
             }
 
             DomainResult.NetworkError -> {
-                LoadResult.Error(Exception(message = "Network error"))
+                LoadResult.Error(Throwable(message = "Network error"))
             }
 
             is DomainResult.TechnicalError -> {
-                LoadResult.Error(Exception(message = "Technical error"))
+                LoadResult.Error(Throwable(message = "Technical error"))
             }
         }
     }
