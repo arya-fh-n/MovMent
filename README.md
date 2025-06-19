@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/1e157cda-db3d-4d9d-bbe7-f3ebe4300294)
+
 # MovMent
 A Movie App made for a certain final project. The application implements an MVVM app architecture pattern, while also adhering to the Clean Architecture pattern (beginner level architecture implementation).
 
