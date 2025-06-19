@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arfdevs.myproject.core.domain.model.PaymentTypeModel
-import com.arfdevs.myproject.core.helper.launchAndCollectIn
+import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.movment.databinding.FragmentPaymentMethodBinding
 import com.arfdevs.myproject.movment.presentation.view.adapter.PaymentTypeAdapter
 import com.arfdevs.myproject.movment.presentation.viewmodel.FirebaseViewModel
@@ -21,7 +21,8 @@ class PaymentMethodFragment : BottomSheetDialogFragment() {
 
     private val paymentList: MutableList<PaymentTypeModel> = mutableListOf()
 
-    private var paymentTypeAdapter = PaymentTypeAdapter(paymentList,
+    private var paymentTypeAdapter = PaymentTypeAdapter(
+        paymentList,
         onPaymentMethodClickListener = {
             paymentMethodListener?.onPaymentMethodClick(it.image, it.label)
             dismiss()
@@ -31,8 +32,8 @@ class PaymentMethodFragment : BottomSheetDialogFragment() {
 
     interface OnPaymentMethodListener {
         fun onPaymentMethodClick(
-            icon: String?,
-            method: String?
+            icon: String,
+            method: String
         )
     }
 
@@ -48,12 +49,39 @@ class PaymentMethodFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        fetchData()
         initObserver()
     }
 
-    private fun initObserver() {
-        getPaymentMethods()
-        updatePaymentMethods()
+    private fun fetchData() = with(viewModel) {
+        getConfigPaymentMethodsList()
+        updateConfigPaymentMethodsList()
+    }
+
+    private fun initObserver() = with(viewModel) {
+        updatePaymentMethodState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UiState.Success -> {
+                    getConfigPaymentMethodsList()
+                }
+
+                else -> {}
+            }
+        }
+
+        paymentMethodList.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    if (paymentList.isEmpty()) {
+                        paymentList.addAll(state.data)
+                        paymentTypeAdapter.notifyDataSetChanged()
+                    }
+                }
+
+                else -> {}
+            }
+
+        }
     }
 
     private fun initView() = with(binding) {
@@ -65,23 +93,6 @@ class PaymentMethodFragment : BottomSheetDialogFragment() {
 
     fun setPaymentMethodListener(listener: OnPaymentMethodListener) {
         paymentMethodListener = listener
-    }
-
-    private fun getPaymentMethods() = with(viewModel) {
-        getConfigPaymentMethodsList().launchAndCollectIn(viewLifecycleOwner) {
-            if (paymentList.isEmpty()) {
-                paymentList.addAll(it)
-                paymentTypeAdapter.notifyDataSetChanged()
-            }
-        }
-    }
-
-    private fun updatePaymentMethods() = with(viewModel) {
-        updateConfigPaymentMethodsList().launchAndCollectIn(viewLifecycleOwner) { success ->
-            if (success) {
-                getPaymentMethods()
-            }
-        }
     }
 
 }

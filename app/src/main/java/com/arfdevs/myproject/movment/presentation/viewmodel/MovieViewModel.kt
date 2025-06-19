@@ -67,9 +67,6 @@ class MovieViewModel(
     private val _tokenBalance = MutableStateFlow(0)
     val tokenBalance = _tokenBalance.asStateFlow()
 
-    private val _uid = MutableStateFlow("")
-    val uid = _uid.asStateFlow()
-
     var movieTransactionModel = MovieTransactionModel()
         private set
 
@@ -113,7 +110,8 @@ class MovieViewModel(
     }
 
     fun insertWishlistMovie() = viewModelScope.launch(dispatcher.io) {
-        movieRepo.insertWishlistMovie(tempWishlistModel)
+        val userId = userRepo.getUID()
+        movieRepo.insertWishlistMovie(tempWishlistModel.copy(userId = userId))
     }
 
     fun deleteWishlistFromDetail() = viewModelScope.launch(dispatcher.io) {
@@ -125,13 +123,13 @@ class MovieViewModel(
     }
 
     fun getWishlist() = viewModelScope.launch(dispatcher.io) {
-        val userId = async { userRepo.getUID() }
-        val result = movieRepo.getWishlist(userId.await())
+        val userId = userRepo.getUID()
+        val result = movieRepo.getWishlist(userId)
         _wishlist.postValue(result)
     }
 
     fun setWishlistModel(wishlistModel: WishlistModel) {
-        this.tempWishlistModel = wishlistModel
+        this@MovieViewModel.tempWishlistModel = wishlistModel
     }
 
     fun setCartModel(cart: CartModel) {
@@ -139,11 +137,13 @@ class MovieViewModel(
     }
 
     fun insertToCart(cart: CartModel) = viewModelScope.launch(dispatcher.io) {
-        movieRepo.insertCartMovie(cart)
+        val userId = userRepo.getUID()
+        movieRepo.insertCartMovie(cart.copy(userId = userId))
     }
 
     fun insertToCartFromDetail() = viewModelScope.launch(dispatcher.io) {
-        movieRepo.insertCartMovie(tempCardModel)
+        val userId = userRepo.getUID()
+        movieRepo.insertCartMovie(tempCardModel.copy(userId = userId))
     }
 
     fun getCartList() = viewModelScope.launch(dispatcher.io) {
@@ -152,7 +152,8 @@ class MovieViewModel(
         _cartList.postValue(result)
     }
 
-    fun getCartById(movieId: Int, userId: String) = viewModelScope.launch(dispatcher.io) {
+    fun getCartById(movieId: Int) = viewModelScope.launch(dispatcher.io) {
+        val userId = userRepo.getUID()
         val result = movieRepo.getCartItemById(movieId, userId)
         _cartItemById.postValue(result)
     }
@@ -189,13 +190,6 @@ class MovieViewModel(
         when (val result = firebaseRepo.getMovieTransaction(userId)) {
             is DomainResult.Success -> _transactionHistory.postValue(result.data)
             else -> _transactionHistory.postValue(emptyList())
-        }
-    }
-
-    fun getUserID() = viewModelScope.launch(dispatcher.io) {
-        val userId = userRepo.getUID()
-        _uid.update {
-            userId
         }
     }
 

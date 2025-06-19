@@ -8,13 +8,11 @@ import com.arfdevs.myproject.core.domain.model.CartModel
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
 import com.arfdevs.myproject.core.domain.model.WishlistModel
 import com.arfdevs.myproject.core.helper.Constants
-import com.arfdevs.myproject.core.helper.onError
-import com.arfdevs.myproject.core.helper.onLoading
+import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.core.helper.posterPathNullHandling
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentDetailBinding
-import com.arfdevs.myproject.movment.presentation.helper.Constants.ERROR
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
 import com.arfdevs.myproject.movment.presentation.viewmodel.MovieViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -80,29 +78,35 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
 
     override fun initObserver() = with(viewModel) {
         responseDetails.observe(viewLifecycleOwner) { state ->
-            binding.apply {
-                state.onSuccess { detail ->
-                    loadingOverlay.visible(false)
-                    loadingAnim.visible(false)
-                    setupDetails(detail)
-
-                    setupCartAndWishlist(detail, uid.value)
-                    this@DetailFragment.getCartById(detail.id, uid.value)
-                }.onError { e ->
-                    loadingOverlay.visible(false)
-                    loadingAnim.visible(false)
-                    context?.let {
-                        CustomSnackbar.show(
-                            it, binding.root,
-                            getString(R.string.err_detail_load_failed),
-                            e.localizedMessage?.toString() ?: ERROR
-                        )
-                    }
-                }.onLoading {
-                    loadingOverlay.visible(true)
-                    loadingAnim.visible(true)
-                }
+            when (state) {
+                UiState.Loading -> handleLoading(state is UiState.Loading)
+                UiState.Empty -> handleError(getString(R.string.err_empty))
+                is UiState.Error -> handleError(state.message)
+                UiState.ErrorConnection -> handleError(getString(R.string.err_connection))
+                is UiState.Success -> handleSuccess(state.data)
             }
+        }
+    }
+
+    private fun handleSuccess(detail: MovieDetailsModel) {
+        setupDetails(detail)
+
+        setupCartAndWishlist(detail)
+        this@DetailFragment.getCartById(detail.id)
+    }
+
+    private fun handleLoading(isLoading: Boolean) = with(binding) {
+        loadingOverlay.visible(isLoading)
+        loadingAnim.visible(isLoading)
+    }
+
+    private fun handleError(message: String) = with(binding) {
+        context?.let {
+            CustomSnackbar.show(
+                it, root,
+                getString(R.string.err_detail_load_failed),
+                message
+            )
         }
     }
 
@@ -144,9 +148,9 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
         }
     }
 
-    private fun getCartById(movieId: Int, userId: String) {
+    private fun getCartById(movieId: Int) {
         viewModel.run {
-            getCartById(movieId, userId)
+            getCartById(movieId)
 
             cartItemById.observe(viewLifecycleOwner) { cartItem ->
                 with(binding) {
@@ -166,11 +170,10 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
         }
     }
 
-    private fun setupCartAndWishlist(detail: MovieDetailsModel, userId: String) = with(viewModel) {
+    private fun setupCartAndWishlist(detail: MovieDetailsModel) = with(viewModel) {
         setWishlistModel(
             WishlistModel(
                 movieId = detail.id,
-                userId = userId,
                 originalTitle = detail.originalTitle,
                 posterPath = detail.posterPath.posterPathNullHandling(),
                 voteAverage = detail.voteAverage,
@@ -181,7 +184,6 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
         setCartModel(
             CartModel(
                 movieId = detail.id,
-                userId = userId,
                 originalTitle = detail.originalTitle,
                 posterPath = detail.posterPath.posterPathNullHandling(),
                 voteAverage = detail.voteAverage,

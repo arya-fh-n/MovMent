@@ -124,4 +124,7 @@
     <string name="btn_crash_app">Crash app!</string>
     <string name="exception_btn_crash">App crashed because crash button is clicked!</string>
     <string name="err_detail_load_failed">Detail Load Failed</string>
+    <string name="err_connection">Connection error. Please try again later.</string>
+    <string name="err_empty">Empty data. Please try again later.</string>
+    <string name="err_failed">Login failed. Please check your credentials.</string>
 </resources>

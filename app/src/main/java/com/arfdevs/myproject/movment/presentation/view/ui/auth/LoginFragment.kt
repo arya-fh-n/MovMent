@@ -7,11 +7,8 @@ import androidx.navigation.fragment.findNavController
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.User
+import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.core.helper.enabled
-import com.arfdevs.myproject.core.helper.launchAndCollectIn
-import com.arfdevs.myproject.core.helper.onError
-import com.arfdevs.myproject.core.helper.onLoading
-import com.arfdevs.myproject.core.helper.onSuccess
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentLoginBinding
@@ -46,7 +43,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 email = etEmail.text.toString().trim(),
                 password = etPassword.text.toString().trim()
             )
-            collectLogin(user)
+            viewModel.loginUser(user)
         }
 
         tvToRegister.setOnClickListener {
@@ -54,30 +51,34 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
     }
 
-    override fun initObserver() {}
+    override fun initObserver() = with(viewModel) {
+        loginState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                UiState.Loading -> handleLoading(state is UiState.Loading)
+                is UiState.Success -> {
+                    if (state.data) findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+                    else handleError(getString(R.string.err_failed))
+                }
 
-    private fun collectLogin(user: User) = with(binding) {
-        viewModel.loginUser(user).launchAndCollectIn(viewLifecycleOwner) { state ->
-            state.onSuccess { success ->
-                loadingOverlay.visible(false)
-                loadingAnim.visible(false)
-                if (success) {
-                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
-                }
-            }.onError { e ->
-                loadingOverlay.visible(false)
-                loadingAnim.visible(false)
-                context?.let {
-                    CustomSnackbar.show(
-                        it, binding.root,
-                        getString(R.string.err_title_login_failed),
-                        e.localizedMessage?.toString() ?: e.message.toString()
-                    )
-                }
-            }.onLoading {
-                loadingOverlay.visible(true)
-                loadingAnim.visible(true)
+                UiState.Empty -> handleError(getString(R.string.err_empty))
+                is UiState.Error -> handleError(state.message)
+                UiState.ErrorConnection -> handleError(getString(R.string.err_connection))
             }
+        }
+    }
+
+    private fun handleLoading(isLoading: Boolean) = with(binding) {
+        loadingOverlay.visible(isLoading)
+        loadingAnim.visible(isLoading)
+    }
+
+    private fun handleError(message: String) = with(binding) {
+        context?.let {
+            CustomSnackbar.show(
+                it, root,
+                getString(R.string.err_title_login_failed),
+                message
+            )
         }
     }
 

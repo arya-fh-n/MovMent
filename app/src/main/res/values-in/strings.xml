@@ -89,4 +89,7 @@
     <string name="btn_crash_app">Crash aplikasi!</string>
     <string name="exception_btn_crash">Aplikasi tertutup karena crash button diklik!</string>
     <string name="err_detail_load_failed">Gagal Load Detail</string>
+    <string name="err_connection">Eror sambungan. Silakan coba beberapa saat lagi.</string>
+    <string name="err_empty">Data kosong. Silakan coba beberapa saat lagi</string>
+    <string name="err_failed">Login gagal. Mohon cek kredensial Anda.</string>
 </resources>

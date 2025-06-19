@@ -11,7 +11,7 @@ import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.NowPlayingModel
 import com.arfdevs.myproject.core.domain.model.PopularModel
 import com.arfdevs.myproject.core.helper.DataMapper.toCartModel
-import com.arfdevs.myproject.core.helper.launchAndCollectIn
+import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentHomeBinding
 import com.arfdevs.myproject.movment.presentation.helper.Constants.HOME_TOKEN_FETCH_DELAY
@@ -27,23 +27,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     private val viewModel: HomeViewModel by viewModel()
 
-    private lateinit var rvPopular: RecyclerView
-    private lateinit var rvNowPlaying: RecyclerView
-
-    private var userId: String = ""
-
-    private var popularAdapter = PopularAdapter(
+    private val popularAdapter = PopularAdapter(
         onItemClickListener = { popular ->
             navigateToDetailFromPopular(popular)
         }
     )
 
-    private var nowPlayingAdapter = NowPlayingAdapter(
+    private val nowPlayingAdapter = NowPlayingAdapter(
         onItemClickListener = { nowPlaying ->
             navigateToDetailFromNowPlaying(nowPlaying)
         },
         onAddToCartClickListener = { movie ->
-            viewModel.insertToCart(movie.toCartModel().copy(userId = userId))
+            viewModel.insertToCart(movie.toCartModel())
             context?.let { it1 ->
                 CustomSnackbar.show(
                     it1,
@@ -65,15 +60,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         setupHome()
 
-        this@HomeFragment.rvPopular = rvPopular
-        this@HomeFragment.rvPopular.run {
+        rvPopular.run {
             hasFixedSize()
             layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
             adapter = popularAdapter
         }
 
-        this@HomeFragment.rvNowPlaying = rvNowPlaying
-        this@HomeFragment.rvNowPlaying.run {
+        rvNowPlaying.run {
             hasFixedSize()
             layoutManager = GridLayoutManager(context, 2)
             adapter = nowPlayingAdapter
@@ -89,26 +82,37 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
     }
 
-    override fun initObserver() {
-        with(viewModel) {
-            currentUser.observe(viewLifecycleOwner) { user ->
-                saveUID(user.uid)
-                userId = user.uid
+    override fun initObserver() = with(viewModel) {
+        currentUser.observe(viewLifecycleOwner) { user ->
+            saveUID(user?.uid.orEmpty())
+            binding.tvUsername.text =
+                getString(R.string.tv_username_ph, user?.displayName ?: "undefined")
+        }
 
-                with(binding) {
-                    tvUsername.text = getString(R.string.tv_username_ph, user.displayName)
+        nowPlayingList.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Success -> nowPlayingAdapter.submitList(state.data)
+                else -> {}
+            }
+        }
+
+        logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundleOf("Home shown" to "HomeFragment"))
+
+        popularList.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Success -> popularAdapter.submitList(state.data)
+                else -> {}
+            }
+        }
+
+        tokenBalance.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    binding.tvBalance.text = getString(R.string.tv_balance, state.data)
                 }
-            }
 
-            responseNowPlaying.observe(viewLifecycleOwner) { list ->
-                nowPlayingAdapter.submitList(list)
+                else -> {}
             }
-
-            responsePopular.observe(viewLifecycleOwner) { list ->
-                popularAdapter.submitList(list)
-            }
-
-            logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundleOf("Home shown" to "HomeFragment"))
         }
     }
 
@@ -118,9 +122,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         getCurrentUser()
 
         Handler(Looper.getMainLooper()).postDelayed({
-            getTokenBalance(userId).launchAndCollectIn(viewLifecycleOwner) { balance ->
-                binding.tvBalance.text = getString(R.string.tv_balance, balance)
-            }
+            getTokenBalance()
         }, HOME_TOKEN_FETCH_DELAY)
     }
 

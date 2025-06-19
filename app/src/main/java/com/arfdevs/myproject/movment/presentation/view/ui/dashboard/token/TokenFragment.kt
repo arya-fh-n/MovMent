@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.TokenTopupModel
+import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.core.helper.enabled
-import com.arfdevs.myproject.core.helper.launchAndCollectIn
+import com.arfdevs.myproject.core.helper.isError
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentTokenBinding
@@ -41,7 +42,7 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
         btnContinue.text = getString(R.string.btn_token_continue)
 
         ivBalance.load(R.drawable.ic_balance)
-
+        fetchData()
         rvTopupAmountSelection.run {
             layoutManager = GridLayoutManager(context, 2)
             adapter = tokenItemAdapter
@@ -75,14 +76,7 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
         }
     }
 
-    override fun initObserver() {
-        getConfig()
-        updateConfig()
-
-        observeTokenPage()
-    }
-
-    private fun observeTokenPage() = with(viewModel) {
+    override fun initObserver() = with(viewModel) {
         tokenAmount.observe(viewLifecycleOwner) {
             amount = it
         }
@@ -95,25 +89,40 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
             this@TokenFragment.tokenModel = it
         }
 
-        getTokenBalance(getUID()).launchAndCollectIn(viewLifecycleOwner) { balance ->
-            binding.tvBalance.text = getString(R.string.tv_balance, balance)
-        }
-
-    }
-
-    private fun getConfig() = with(viewModel) {
-        getConfigTokenTopupList().launchAndCollectIn(viewLifecycleOwner) { topupList ->
-            tokenItemAdapter.submitList(topupList)
-        }
-    }
-
-    private fun updateConfig() = with(viewModel) {
-        updateConfigTokenTopupList().launchAndCollectIn(viewLifecycleOwner) { success ->
-            showError(!success)
-            if (success) {
-                getConfig()
+        tokenTopupList.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Success -> tokenItemAdapter.submitList(state.data)
+                else -> showError(state.isError(true))
             }
         }
+
+        updateTokenTopupState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    if (state.data) {
+                        getConfigTokenTopupList()
+                    }
+                }
+
+                else -> showError(state.isError(true))
+            }
+        }
+
+        tokenBalance.observe(viewLifecycleOwner) { balance ->
+            when (balance) {
+                is UiState.Success -> {
+                    binding.tvBalance.text = getString(R.string.tv_balance, balance.data)
+                }
+
+                else -> showError(balance.isError(true))
+            }
+        }
+    }
+
+    private fun fetchData() = with(viewModel) {
+        getConfigTokenTopupList()
+        updateConfigTokenTopupList()
+        getTokenBalance()
     }
 
     private fun showError(state: Boolean) = with(binding) {
@@ -123,7 +132,7 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
             "Loading Failed",
             "Token topup amount cannot be fetched."
         ) {
-            getConfig()
+            viewModel.getConfigTokenTopupList()
         }
     }
 

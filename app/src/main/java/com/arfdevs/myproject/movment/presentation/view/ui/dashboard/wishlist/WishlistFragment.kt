@@ -117,7 +117,7 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding>(FragmentWishlistB
     }
 
     private fun getCartById(wishlist: WishlistModel) {
-        viewModel.getCartById(wishlist.movieId, wishlist.userId)
+        viewModel.getCartById(wishlist.movieId)
         viewModel.cartItemById.observe(viewLifecycleOwner) {
             wishlistAdapter.itemIsInCart(it != null)
         }

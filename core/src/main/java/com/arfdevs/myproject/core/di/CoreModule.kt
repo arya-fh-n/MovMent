@@ -3,7 +3,6 @@ package com.arfdevs.myproject.core.di
 import android.content.Context
 import androidx.room.Room
 import com.arfdevs.myproject.core.base.BaseModule
-import com.arfdevs.myproject.core.data.local.datasource.LocalDataSource
 import com.arfdevs.myproject.core.data.local.db.Database
 import com.arfdevs.myproject.core.data.local.sharedpref.SharedPreferencesHelper
 import com.arfdevs.myproject.core.data.local.sharedpref.SharedPreferencesHelperImpl
@@ -77,12 +76,6 @@ object CoreModule : BaseModule {
         }
     }
 
-    private val dataSourceModule = module {
-        single {
-            LocalDataSource(get(), get())
-        }
-    }
-
     private val repositoryModule = module {
         single<MovieRepository> {
             MovieRepositoryImpl(get(), get(), get())
@@ -133,7 +126,6 @@ object CoreModule : BaseModule {
         firebaseModule,
         databaseModule,
         sharedPrefModule,
-        dataSourceModule,
         repositoryModule,
         useCaseModule,
         networkModule,

@@ -6,8 +6,8 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.TokenTransactionModel
+import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.core.helper.enabled
-import com.arfdevs.myproject.core.helper.launchAndCollectIn
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentTopupBinding
 import com.arfdevs.myproject.movment.presentation.helper.Constants.getCurrentDateInDDMMYYYYFormat
@@ -25,19 +25,16 @@ class TopupFragment : BaseFragment<FragmentTopupBinding>(FragmentTopupBinding::i
         PaymentMethodFragment()
     }
 
-    private var transactionModel = TokenTransactionModel()
-    private var paymentMethod: String = ""
-    private var userId: String = ""
-    private var currentTIme: String = getCurrentDateInDDMMYYYYFormat()
+    private val tokenModel by lazy {
+        safeArgs.tokenModel
+    }
 
     override fun initView() = with(binding) {
         btnPay.enabled(false)
 
-        safeArgs.tokenModel.let { tokenTopup ->
+        tokenModel.let { tokenTopup ->
             tvAmount.text = getString(R.string.tv_amount, tokenTopup.token)
             tvPrice.text = getString(R.string.tv_price, tokenTopup.price)
-            transactionModel.price = tokenTopup.price
-            transactionModel.token = tokenTopup.token
         }
 
         toolbarTopup.title = getString(R.string.app_name_movment)
@@ -66,46 +63,39 @@ class TopupFragment : BaseFragment<FragmentTopupBinding>(FragmentTopupBinding::i
         }
 
         btnPay.setOnClickListener {
-            val transaction = transactionModel.copy(
-                uid = userId,
-                method = paymentMethod,
-                date = currentTIme
+            val transaction = TokenTransactionModel(
+                token = tokenModel.token,
+                price = tokenModel.price,
+                date = getCurrentDateInDDMMYYYYFormat()
             )
-            collectTransaction(transaction, userId)
+            viewModel.insertTokenTransaction(transaction)
         }
-
     }
 
     override fun initObserver() = with(viewModel) {
-        userId = getUID()
+        insertTokenTransactionState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Success -> {
+                    if (state.data) {
+                        findNavController().navigate(
+                            R.id.action_topupFragment_to_topupStatusFragment,
+                            bundleOf("tokenTransactionModel" to tokenTransactionModel)
+                        )
+                    }
+                }
+
+                else -> {}
+            }
+        }
     }
 
-    override fun onPaymentMethodClick(icon: String?, method: String?) {
+    override fun onPaymentMethodClick(icon: String, method: String) {
         with(binding) {
             ivPaymentLogo.load(icon)
             tvPaymentMethodTitle.text = method
-            if (method != null) {
-                paymentMethod = method
-                btnPay.enabled(true)
-            }
+            viewModel.setPaymentMethod(method)
+            btnPay.enabled(true)
         }
     }
 
-    private fun collectTransaction(
-        transaction: TokenTransactionModel,
-        userId: String
-    ) =
-        with(viewModel) {
-            insertTokenTransaction(
-                transaction,
-                userId
-            ).launchAndCollectIn(viewLifecycleOwner) { success ->
-                if (success) {
-                    findNavController().navigate(
-                        R.id.action_topupFragment_to_topupStatusFragment,
-                        bundleOf("tokenTransactionModel" to transaction)
-                    )
-                }
-            }
-        }
 }

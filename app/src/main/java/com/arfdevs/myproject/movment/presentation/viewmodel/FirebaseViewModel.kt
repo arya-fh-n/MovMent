@@ -17,7 +17,6 @@ import com.arfdevs.myproject.core.helper.DomainResult
 import com.arfdevs.myproject.core.helper.UiState
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class FirebaseViewModel(
     private val userRepo: UserRepository,
@@ -48,6 +47,14 @@ class FirebaseViewModel(
 
     private val _tokenBalance = MutableLiveData<UiState<Int>>()
     val tokenBalance: LiveData<UiState<Int>> = _tokenBalance
+
+    private val _insertTokenTransactionState = MutableLiveData<UiState<Boolean>>()
+    val insertTokenTransactionState: LiveData<UiState<Boolean>> = _insertTokenTransactionState
+
+    var tokenTransactionModel = TokenTransactionModel()
+        private set
+
+    var paymentMethod: String = ""
 
     fun setTokenModel(tokenModel: TokenTopupModel) {
         _tokenModel.value = tokenModel
@@ -133,9 +140,23 @@ class FirebaseViewModel(
         _updatePaymentMethodState.postValue(state)
     }
 
-    fun insertTokenTransaction(transaction: TokenTransactionModel) = runBlocking {
+    fun insertTokenTransaction(
+        transaction: TokenTransactionModel
+    ) = viewModelScope.launch(dispatcher.io) {
+        this@FirebaseViewModel.tokenTransactionModel = transaction
         val userId = userRepo.getUID()
-        firebaseRepo.insertTokenTransaction(transaction, userId)
+        val model = transaction.copy(method = this@FirebaseViewModel.paymentMethod)
+        val state = when (val result = firebaseRepo.insertTokenTransaction(model, userId)) {
+            is DomainResult.Success -> UiState.Success(result.data)
+            else -> UiState.Error("Something went wrong. Please try again later.")
+        }
+        _insertTokenTransactionState.postValue(state)
+    }
+
+    fun setPaymentMethod(
+        method: String
+    ) {
+        paymentMethod = method
     }
 
     fun getTokenBalance() = viewModelScope.launch(dispatcher.io) {

@@ -51,6 +51,9 @@ class HomeViewModel(
         MutableLiveData<SplashState<SessionModel>>()
     val onboardingState: LiveData<SplashState<SessionModel>> = _onboardingState
 
+    private val _tokenBalance = MutableLiveData<UiState<Int>>()
+    val tokenBalance: LiveData<UiState<Int>> = _tokenBalance
+
     fun getPopularMovies(page: Int) = viewModelScope.launch(dispatcher.io) {
         val state = when (val result = movieRepo.fetchPopular(page)) {
             is DomainResult.Success -> {
@@ -120,12 +123,18 @@ class HomeViewModel(
         firebaseRepo.logEvent(eventName, bundle)
     }
 
-    fun getTokenBalance(userId: String) = viewModelScope.launch(dispatcher.io) {
-        firebaseRepo.getTokenBalance(userId)
+    fun getTokenBalance() = viewModelScope.launch(dispatcher.io) {
+        val userId = userRepo.getUID()
+        val state = when (val result = firebaseRepo.getTokenBalance(userId)) {
+            is DomainResult.Success -> UiState.Success(result.data)
+            else -> UiState.Error("Something went wrong. Please try again later.")
+        }
+        _tokenBalance.postValue(state)
     }
 
     fun insertToCart(cart: CartModel) = viewModelScope.launch {
-        movieRepo.insertCartMovie(cart)
+        val userId = userRepo.getUID()
+        movieRepo.insertCartMovie(cart.copy(userId = userId))
     }
 
 }

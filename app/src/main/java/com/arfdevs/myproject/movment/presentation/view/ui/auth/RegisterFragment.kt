@@ -2,7 +2,6 @@ package com.arfdevs.myproject.movment.presentation.view.ui.auth
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.text.Editable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -12,15 +11,13 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Patterns
 import android.view.View
+import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.User
+import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.core.helper.enabled
-import com.arfdevs.myproject.core.helper.launchAndCollectIn
-import com.arfdevs.myproject.core.helper.onError
-import com.arfdevs.myproject.core.helper.onLoading
-import com.arfdevs.myproject.core.helper.onSuccess
 import com.arfdevs.myproject.core.helper.visible
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentRegisterBinding
@@ -61,7 +58,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                 email = etEmail.text.toString().trim(),
                 password = etPassword.text.toString().trim()
             )
-            collectRegister(user)
+            viewModel.registerUser(user)
         }
 
         tvToLogin.setOnClickListener {
@@ -69,30 +66,33 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         }
     }
 
-    override fun initObserver() {}
-
-    private fun collectRegister(user: User) = with(binding) {
-        viewModel.registerUser(user).launchAndCollectIn(viewLifecycleOwner) { state ->
-            state.onSuccess { success ->
-                loadingOverlay.visible(false)
-                loadingAnim.visible(false)
-                if (success) {
-                    findNavController().navigate(R.id.action_registerFragment_to_profileFragment)
+    override fun initObserver() = with(viewModel) {
+        registerState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                UiState.Loading -> handleLoading(state is UiState.Loading)
+                UiState.Empty -> handleError(getString(R.string.err_empty))
+                is UiState.Error -> handleError(state.message)
+                UiState.ErrorConnection -> handleError(getString(R.string.err_connection))
+                is UiState.Success -> {
+                    if (state.data) findNavController().navigate(R.id.action_registerFragment_to_profileFragment)
+                    else handleError(getString(R.string.err_failed))
                 }
-            }.onError { e ->
-                loadingOverlay.visible(false)
-                loadingAnim.visible(false)
-                context?.let {
-                    CustomSnackbar.show(
-                        it, binding.root,
-                        getString(R.string.err_title_register_failed),
-                        e.localizedMessage?.toString() ?: e.message.toString()
-                    )
-                }
-            }.onLoading {
-                loadingOverlay.visible(true)
-                loadingAnim.visible(true)
             }
+        }
+    }
+
+    private fun handleLoading(isLoading: Boolean) = with(binding) {
+        loadingOverlay.visible(isLoading)
+        loadingAnim.visible(isLoading)
+    }
+
+    private fun handleError(message: String) = with(binding) {
+        context?.let {
+            CustomSnackbar.show(
+                it, root,
+                getString(R.string.err_title_register_failed),
+                message
+            )
         }
     }
 
@@ -239,7 +239,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
     }
 
     private fun openWebPage(context: Context, url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        val intent = Intent(Intent.ACTION_VIEW, url.toUri())
         context.startActivity(intent)
     }
 }
