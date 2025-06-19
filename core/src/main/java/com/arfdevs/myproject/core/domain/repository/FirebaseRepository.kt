@@ -3,31 +3,32 @@ package com.arfdevs.myproject.core.domain.repository
 import android.os.Bundle
 import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
 import com.arfdevs.myproject.core.domain.model.TokenTransactionModel
+import com.arfdevs.myproject.core.helper.DomainResult
 
 interface FirebaseRepository {
 
-    fun getConfigTokenTopupList(): String
+    suspend fun getConfigTokenTopupList(): DomainResult<String>
 
-    fun updateConfigTokenTopupList(): Boolean
+    suspend fun updateConfigTokenTopupList(): DomainResult<Boolean>
 
-    fun getConfigPaymentMethodsList(): String
+    suspend fun getConfigPaymentMethodsList(): DomainResult<String>
 
-    fun updateConfigPaymentMethodsList(): Boolean
+    suspend fun updateConfigPaymentMethodsList(): DomainResult<Boolean>
 
     fun logEvent(eventName: String, bundle: Bundle)
 
-    fun insertTokenTransaction(
+    suspend fun insertTokenTransaction(
         transaction: TokenTransactionModel,
         userId: String
-    ): Boolean
+    ): DomainResult<Boolean>
 
-    fun getTokenBalance(userId: String): Int
+    suspend fun getTokenBalance(userId: String): DomainResult<Int>
 
-    fun insertMovieTransaction(
+    suspend fun insertMovieTransaction(
         movieTransaction: MovieTransactionModel,
         userId: String
-    ): Boolean
+    ): DomainResult<Boolean>
 
-    fun getMovieTransaction(userId: String): List<MovieTransactionModel>
+    suspend fun getMovieTransaction(userId: String): DomainResult<List<MovieTransactionModel>>
 
 }

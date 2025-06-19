@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.liveData
 import com.arfdevs.myproject.core.domain.model.CartModel
+import com.arfdevs.myproject.core.domain.model.CheckoutModel
 import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
 import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
 import com.arfdevs.myproject.core.domain.model.SearchModel
@@ -17,6 +18,8 @@ import com.arfdevs.myproject.core.domain.repository.MovieRepository
 import com.arfdevs.myproject.core.domain.repository.UserRepository
 import com.arfdevs.myproject.core.helper.Constants
 import com.arfdevs.myproject.core.helper.CoroutinesDispatcherProvider
+import com.arfdevs.myproject.core.helper.DataMapper.toMovieTransactionModel
+import com.arfdevs.myproject.core.helper.DataMapper.toUIData
 import com.arfdevs.myproject.core.helper.DomainResult
 import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.core.helper.orZero
@@ -33,10 +36,6 @@ class MovieViewModel(
     private val firebaseRepo: FirebaseRepository,
     private val dispatcher: CoroutinesDispatcherProvider
 ) : ViewModel() {
-
-    init {
-        getUserID()
-    }
 
     private var _responseDetails = MutableLiveData<UiState<MovieDetailsModel>>()
     val responseDetails: LiveData<UiState<MovieDetailsModel>> = _responseDetails
@@ -71,6 +70,9 @@ class MovieViewModel(
     private val _uid = MutableStateFlow("")
     val uid = _uid.asStateFlow()
 
+    var movieTransactionModel = MovieTransactionModel()
+        private set
+
     fun getMovieDetails(movieId: Int) = viewModelScope.launch(dispatcher.io) {
         _responseDetails.postValue(UiState.Loading)
 
@@ -92,7 +94,7 @@ class MovieViewModel(
                     result.code
                 )
 
-                is DomainResult.Success -> UiState.Success(result.data)
+                is DomainResult.Success -> UiState.Success(result.data.toUIData())
             }
             uiState
         } catch (e: Throwable) {
@@ -164,25 +166,30 @@ class MovieViewModel(
     }
 
     fun getTokenBalance() = viewModelScope.launch(dispatcher.io) {
-        val userId = async { userRepo.getUID() }
-        val result = firebaseRepo.getTokenBalance(userId.await())
-        _tokenBalance.update {
-            result
+        val userId = userRepo.getUID()
+        when (val result = firebaseRepo.getTokenBalance(userId)) {
+            is DomainResult.Success -> _tokenBalance.update { result.data }
+            else -> _tokenBalance.update { 0 }
         }
     }
 
     fun insertTransactionModel(
         transaction: MovieTransactionModel,
-        userId: String
     ) = viewModelScope.launch(dispatcher.io) {
-        val result = firebaseRepo.insertMovieTransaction(transaction, userId)
-        _insertResult.update { result }
+        val userId = userRepo.getUID()
+        when (val result = firebaseRepo.insertMovieTransaction(transaction, userId)) {
+            is DomainResult.Success -> _insertResult.update { result.data }
+            else -> _insertResult.update { false }
+        }
+
     }
 
     fun getTransactionHistory() = viewModelScope.launch(dispatcher.io) {
-        val userId = async { userRepo.getUID() }
-        val movieTransaction = firebaseRepo.getMovieTransaction(userId.await())
-        _transactionHistory.postValue(movieTransaction)
+        val userId = userRepo.getUID()
+        when (val result = firebaseRepo.getMovieTransaction(userId)) {
+            is DomainResult.Success -> _transactionHistory.postValue(result.data)
+            else -> _transactionHistory.postValue(emptyList())
+        }
     }
 
     fun getUserID() = viewModelScope.launch(dispatcher.io) {
@@ -199,6 +206,20 @@ class MovieViewModel(
 
     fun logEvent(eventName: String, bundle: Bundle) = viewModelScope.launch(dispatcher.io) {
         firebaseRepo.logEvent(eventName, bundle)
+    }
+
+    fun setMovieTransactionModel(
+        checkoutList: List<CheckoutModel?>,
+        totalPrice: Int,
+        date: String,
+        transactionId: String
+    ) = viewModelScope.launch(dispatcher.io) {
+        val userId = userRepo.getUID()
+        movieTransactionModel = checkoutList.toMovieTransactionModel(
+            uid = userId,
+            total = totalPrice,
+            date = date
+        ).copy(transactionId = transactionId)
     }
 
 }
