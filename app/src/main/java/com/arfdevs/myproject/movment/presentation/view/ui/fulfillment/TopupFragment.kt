@@ -93,7 +93,7 @@ class TopupFragment : BaseFragment<FragmentTopupBinding>(FragmentTopupBinding::i
         with(binding) {
             ivPaymentLogo.load(icon)
             tvPaymentMethodTitle.text = method
-            viewModel.setPaymentMethod(method)
+            viewModel.setSelectedPaymentMethod(method)
             btnPay.enabled(true)
         }
     }

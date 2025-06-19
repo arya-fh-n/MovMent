@@ -153,7 +153,7 @@ class FirebaseViewModel(
         _insertTokenTransactionState.postValue(state)
     }
 
-    fun setPaymentMethod(
+    fun setSelectedPaymentMethod(
         method: String
     ) {
         paymentMethod = method

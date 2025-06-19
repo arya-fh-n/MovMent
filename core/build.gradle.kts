@@ -3,7 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("kotlin-parcelize")
-    id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("jacoco")
 }
@@ -17,7 +16,7 @@ private val coverageExclusions = listOf(
 
 android {
     namespace = "com.arfdevs.myproject.core"
-    compileSdk = 34
+    compileSdk = 35
 
     configure<JacocoPluginExtension> {
         toolVersion = "0.8.10"
@@ -93,8 +92,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
         jvmTarget = "17"
