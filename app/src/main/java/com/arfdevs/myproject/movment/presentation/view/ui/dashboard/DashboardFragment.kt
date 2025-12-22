@@ -3,6 +3,8 @@ package com.arfdevs.myproject.movment.presentation.view.ui.dashboard
 import android.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -27,6 +29,26 @@ class DashboardFragment :
         val navHost = childFragmentManager.findFragmentById(R.id.fcv_dashboard) as NavHostFragment
         navController = navHost.navController
         bottomNavigation.setupWithNavController(navController)
+
+        val builder = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setRestoreState(true)
+            .setPopUpTo(
+                navController.graph.findStartDestination().id,
+                inclusive = false,
+                saveState = true
+            )
+
+        val options = builder.build()
+
+        bottomNavigation.setOnItemSelectedListener { item ->
+            if (navController.currentDestination?.id != item.itemId) {
+                navController.navigate(item.itemId, null, options)
+                true
+            } else {
+                false
+            }
+        }
 
         toolbarDashboard.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
