@@ -25,27 +25,17 @@ class UserRepositoryImpl(
             auth.createUserWithEmailAndPassword(user.email, user.password).await()
             DomainResult.Success(true)
         } catch (e: FirebaseAuthException) {
-            DomainResult.ErrorState(e.localizedMessage ?: "Unknown error occurred", -1)
+            DomainResult.ErrorState(e.localizedMessage.orEmpty(), -1)
         }
     }
 
     override suspend fun signInUser(
         user: User
     ): DomainResult<Boolean> = withContext(dispatcher.io) {
-        var isSuccess = false
-        var e: Exception = Exception()
-
-        auth.signInWithEmailAndPassword(user.email, user.password)
-            .addOnCompleteListener { task ->
-                isSuccess = task.isSuccessful
-            }.addOnFailureListener { error ->
-                isSuccess = false
-                e = error
-            }
-
-        return@withContext if (isSuccess) {
+        return@withContext try {
+            auth.signInWithEmailAndPassword(user.email, user.password).await()
             DomainResult.Success(true)
-        } else {
+        } catch (e: FirebaseAuthException) {
             DomainResult.ErrorState(e.localizedMessage.orEmpty(), -1)
         }
     }
@@ -53,23 +43,14 @@ class UserRepositoryImpl(
     override suspend fun updateUsername(
         username: String
     ): DomainResult<Boolean> = withContext(dispatcher.io) {
-        var isSuccess = false
-        var e: Exception = Exception()
-
         val updates = userProfileChangeRequest {
             displayName = username
         }
 
-        auth.currentUser?.updateProfile(updates)?.addOnCompleteListener { task ->
-            isSuccess = task.isSuccessful
-        }?.addOnFailureListener { error ->
-            isSuccess = false
-            e = error
-        }
-
-        return@withContext if (isSuccess) {
+        return@withContext try {
+            auth.currentUser?.updateProfile(updates)?.await()
             DomainResult.Success(true)
-        } else {
+        } catch (e: FirebaseAuthException) {
             DomainResult.ErrorState(e.localizedMessage.orEmpty(), -1)
         }
     }

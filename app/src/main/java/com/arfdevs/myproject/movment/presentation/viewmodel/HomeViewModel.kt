@@ -81,11 +81,11 @@ class HomeViewModel(
     fun getCurrentUser() = viewModelScope.launch(dispatcher.io) {
         when (val state = userRepo.fetchCurrentUser()) {
             is DomainResult.Success -> {
-                _currentUser.value = state.data
+                _currentUser.postValue(state.data)
             }
 
             else -> {
-                _currentUser.value = null
+                _currentUser.postValue(null)
             }
         }
     }
