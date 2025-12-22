@@ -18,7 +18,7 @@ import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.core.helper.enabled
-import com.arfdevs.myproject.core.helper.visible
+import com.arfdevs.myproject.core.helper.visibleIf
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentRegisterBinding
 import com.arfdevs.myproject.movment.presentation.helper.Constants.PASSWORD_MAX_LENGTH
@@ -82,8 +82,8 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
     }
 
     private fun handleLoading(isLoading: Boolean) = with(binding) {
-        loadingOverlay.visible(isLoading)
-        loadingAnim.visible(isLoading)
+        loadingOverlay.visibleIf(isLoading)
+        loadingAnim.visibleIf(isLoading)
     }
 
     private fun handleError(message: String) = with(binding) {

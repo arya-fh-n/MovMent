@@ -5,7 +5,7 @@ import androidx.navigation.fragment.findNavController
 import com.arfdevs.myproject.core.base.BaseFragment
 import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.core.helper.enabled
-import com.arfdevs.myproject.core.helper.visible
+import com.arfdevs.myproject.core.helper.visibleIf
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentProfileBinding
 import com.arfdevs.myproject.movment.presentation.helper.Constants.USERNAME_MIN_LENGTH
@@ -54,8 +54,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
     }
 
     private fun handleLoading(isLoading: Boolean) = with(binding) {
-        loadingOverlay.visible(isLoading)
-        loadingAnim.visible(isLoading)
+        loadingOverlay.visibleIf(isLoading)
+        loadingAnim.visibleIf(isLoading)
     }
 
     private fun handleError(message: String) = with(binding) {

@@ -1,7 +1,6 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.dashboard.search
 
 import androidx.core.os.bundleOf
-import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.arfdevs.myproject.core.base.BaseFragment
@@ -38,9 +37,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
     }
 
     override fun initView() = with(binding) {
-        tiSearch.hint = getString(R.string.ti_search_hint)
         tiSearch.placeholderText = getString(R.string.ti_search_ph)
-
+        btnSearch.text = getString(R.string.ti_search_hint)
         rvSearch.run {
             layoutManager = GridLayoutManager(context, 2)
             adapter = searchAdapter
@@ -49,17 +47,17 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
 
     override fun initListener() {
         with(binding) {
-            etSearch.doAfterTextChanged {
-                parentFragment?.viewLifecycleOwner?.let {
-                    viewModel.searchMovies(etSearch.text.toString())
-                }
+            btnSearch.setOnClickListener {
+                viewModel.searchMovies(etSearch.text.toString())
             }
         }
     }
 
     override fun initObserver() = with(viewModel) {
         movieSearch.observe(viewLifecycleOwner) { pagingData ->
-            searchAdapter.submitData(lifecycle, pagingData)
+            if (pagingData != null) {
+                searchAdapter.submitData(viewLifecycleOwner.lifecycle, pagingData)
+            }
         }
     }
 

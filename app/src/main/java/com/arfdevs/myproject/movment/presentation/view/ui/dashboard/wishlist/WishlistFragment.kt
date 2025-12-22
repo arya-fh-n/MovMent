@@ -50,6 +50,7 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding>(FragmentWishlistB
                     "Movie successfully removed from wishlist!"
                 )
             }
+            fetchData()
         }
     )
 
@@ -97,7 +98,7 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding>(FragmentWishlistB
     }
 
     private fun fetchData() {
-        viewModel.getWishlist()
+        viewModel.fetchWishlist()
     }
 
     private fun showError(state: Boolean) = with(binding) {

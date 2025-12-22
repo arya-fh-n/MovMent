@@ -10,12 +10,14 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
+import com.google.firebase.remoteconfig.ConfigUpdateListenerRegistration
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
+import kotlinx.coroutines.async
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 class FirebaseRepositoryImpl(
     private val config: FirebaseRemoteConfig,
@@ -26,101 +28,56 @@ class FirebaseRepositoryImpl(
 
     override suspend fun getConfigTokenTopupList(): DomainResult<String> =
         withContext(dispatcher.io) {
-            suspendCancellableCoroutine { continuation ->
-                config.fetchAndActivate().addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        continuation.resume(DomainResult.Success(config.getString("token_list")))
-                    } else {
-                        continuation.resume(
-                            DomainResult.ErrorState(
-                                task.exception?.message ?: "Unknown error"
-                            )
-                        )
-                    }
-                }.addOnFailureListener { e ->
-                    continuation.resumeWithException(e)
-                }
-            }
-        }
-
-    override suspend fun updateConfigTokenTopupList(): DomainResult<Boolean> =
-        withContext(dispatcher.io) {
-            suspendCancellableCoroutine { continuation ->
-                config.addOnConfigUpdateListener(object : ConfigUpdateListener {
-                    override fun onUpdate(configUpdate: ConfigUpdate) {
-                        if (configUpdate.updatedKeys.contains("token_list")) {
-                            config.activate().addOnCompleteListener { task ->
-                                continuation.resume(DomainResult.Success(task.isSuccessful))
-                            }.addOnFailureListener { e ->
-                                continuation.resume(
-                                    DomainResult.ErrorState(
-                                        e.message ?: "Activation failed"
-                                    )
-                                )
-                            }
-                        } else {
-                            continuation.resume(DomainResult.Success(false))
-                        }
-                    }
-
-                    override fun onError(error: FirebaseRemoteConfigException) {
-                        continuation.resume(
-                            DomainResult.ErrorState(
-                                error.message ?: "Config update error"
-                            )
-                        )
-                    }
-                })
-            }
+            getRemoteString("token_list")
         }
 
     override suspend fun getConfigPaymentMethodsList(): DomainResult<String> =
         withContext(dispatcher.io) {
-            suspendCancellableCoroutine { continuation ->
-                config.fetchAndActivate().addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        continuation.resume(DomainResult.Success(config.getString("payment_list")))
-                    } else {
-                        continuation.resume(
-                            DomainResult.ErrorState(
-                                task.exception?.message ?: "Unknown error"
-                            )
-                        )
-                    }
-                }.addOnFailureListener { e ->
-                    continuation.resumeWithException(e)
-                }
-            }
+            getRemoteString("payment_list")
         }
 
-    override suspend fun updateConfigPaymentMethodsList(): DomainResult<Boolean> =
+    override suspend fun updateConfigTokenTopupList() = awaitConfigUpdate("token_list")
+    override suspend fun updateConfigPaymentMethodsList() = awaitConfigUpdate("payment_list")
+
+    private suspend fun getRemoteString(key: String): DomainResult<String> {
+        return try {
+            config.fetchAndActivate().await()
+            DomainResult.Success(config.getString(key))
+        } catch (e: Exception) {
+            DomainResult.ErrorState(e.message ?: "Failed to fetch $key")
+        }
+    }
+
+    private suspend fun awaitConfigUpdate(targetKey: String): DomainResult<Boolean> =
         withContext(dispatcher.io) {
             suspendCancellableCoroutine { continuation ->
-                config.addOnConfigUpdateListener(object : ConfigUpdateListener {
+                var registration: ConfigUpdateListenerRegistration? = null
+
+                registration = config.addOnConfigUpdateListener(object : ConfigUpdateListener {
                     override fun onUpdate(configUpdate: ConfigUpdate) {
-                        if (configUpdate.updatedKeys.contains("payment_list")) {
+                        if (configUpdate.updatedKeys.contains(targetKey)) {
                             config.activate().addOnCompleteListener { task ->
-                                continuation.resume(DomainResult.Success(task.isSuccessful))
-                            }.addOnFailureListener { e ->
-                                continuation.resume(
-                                    DomainResult.ErrorState(
-                                        e.message ?: "Activation failed"
-                                    )
-                                )
+                                registration?.remove()
+                                if (continuation.isActive) {
+                                    continuation.resume(DomainResult.Success(task.isSuccessful))
+                                }
                             }
-                        } else {
-                            continuation.resume(DomainResult.Success(false))
                         }
                     }
 
                     override fun onError(error: FirebaseRemoteConfigException) {
-                        continuation.resume(
-                            DomainResult.ErrorState(
-                                error.message ?: "Config update error"
+                        registration?.remove()
+                        if (continuation.isActive) {
+                            continuation.resume(
+                                DomainResult.ErrorState(
+                                    error.message ?: "Update error"
+                                )
                             )
-                        )
+                        }
                     }
                 })
+
+                continuation.invokeOnCancellation { registration.remove() }
             }
         }
 
@@ -154,50 +111,35 @@ class FirebaseRepositoryImpl(
 
     override suspend fun getTokenBalance(userId: String): DomainResult<Int> =
         withContext(dispatcher.io) {
-            suspendCancellableCoroutine { continuation ->
-                realtime.database.reference.child("token_transaction").child(userId)
-                    .get()
-                    .addOnSuccessListener { tokenSnapshot ->
-                        var currentBalance = 0
-                        for (transactions in tokenSnapshot.children) {
-                            val token = transactions.child("token").getValue(Int::class.java)
-                            if (token != null) {
-                                currentBalance += token
-                            }
-                        }
+            try {
+                val tokensDeferred = async {
+                    realtime.database.reference.child("token_transaction").child(userId).get()
+                        .await()
+                }
+                val moviesDeferred = async {
+                    realtime.database.reference.child("movie_transaction").child(userId).get()
+                        .await()
+                }
 
-                        // Get movie transactions
-                        realtime.database.reference.child("movie_transaction").child(userId)
-                            .get()
-                            .addOnSuccessListener { movieSnapshot ->
-                                var totalSpent = 0
-                                if (movieSnapshot.exists()) {
-                                    for (transactionSnapshot in movieSnapshot.children) {
-                                        val transaction =
-                                            transactionSnapshot.getValue(MovieTransactionModel::class.java)
-                                        transaction?.movies?.forEach { movie ->
-                                            totalSpent += movie?.price ?: 0
-                                        }
-                                    }
-                                }
-                                val finalBalance = currentBalance - totalSpent
-                                continuation.resume(DomainResult.Success(finalBalance))
-                            }
-                            .addOnFailureListener { e ->
-                                continuation.resume(
-                                    DomainResult.ErrorState(
-                                        e.message ?: "Failed to get movie transactions"
-                                    )
-                                )
-                            }
+                val tokenSnapshot = tokensDeferred.await()
+                val movieSnapshot = moviesDeferred.await()
+
+                val currentBalance = tokenSnapshot.children.sumOf {
+                    it.child("token").getValue(Int::class.java) ?: 0
+                }
+
+                var totalSpent = 0
+                movieSnapshot.children.forEach { transactionSnapshot ->
+                    val transaction =
+                        transactionSnapshot.getValue(MovieTransactionModel::class.java)
+                    transaction?.movies?.forEach { movie ->
+                        totalSpent += movie?.price ?: 0
                     }
-                    .addOnFailureListener { e ->
-                        continuation.resume(
-                            DomainResult.ErrorState(
-                                e.message ?: "Failed to get token transactions"
-                            )
-                        )
-                    }
+                }
+
+                DomainResult.Success(currentBalance - totalSpent)
+            } catch (e: Exception) {
+                DomainResult.ErrorState(e.message ?: "An unknown error occurred")
             }
         }
 

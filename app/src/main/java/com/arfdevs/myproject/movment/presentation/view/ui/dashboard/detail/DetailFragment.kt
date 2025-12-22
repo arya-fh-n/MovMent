@@ -11,6 +11,7 @@ import com.arfdevs.myproject.core.helper.Constants
 import com.arfdevs.myproject.core.helper.UiState
 import com.arfdevs.myproject.core.helper.posterPathNullHandling
 import com.arfdevs.myproject.core.helper.visible
+import com.arfdevs.myproject.core.helper.visibleIf
 import com.arfdevs.myproject.movment.R
 import com.arfdevs.myproject.movment.databinding.FragmentDetailBinding
 import com.arfdevs.myproject.movment.presentation.view.component.CustomSnackbar
@@ -73,17 +74,19 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                     "Movie is added to cart!"
                 )
             }
+            viewModel.getCartById(safeArgs.movieId)
         }
     }
 
     override fun initObserver() = with(viewModel) {
         responseDetails.observe(viewLifecycleOwner) { state ->
+            handleLoading(state is UiState.Loading)
             when (state) {
-                UiState.Loading -> handleLoading(state is UiState.Loading)
                 UiState.Empty -> handleError(getString(R.string.err_empty))
                 is UiState.Error -> handleError(state.message)
                 UiState.ErrorConnection -> handleError(getString(R.string.err_connection))
                 is UiState.Success -> handleSuccess(state.data)
+                else -> {}
             }
         }
     }
@@ -96,8 +99,8 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
     }
 
     private fun handleLoading(isLoading: Boolean) = with(binding) {
-        loadingOverlay.visible(isLoading)
-        loadingAnim.visible(isLoading)
+        loadingOverlay.visibleIf(isLoading)
+        loadingAnim.visibleIf(isLoading)
     }
 
     private fun handleError(message: String) = with(binding) {

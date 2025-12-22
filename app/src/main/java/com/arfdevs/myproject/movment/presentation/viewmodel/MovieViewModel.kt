@@ -4,8 +4,11 @@ import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.paging.liveData
 import com.arfdevs.myproject.core.domain.model.CartModel
 import com.arfdevs.myproject.core.domain.model.CheckoutModel
@@ -58,8 +61,19 @@ class MovieViewModel(
     private val _transactionHistory = MutableLiveData<List<MovieTransactionModel>>()
     val transactionHistory: LiveData<List<MovieTransactionModel>> get() = _transactionHistory
 
-    private val _movieSearch = MutableLiveData<PagingData<SearchModel>>()
-    val movieSearch: LiveData<PagingData<SearchModel>> get() = _movieSearch
+    private val movieSearchQuery = MutableLiveData("")
+    val movieSearch: LiveData<PagingData<SearchModel>> = movieSearchQuery.switchMap { query ->
+        if (query.isNullOrBlank()) {
+            MutableLiveData()
+        } else {
+            liveData(dispatcher.io) {
+                val pager = movieRepo.fetchSearch(query)
+                emitSource(
+                    pager.liveData.cachedIn(viewModelScope)
+                )
+            }
+        }
+    }
 
     private val _insertResult = MutableStateFlow(false)
     val insertResult = _insertResult.asStateFlow()
@@ -122,7 +136,7 @@ class MovieViewModel(
         movieRepo.deleteWishlistMovie(wishlist)
     }
 
-    fun getWishlist() = viewModelScope.launch(dispatcher.io) {
+    fun fetchWishlist() = viewModelScope.launch(dispatcher.io) {
         val userId = userRepo.getUID()
         val result = movieRepo.getWishlist(userId)
         _wishlist.postValue(result)
@@ -146,7 +160,7 @@ class MovieViewModel(
         movieRepo.insertCartMovie(tempCardModel.copy(userId = userId))
     }
 
-    fun getCartList() = viewModelScope.launch(dispatcher.io) {
+    fun fetchCartList() = viewModelScope.launch(dispatcher.io) {
         val userId = async { userRepo.getUID() }
         val result = movieRepo.getCartList(userId.await())
         _cartList.postValue(result)
@@ -155,7 +169,7 @@ class MovieViewModel(
     fun getCartById(movieId: Int) = viewModelScope.launch(dispatcher.io) {
         val userId = userRepo.getUID()
         val result = movieRepo.getCartItemById(movieId, userId)
-        _cartItemById.postValue(result)
+        _cartItemById.postValue(if (result.isEmptyOrZero()) null else result)
     }
 
     fun deleteCart(cart: CartModel) = viewModelScope.launch(dispatcher.io) {
@@ -193,9 +207,10 @@ class MovieViewModel(
         }
     }
 
-    fun searchMovies(query: String) = viewModelScope.launch(dispatcher.io) {
-        val result = movieRepo.fetchSearch(query)
-        _movieSearch.postValue(result.liveData.value)
+    fun searchMovies(query: String) {
+        if (query.isNotBlank()) {
+            movieSearchQuery.value = query
+        }
     }
 
     fun logEvent(eventName: String, bundle: Bundle) = viewModelScope.launch(dispatcher.io) {
@@ -214,6 +229,10 @@ class MovieViewModel(
             total = totalPrice,
             date = date
         ).copy(transactionId = transactionId)
+    }
+
+    private fun CartModel.isEmptyOrZero(): Boolean {
+        return this.userId.isBlank() || this.price == 0 || this.originalTitle.isBlank()
     }
 
 }

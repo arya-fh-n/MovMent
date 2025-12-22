@@ -43,6 +43,7 @@ class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::infl
                                 "Movie is removed from cart."
                             )
                         }
+                        fetchData()
                     }
                     .show()
                     .getButton(AlertDialog.BUTTON_POSITIVE)
@@ -60,6 +61,8 @@ class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::infl
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = cartAdapter
         }
+
+        fetchData()
     }
 
     override fun initListener() = with(binding) {
@@ -78,14 +81,14 @@ class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::infl
             cartAdapter.submitList(list)
             var totalPrice = 0
             for (item in list) {
-                totalPrice += item?.price ?: 0
+                totalPrice += item.price
             }
             binding.tvPaymentTotal.text = getString(R.string.tv_payment_total, totalPrice)
         }
     }
 
     private fun fetchData() {
-        viewModel.getCartList()
+        viewModel.fetchCartList()
     }
 
     private fun showError(state: Boolean) = with(binding) {

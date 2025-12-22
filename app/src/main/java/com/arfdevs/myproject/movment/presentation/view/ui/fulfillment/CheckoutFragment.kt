@@ -119,6 +119,7 @@ class CheckoutFragment : BaseFragment<FragmentCheckoutBinding>(FragmentCheckoutB
 
     private fun fetchData() {
         viewModel.getTokenBalance()
+        viewModel.fetchCartList()
     }
 
     private fun navigateToDetailFromCheckout(checkout: CheckoutModel) {

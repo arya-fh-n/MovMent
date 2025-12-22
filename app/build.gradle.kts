@@ -145,8 +145,8 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.1.0")
 
     //navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.9.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.9.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.9.6")
+    implementation("androidx.navigation:navigation-ui-ktx:2.9.6")
 
     //coil
     implementation("io.coil-kt:coil:2.5.0")

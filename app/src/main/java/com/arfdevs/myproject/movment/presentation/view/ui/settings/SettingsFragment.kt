@@ -1,5 +1,6 @@
 package com.arfdevs.myproject.movment.presentation.view.ui.settings
 
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.navigation.fragment.findNavController
@@ -52,17 +53,13 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
         }
 
         switchTheme.setOnCheckedChangeListener { _, isChecked ->
-            when (isChecked) {
-                true -> {
-                    updateTheme(true)
-                    viewModel.saveTheme(true)
-                }
-
-                false -> {
-                    updateTheme(false)
-                    viewModel.saveTheme(false)
-                }
-            }
+            //Removed due to glitchy implementation
+            //TODO Revisit theme switching in the future
+            Toast.makeText(
+                context,
+                "Feature is disabled and currently being reviewed. Please check again later~",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         btnCrashApp.setOnClickListener {

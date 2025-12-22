@@ -7,6 +7,14 @@ fun View.visible(state: Boolean) {
     this.isVisible = state
 }
 
+fun View.visibleIf(state: Boolean) {
+    if (state) {
+        this.visibility = View.VISIBLE
+    } else {
+        this.visibility = View.GONE
+    }
+}
+
 fun View.enabled(state: Boolean) {
     this.isEnabled = state
 }

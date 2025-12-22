@@ -127,6 +127,8 @@ class TokenFragment : BaseFragment<FragmentTokenBinding>(FragmentTokenBinding::i
 
     private fun showError(state: Boolean) = with(binding) {
         rvTopupAmountSelection.visible(!state)
+        cardviewTopup.visible(!state)
+        btnContinue.visible(!state)
         errorView.visible(state)
         errorView.setMessage(
             "Loading Failed",

@@ -73,7 +73,7 @@ class FirebaseViewModel(
             is DomainResult.Success -> {
                 try {
                     val json = result.data.length
-                    if (json == 0) {
+                    if (json != 0) {
                         val parsedData =
                             Gson().fromJson(result.data, TokenTopupResponse::class.java)
                         val mappedTokenTopupItem = parsedData.map {
@@ -109,7 +109,7 @@ class FirebaseViewModel(
             is DomainResult.Success -> {
                 try {
                     val json = result.data.length
-                    if (json == 0) {
+                    if (json != 0) {
                         val parsedData =
                             Gson().fromJson(result.data, PaymentMethodsResponse::class.java)
                         val mappedTokenTopupItem = parsedData.data.map {
