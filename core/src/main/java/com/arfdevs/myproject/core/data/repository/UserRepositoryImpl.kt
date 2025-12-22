@@ -6,8 +6,10 @@ import com.arfdevs.myproject.core.domain.repository.UserRepository
 import com.arfdevs.myproject.core.helper.CoroutinesDispatcherProvider
 import com.arfdevs.myproject.core.helper.DomainResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.userProfileChangeRequest
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class UserRepositoryImpl(
@@ -19,21 +21,11 @@ class UserRepositoryImpl(
     override suspend fun createUser(
         user: User
     ): DomainResult<Boolean> = withContext(dispatcher.io) {
-        var isSuccess = false
-        var e: Exception = Exception()
-
-        auth.createUserWithEmailAndPassword(user.email, user.password)
-            .addOnCompleteListener { task ->
-                isSuccess = task.isSuccessful
-            }.addOnFailureListener { error ->
-                isSuccess = false
-                e = error
-            }
-
-        return@withContext if (isSuccess) {
+        return@withContext try {
+            auth.createUserWithEmailAndPassword(user.email, user.password).await()
             DomainResult.Success(true)
-        } else {
-            DomainResult.ErrorState(e.localizedMessage.orEmpty(), -1)
+        } catch (e: FirebaseAuthException) {
+            DomainResult.ErrorState(e.localizedMessage ?: "Unknown error occurred", -1)
         }
     }
 
