@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.view.ui.fulfillment.TopupStatusFragment">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardview_topup_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="36dp"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="12dp">
+
+            <TextView
+                android:id="@+id/tv_topup_status_title"
+                style="@style/TextAppearance.Material3.TitleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/tv_topup_status_title" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/success_animation"
+                android:layout_width="290dp"
+                android:layout_height="160dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_topup_status_title"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/success_animation" />
+
+            <TextView
+                android:id="@+id/tv_amount"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/success_animation"
+                app:layout_constraintStart_toStartOf="@id/success_animation"
+                app:layout_constraintTop_toBottomOf="@id/success_animation"
+                tools:text="@string/tv_token_ph_2" />
+
+            <TextView
+                android:id="@+id/tv_price_title"
+                style="@style/TextAppearance.Material3.TitleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tv_amount"
+                app:layout_constraintTop_toBottomOf="@id/tv_amount"
+                tools:text="@string/tv_price_status_title" />
+
+            <TextView
+                android:id="@+id/tv_price"
+                style="@style/TextAppearance.Material3.TitleSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/tv_price_title"
+                app:layout_constraintEnd_toEndOf="@id/tv_amount"
+                app:layout_constraintTop_toTopOf="@id/tv_price_title"
+                tools:text="@string/tv_price_ph" />
+
+            <TextView
+                android:id="@+id/tv_payment_method_title"
+                style="@style/TextAppearance.Material3.TitleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="@+id/tv_price_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_price"
+                tools:text="@string/tv_payment_method_status_title" />
+
+            <TextView
+                android:id="@+id/tv_payment_method_name"
+                style="@style/TextAppearance.Material3.TitleSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/tv_payment_method_title"
+                app:layout_constraintEnd_toEndOf="@id/tv_price"
+                app:layout_constraintTop_toTopOf="@id/tv_payment_method_title"
+                tools:text="@string/tv_payment_method_name" />
+
+            <TextView
+                android:id="@+id/tv_payment_date_title"
+                style="@style/TextAppearance.Material3.TitleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="@+id/tv_payment_method_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_payment_method_title"
+                tools:text="@string/tv_payment_date_title" />
+
+            <TextView
+                android:id="@+id/tv_payment_date"
+                style="@style/TextAppearance.Material3.TitleSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/tv_payment_date_title"
+                app:layout_constraintEnd_toEndOf="@id/tv_payment_method_name"
+                app:layout_constraintTop_toTopOf="@id/tv_payment_date_title"
+                tools:text="@string/tv_payment_date_ph" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_go_back"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="@id/cardview_topup_status"
+        app:layout_constraintStart_toStartOf="@id/cardview_topup_status"
+        app:layout_constraintTop_toBottomOf="@id/cardview_topup_status"
+        tools:text="@string/btn_go_back_to_home" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.prelogin.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_onboardingFragment"
+            app:destination="@id/onboardingFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.auth.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.auth.RegisterFragment"
+        android:label="RegisterFragment"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_registerFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.prelogin.OnboardingFragment"
+        android:label="fragment_onboarding"
+        tools:layout="@layout/fragment_onboarding">
+        <action
+            android:id="@+id/action_onboardingFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/onboardingFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_onboardingFragment_to_registerFragment"
+            app:destination="@id/registerFragment"
+            app:popUpTo="@id/onboardingFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.dashboard.DashboardFragment"
+        android:label="fragment_dashboard"
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_dashboardFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/dashboardFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_tokenFragment"
+            app:destination="@id/tokenFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.auth.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.dashboard.detail.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="movieId"
+            app:argType="integer"/>
+        <action
+            android:id="@+id/action_detailFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment"
+            app:popUpTo="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/tokenFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.dashboard.token.TokenFragment"
+        android:label="fragment_token"
+        tools:layout="@layout/fragment_token" >
+        <action
+            android:id="@+id/action_tokenFragment_to_topupFragment"
+            app:destination="@id/topupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/topupFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.fulfillment.TopupFragment"
+        android:label="fragment_topup"
+        tools:layout="@layout/fragment_topup" >
+        <argument
+            android:name="tokenModel"
+            app:argType="com.arfdevs.myproject.core.domain.model.TokenTopupModel" />
+        <action
+            android:id="@+id/action_topupFragment_to_topupStatusFragment"
+            app:destination="@id/topupStatusFragment"
+            app:popUpTo="@id/dashboardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/topupStatusFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.fulfillment.TopupStatusFragment"
+        android:label="fragment_topup_status"
+        tools:layout="@layout/fragment_topup_status" >
+
+        <action
+            android:id="@+id/action_topupStatusFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/topupStatusFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="tokenTransactionModel"
+            app:argType="com.arfdevs.myproject.core.domain.model.TokenTransactionModel" />
+    </fragment>
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.cart.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cartFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_cartFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.fulfillment.CheckoutFragment"
+        android:label="fragment_checkout"
+        tools:layout="@layout/fragment_checkout" >
+        <action
+            android:id="@+id/action_checkoutFragment_to_paymentStatusFragment"
+            app:destination="@id/paymentStatusFragment"
+            app:popUpTo="@id/dashboardFragment" />
+        <action
+            android:id="@+id/action_checkoutFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_checkoutFragment_to_tokenFragment"
+            app:destination="@id/tokenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentStatusFragment"
+        android:name="com.arfdevs.myproject.movment.presentation.view.ui.fulfillment.PaymentStatusFragment"
+        android:label="fragment_payment_status"
+        tools:layout="@layout/fragment_payment_status" >
+        <action
+            android:id="@+id/action_paymentStatusFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
+        <argument
+            android:name="movieTransactionModel"
+            app:argType="com.arfdevs.myproject.core.domain.model.MovieTransactionModel" />
+    </fragment>
+</navigation>

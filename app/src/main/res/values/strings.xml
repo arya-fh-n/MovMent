@@ -1,0 +1,130 @@
+<resources>
+    <string name="app_name">MovMent</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="bottom_nav_home" translatable="false">Home</string>
+    <string name="bottom_nav_search">Search</string>
+    <string name="bottom_nav_favorite">Favorite</string>
+    <string name="bottom_nav_transaction">Transaction</string>
+    <string name="app_name_movment" translatable="false">MovMent</string>
+    <string name="tv_login_title">Sign In</string>
+    <string name="ti_email_hint" translatable="false">Email</string>
+    <string name="ti_password_hint">Password</string>
+    <string name="btn_login">Sign In</string>
+    <string name="tv_to_register">Sign up now!</string>
+    <string name="tv_new_to_movment">New to MovMent?</string>
+    <string name="tv_tnc"><![CDATA[By signing up, you have agreed to MovMent\'s \n Terms and Conditions & Privacy Policy.]]></string>
+    <string name="tv_not_new_to_movment">Already have an account?</string>
+    <string name="tv_to_login">Sign in here!</string>
+    <string name="btn_register">Sign Up</string>
+    <string name="tv_register_title">Sign Up</string>
+    <string name="btn_join">Join MovMent</string>
+    <string name="btn_skip">Skip</string>
+    <string name="tv_username_ph">Hello, %1$s!</string>
+    <string name="tv_balance_is">Your account\'s balance is:</string>
+    <string name="tv_balance" translatable="false">%1$d Token</string>
+    <string name="tv_section_popular">Popular</string>
+    <string name="tv_section_now_playing">Now Playing</string>
+    <string name="err_email_empty">Email cannot be empty</string>
+    <string name="err_email_invalid">Email is invalid</string>
+    <string name="err_password_empty">Password cannot be empty</string>
+    <string name="err_password_invalid">Password is invalid</string>
+    <string name="tv_tnc_link">https://www.google.com</string>
+    <string name="tv_pp_link" translatable="false">https://www.bing.com</string>
+    <string name="err_title_login_failed">Login Failed</string>
+    <string name="err_msg_login_failed">Please try again</string>
+    <string name="tv_profile_title">Profile Name</string>
+    <string name="ti_username_hint" translatable="false">Username</string>
+    <string name="btn_profile_finish">Finish</string>
+    <string name="err_username_empty">Username cannot be empty</string>
+    <string name="err_username_short">Username should at least be 3 characters long</string>
+    <string name="tv_movie_price" translatable="false">%1$d Token</string>
+    <string name="btn_add_to_cart">+ Cart</string>
+    <string name="desc_fab_favorite" translatable="false">Floating Favorite Button</string>
+    <string name="btn_rent_directly">Rent Directly</string>
+    <string name="tv_movie_detail_overview_ph" translatable="false">Young hobbit Frodo Baggins, after inheriting a mysterious ring from his uncle Bilbo, must leave his home in order to keep it from falling into the hands of its evil creator. Along the way, a fellowship is formed to protect the ringbearer and make sure that the ring arrives at its final destination: Mt. Doom, the only place where it can be destroyed.</string>
+    <string name="tv_movie_detail_overview" translatable="false">Movie Overview</string>
+    <string name="tv_movie_detail_title_ph" translatable="false">The Lord of The Rings: The Fellowship of The Ring</string>
+    <string name="tv_movie_detail_title" translatable="false">Movie Title</string>
+    <string name="tv_movie_detail_genres_ph" translatable="false">Adventure, Fantasy, Action, Family, Horror, Fiction, Elf, Hobbit</string>
+    <string name="tv_movie_detail_genres" translatable="false">Genres</string>
+    <string name="tv_movie_detail_ratings_title">"Ratings : "</string>
+    <string name="tv_movie_detail_price_ph" translatable="false">Price : 140 Token</string>
+    <string name="tv_movie_detail_price">Price : %1$d Token</string>
+    <string name="tv_movie_detail_tagline_ph" translatable="false">\"One Ring to Rule Them All.\"</string>
+    <string name="tv_movie_detail_tagline" translatable="false">\"%1$s\"</string>
+    <string name="menu_sign_out">Sign out</string>
+    <string name="menu_cart">Cart</string>
+    <string name="menu_settings">Settings</string>
+    <string name="error_title" translatable="false">Error Title</string>
+    <string name="error_description" translatable="false">Error Description</string>
+    <string name="error_btn" translatable="false">Error Button</string>
+    <string name="ev_wishlist_empty_desc">You don\'t have any favorited movies. Start adding!</string>
+    <string name="ev_cart_empty_desc">You don\'t have any movies in your cart. Start adding!</string>
+    <string name="ev_wishlist_empty_title">Wishlist is empty</string>
+    <string name="ev_cart_empty_title">Cart is empty</string>
+    <string name="ob_title_1">Your favorite movies, in one app.</string>
+    <string name="ob_title_2">All great selections, from all genres</string>
+    <string name="ob_title_3">Join our MovMent!</string>
+    <string name="ad_msg_logout">Are you sure you want to log out of the app?</string>
+    <string name="ad_msg_remove_cart">Are you sure you remove this item?</string>
+    <string name="option_negative">No</string>
+    <string name="option_positive">Yes</string>
+    <string name="loc_english" translatable="false">EN</string>
+    <string name="loc_indonesian" translatable="false">ID</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="tv_settings_title">Settings</string>
+    <string name="ti_search_ph">Find your movies…</string>
+    <string name="ti_search_hint">Search</string>
+    <string name="tv_token_balance_is">Balance</string>
+    <string name="tv_token_balance" translatable="false">%1$d Token</string>
+    <string name="tv_token_manual_amt" translatable="false">Token</string>
+    <string name="btn_token_continue">Continue</string>
+    <string name="tv_amount_title">Amount</string>
+    <string name="tv_topup_payment_title">Payment</string>
+    <string name="tv_amount" translatable="false">%1$d Token</string>
+    <string name="tv_amount_ph" translatable="false">200 Token</string>
+    <string name="tv_movie_price_ph" translatable="false">200 Token</string>
+    <string name="tv_price_title">Price</string>
+    <string name="tv_price_ph" translatable="false">Rp30.000</string>
+    <string name="tv_price" translatable="false">Rp%1$d</string>
+    <string name="tv_payment_method_title">Choose Payment Method</string>
+    <string name="btn_pay">Pay</string>
+    <string name="tv_payment_method_name">BCA Virtual Account</string>
+    <string name="tv_payment_type_title" translatable="false">Transfer Virtual Account</string>
+    <string name="err_msg_login_failed_unsuccessful">Make sure your email and password are correct!</string>
+    <string name="err_title_register_failed">Register Failed</string>
+    <string name="tv_token_ph_2">Purchased 200 Token</string>
+    <string name="tv_token_status">Purchased %1$d Token</string>
+    <string name="tv_price_status_title">Total Paid</string>
+    <string name="tv_payment_method_status_title">Payment Method</string>
+    <string name="tv_payment_date_title">Time</string>
+    <string name="btn_go_back_to_home">Go back to Home</string>
+    <string name="tv_topup_status_title">Payment Successful!</string>
+    <string name="tv_payment_date_ph" translatable="false">01-01-2024 12:00:00</string>
+    <string name="toolbar_title_cart">Cart</string>
+    <string name="tv_payment_total_title" translatable="false">Total</string>
+    <string name="btn_buy_cart">Buy</string>
+    <string name="tv_payment_total" translatable="false">%1$d Token</string>
+    <string name="toolbar_title_checkout">Checkout</string>
+    <string name="btn_checkout">Checkout</string>
+    <string name="ad_msg_checkout">Are you sure you want to checkout?</string>
+    <string name="tv_payment_status_detail_title">Transaction Detail</string>
+    <string name="tv_payment_status_title">Purchase Successful!</string>
+    <string name="tv_payment_status_transaction_id_title">Transaction ID</string>
+    <string name="tv_item_transaction_total">%1$d movies</string>
+    <string name="tv_item_transaction_total_notif">%1$d movie(s) successfully checked out!</string>
+    <string name="tv_item_transaction_id">Transaction ID: %1$s</string>
+    <string name="ev_transaction_empty_title">No transaction history</string>
+    <string name="ev_transaction_empty_desc">No transaction history found. Start buying movies!</string>
+    <string name="csb_transaction_detail_title" translatable="false">Transaction Detail Clicked</string>
+    <string name="csb_transaction_detail_msg" translatable="false">This feature is not available yet!</string>
+    <string name="notify_content">Movie checkout success!</string>
+    <string name="notify_channel_name">MovMent Movie Rent</string>
+    <string name="btn_crash_app">Crash app!</string>
+    <string name="exception_btn_crash">App crashed because crash button is clicked!</string>
+    <string name="err_detail_load_failed">Detail Load Failed</string>
+    <string name="err_connection">Connection error. Please try again later.</string>
+    <string name="err_empty">Empty data. Please try again later.</string>
+    <string name="err_failed">Login failed. Please check your credentials.</string>
+</resources>

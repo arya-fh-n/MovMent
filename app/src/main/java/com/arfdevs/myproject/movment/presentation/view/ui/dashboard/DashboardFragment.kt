@@ -1,0 +1,111 @@
+package com.arfdevs.myproject.movment.presentation.view.ui.dashboard
+
+import android.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
+import com.arfdevs.myproject.core.base.BaseFragment
+import com.arfdevs.myproject.core.helper.UiState
+import com.arfdevs.myproject.movment.R
+import com.arfdevs.myproject.movment.databinding.FragmentDashboardBinding
+import com.arfdevs.myproject.movment.presentation.viewmodel.AuthViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
+class DashboardFragment :
+    BaseFragment<FragmentDashboardBinding>(FragmentDashboardBinding::inflate) {
+
+    private val viewModel: AuthViewModel by viewModel()
+
+    private lateinit var navController: NavController
+
+    override fun initView() = with(binding) {
+        toolbarDashboard.title = getString(R.string.app_name)
+
+        val navHost = childFragmentManager.findFragmentById(R.id.fcv_dashboard) as NavHostFragment
+        navController = navHost.navController
+        bottomNavigation.setupWithNavController(navController)
+
+        val builder = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setRestoreState(true)
+            .setPopUpTo(
+                navController.graph.findStartDestination().id,
+                inclusive = false,
+                saveState = true
+            )
+
+        val options = builder.build()
+
+        bottomNavigation.setOnItemSelectedListener { item ->
+            if (navController.currentDestination?.id != item.itemId) {
+                navController.navigate(item.itemId, null, options)
+                true
+            } else {
+                false
+            }
+        }
+
+        toolbarDashboard.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_cart -> {
+                    activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
+                        ?.findNavController()
+                        ?.navigate(R.id.action_dashboardFragment_to_cartFragment)
+                    true
+                }
+
+                R.id.menu_settings -> {
+                    activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
+                        ?.findNavController()
+                        ?.navigate(R.id.action_dashboardFragment_to_settingsFragment)
+                    true
+                }
+
+                R.id.menu_sign_out -> {
+                    logOut()
+                    true
+                }
+
+                else -> false
+            }
+
+        }
+    }
+
+    override fun initListener() {
+
+    }
+
+    override fun initObserver() = with(viewModel) {
+        logoutState.observe(viewLifecycleOwner) { state ->
+            if (state is UiState.Success) {
+                activity?.supportFragmentManager?.findFragmentById(R.id.main_navigation_container)
+                    ?.findNavController()
+                    ?.navigate(R.id.action_dashboardFragment_to_loginFragment)
+            }
+        }
+    }
+
+    private fun logOut() {
+        context?.let {
+            MaterialAlertDialogBuilder(it)
+                .setMessage(getString(R.string.ad_msg_logout))
+                .setNegativeButton(getString(R.string.option_negative)) { dialog, which ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton(getString(R.string.option_positive)) { dialog, which ->
+                    viewModel.deleteAllWishlistItem()
+                    viewModel.logoutUser()
+                }
+                .show()
+                .getButton(AlertDialog.BUTTON_POSITIVE)
+                ?.setTextColor(ContextCompat.getColor(it, R.color.red))
+        }
+    }
+
+}

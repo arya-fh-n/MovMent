@@ -1,0 +1,238 @@
+package com.arfdevs.myproject.movment.presentation.viewmodel
+
+import android.os.Bundle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.liveData
+import com.arfdevs.myproject.core.domain.model.CartModel
+import com.arfdevs.myproject.core.domain.model.CheckoutModel
+import com.arfdevs.myproject.core.domain.model.MovieDetailsModel
+import com.arfdevs.myproject.core.domain.model.MovieTransactionModel
+import com.arfdevs.myproject.core.domain.model.SearchModel
+import com.arfdevs.myproject.core.domain.model.WishlistModel
+import com.arfdevs.myproject.core.domain.repository.FirebaseRepository
+import com.arfdevs.myproject.core.domain.repository.MovieRepository
+import com.arfdevs.myproject.core.domain.repository.UserRepository
+import com.arfdevs.myproject.core.helper.Constants
+import com.arfdevs.myproject.core.helper.CoroutinesDispatcherProvider
+import com.arfdevs.myproject.core.helper.DataMapper.toMovieTransactionModel
+import com.arfdevs.myproject.core.helper.DataMapper.toUIData
+import com.arfdevs.myproject.core.helper.DomainResult
+import com.arfdevs.myproject.core.helper.UiState
+import com.arfdevs.myproject.core.helper.orZero
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+class MovieViewModel(
+    private val movieRepo: MovieRepository,
+    private val userRepo: UserRepository,
+    private val firebaseRepo: FirebaseRepository,
+    private val dispatcher: CoroutinesDispatcherProvider
+) : ViewModel() {
+
+    private var _responseDetails = MutableLiveData<UiState<MovieDetailsModel>>()
+    val responseDetails: LiveData<UiState<MovieDetailsModel>> = _responseDetails
+
+    private var _isFavorite = MutableLiveData<Int>()
+    val isFavorite: LiveData<Int> = _isFavorite
+
+    private var tempWishlistModel: WishlistModel = WishlistModel()
+    private var tempCardModel: CartModel = CartModel()
+
+    private val _cartItemById = MutableLiveData<CartModel?>()
+    val cartItemById: LiveData<CartModel?> = _cartItemById
+
+    private val _wishlist = MutableLiveData<List<WishlistModel>>()
+    val wishlist: LiveData<List<WishlistModel>> get() = _wishlist
+
+    private val _cartList = MutableLiveData<List<CartModel>>()
+    val cartList: LiveData<List<CartModel>> get() = _cartList
+
+    private val _transactionHistory = MutableLiveData<List<MovieTransactionModel>>()
+    val transactionHistory: LiveData<List<MovieTransactionModel>> get() = _transactionHistory
+
+    private val movieSearchQuery = MutableLiveData("")
+    val movieSearch: LiveData<PagingData<SearchModel>> = movieSearchQuery.switchMap { query ->
+        if (query.isNullOrBlank()) {
+            MutableLiveData()
+        } else {
+            liveData(dispatcher.io) {
+                val pager = movieRepo.fetchSearch(query)
+                emitSource(
+                    pager.liveData.cachedIn(viewModelScope)
+                )
+            }
+        }
+    }
+
+    private val _insertResult = MutableStateFlow(false)
+    val insertResult = _insertResult.asStateFlow()
+
+    private val _tokenBalance = MutableStateFlow(0)
+    val tokenBalance = _tokenBalance.asStateFlow()
+
+    var movieTransactionModel = MovieTransactionModel()
+        private set
+
+    fun getMovieDetails(movieId: Int) = viewModelScope.launch(dispatcher.io) {
+        _responseDetails.postValue(UiState.Loading)
+
+        val state = try {
+            val uiState = when (val result = movieRepo.fetchMovieDetails(movieId)) {
+                is DomainResult.EmptyState -> UiState.Empty
+                is DomainResult.ErrorState -> UiState.Error(
+                    result.message.orEmpty(),
+                    result.responseStatusCode.orZero()
+                )
+
+                DomainResult.NetworkError -> UiState.Error(
+                    Constants.MSG_NETWORK_ERROR,
+                    Constants.CODE_NETWORK_ERROR
+                )
+
+                is DomainResult.TechnicalError -> UiState.Error(
+                    Constants.MSG_TECHNICAL_ERROR,
+                    result.code
+                )
+
+                is DomainResult.Success -> UiState.Success(result.data.toUIData())
+            }
+            uiState
+        } catch (e: Throwable) {
+            UiState.Error(e.message.orEmpty())
+        }
+
+        _responseDetails.postValue(state)
+    }
+
+    fun checkFavorite(movieId: Int) = viewModelScope.launch(dispatcher.io) {
+        val isFavorite = async { movieRepo.checkFavorite(movieId) }
+
+        withContext(dispatcher.main) {
+            _isFavorite.value = isFavorite.await()
+        }
+    }
+
+    fun insertWishlistMovie() = viewModelScope.launch(dispatcher.io) {
+        val userId = userRepo.getUID()
+        movieRepo.insertWishlistMovie(tempWishlistModel.copy(userId = userId))
+    }
+
+    fun deleteWishlistFromDetail() = viewModelScope.launch(dispatcher.io) {
+        movieRepo.deleteWishlistMovie(tempWishlistModel)
+    }
+
+    fun deleteWishlist(wishlist: WishlistModel) = viewModelScope.launch {
+        movieRepo.deleteWishlistMovie(wishlist)
+    }
+
+    fun fetchWishlist() = viewModelScope.launch(dispatcher.io) {
+        val userId = userRepo.getUID()
+        val result = movieRepo.getWishlist(userId)
+        _wishlist.postValue(result)
+    }
+
+    fun setWishlistModel(wishlistModel: WishlistModel) {
+        this@MovieViewModel.tempWishlistModel = wishlistModel
+    }
+
+    fun setCartModel(cart: CartModel) {
+        tempCardModel = cart
+    }
+
+    fun insertToCart(cart: CartModel) = viewModelScope.launch(dispatcher.io) {
+        val userId = userRepo.getUID()
+        movieRepo.insertCartMovie(cart.copy(userId = userId))
+    }
+
+    fun insertToCartFromDetail() = viewModelScope.launch(dispatcher.io) {
+        val userId = userRepo.getUID()
+        movieRepo.insertCartMovie(tempCardModel.copy(userId = userId))
+    }
+
+    fun fetchCartList() = viewModelScope.launch(dispatcher.io) {
+        val userId = async { userRepo.getUID() }
+        val result = movieRepo.getCartList(userId.await())
+        _cartList.postValue(result)
+    }
+
+    fun getCartById(movieId: Int) = viewModelScope.launch(dispatcher.io) {
+        val userId = userRepo.getUID()
+        val result = movieRepo.getCartItemById(movieId, userId)
+        _cartItemById.postValue(if (result.isEmptyOrZero()) null else result)
+    }
+
+    fun deleteCart(cart: CartModel) = viewModelScope.launch(dispatcher.io) {
+        movieRepo.deleteCartItem(cart)
+    }
+
+    fun removeAllCartItem() = viewModelScope.launch(dispatcher.io) {
+        movieRepo.deleteAllCartItem()
+    }
+
+    fun getTokenBalance() = viewModelScope.launch(dispatcher.io) {
+        val userId = userRepo.getUID()
+        when (val result = firebaseRepo.getTokenBalance(userId)) {
+            is DomainResult.Success -> _tokenBalance.update { result.data }
+            else -> _tokenBalance.update { 0 }
+        }
+    }
+
+    fun insertTransactionModel(
+        transaction: MovieTransactionModel,
+    ) = viewModelScope.launch(dispatcher.io) {
+        val userId = userRepo.getUID()
+        when (val result = firebaseRepo.insertMovieTransaction(transaction, userId)) {
+            is DomainResult.Success -> _insertResult.update { result.data }
+            else -> _insertResult.update { false }
+        }
+
+    }
+
+    fun getTransactionHistory() = viewModelScope.launch(dispatcher.io) {
+        val userId = userRepo.getUID()
+        when (val result = firebaseRepo.getMovieTransaction(userId)) {
+            is DomainResult.Success -> _transactionHistory.postValue(result.data)
+            else -> _transactionHistory.postValue(emptyList())
+        }
+    }
+
+    fun searchMovies(query: String) {
+        if (query.isNotBlank()) {
+            movieSearchQuery.value = query
+        }
+    }
+
+    fun logEvent(eventName: String, bundle: Bundle) = viewModelScope.launch(dispatcher.io) {
+        firebaseRepo.logEvent(eventName, bundle)
+    }
+
+    fun setMovieTransactionModel(
+        checkoutList: List<CheckoutModel?>,
+        totalPrice: Int,
+        date: String,
+        transactionId: String
+    ) = viewModelScope.launch(dispatcher.io) {
+        val userId = userRepo.getUID()
+        movieTransactionModel = checkoutList.toMovieTransactionModel(
+            uid = userId,
+            total = totalPrice,
+            date = date
+        ).copy(transactionId = transactionId)
+    }
+
+    private fun CartModel.isEmptyOrZero(): Boolean {
+        return this.userId.isBlank() || this.price == 0 || this.originalTitle.isBlank()
+    }
+
+}
