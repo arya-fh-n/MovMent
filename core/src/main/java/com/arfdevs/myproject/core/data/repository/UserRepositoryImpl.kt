@@ -1,6 +1,6 @@
 package com.arfdevs.myproject.core.data.repository
 
-import com.arfdevs.myproject.core.data.local.sharedpref.SharedPreferencesHelper
+import com.arfdevs.myproject.core.data.local.datastore.PreferenceDataStoreHelper
 import com.arfdevs.myproject.core.domain.model.User
 import com.arfdevs.myproject.core.domain.repository.UserRepository
 import com.arfdevs.myproject.core.helper.CoroutinesDispatcherProvider
@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 
 class UserRepositoryImpl(
     private val auth: FirebaseAuth,
-    private val sharedPrefHelper: SharedPreferencesHelper,
+    private val dataStoreHelper: PreferenceDataStoreHelper,
     private val dispatcher: CoroutinesDispatcherProvider,
 ) : UserRepository {
 
@@ -70,35 +70,35 @@ class UserRepositoryImpl(
     }
 
     override suspend fun getOnboardingState(): Boolean = withContext(dispatcher.io) {
-        return@withContext sharedPrefHelper.getOnboardingState()
+        return@withContext dataStoreHelper.getOnboardingState()
     }
 
     override suspend fun saveOnboardingState(state: Boolean) = withContext(dispatcher.io) {
-        sharedPrefHelper.putOnboardingState(state)
+        dataStoreHelper.putOnboardingState(state)
     }
 
     override suspend fun getLanguage(): String = withContext(dispatcher.io) {
-        return@withContext sharedPrefHelper.getLanguage()
+        return@withContext dataStoreHelper.getLanguage()
     }
 
     override suspend fun saveLanguage(value: String) = withContext(dispatcher.io) {
-        sharedPrefHelper.putLanguage(value)
+        dataStoreHelper.putLanguage(value)
     }
 
     override suspend fun getTheme(): Boolean = withContext(dispatcher.io) {
-        return@withContext sharedPrefHelper.getTheme()
+        return@withContext dataStoreHelper.getTheme()
     }
 
     override suspend fun saveTheme(value: Boolean) = withContext(dispatcher.io) {
-        sharedPrefHelper.putTheme(value)
+        dataStoreHelper.putTheme(value)
     }
 
     override suspend fun getUID(): String = withContext(dispatcher.io) {
-        return@withContext sharedPrefHelper.getUID()
+        return@withContext dataStoreHelper.getUID()
     }
 
     override suspend fun saveUID(value: String) = withContext(dispatcher.io) {
-        sharedPrefHelper.putUID(value)
+        dataStoreHelper.putUID(value)
     }
 
 }

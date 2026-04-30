@@ -1,11 +1,12 @@
 package com.arfdevs.myproject.core.di
 
 import android.content.Context
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.arfdevs.myproject.core.base.BaseModule
 import com.arfdevs.myproject.core.data.local.db.Database
-import com.arfdevs.myproject.core.data.local.sharedpref.SharedPreferencesHelper
-import com.arfdevs.myproject.core.data.local.sharedpref.SharedPreferencesHelperImpl
+import com.arfdevs.myproject.core.data.local.datastore.PreferenceDataStoreHelper
+import com.arfdevs.myproject.core.data.local.datastore.PreferenceDataStoreHelperImpl
 import com.arfdevs.myproject.core.data.remote.ApiClient
 import com.arfdevs.myproject.core.data.remote.ApiEndpoint
 import com.arfdevs.myproject.core.data.remote.NetworkResponseAdapterFactory
@@ -29,6 +30,8 @@ import com.google.firebase.remoteconfig.remoteConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.dsl.module
+
+private val Context.dataStore by preferencesDataStore(name = SHARED_PREF_FILE)
 
 object CoreModule : BaseModule {
 
@@ -66,13 +69,13 @@ object CoreModule : BaseModule {
         }
     }
 
-    private val sharedPrefModule = module {
+    private val dataStoreModule = module {
         single {
-            androidContext().getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE)
+            androidContext().dataStore
         }
 
-        single<SharedPreferencesHelper> {
-            SharedPreferencesHelperImpl(get())
+        single<PreferenceDataStoreHelper> {
+            PreferenceDataStoreHelperImpl(get())
         }
     }
 
@@ -125,7 +128,7 @@ object CoreModule : BaseModule {
     override fun getModules(): List<Module> = listOf(
         firebaseModule,
         databaseModule,
-        sharedPrefModule,
+        dataStoreModule,
         repositoryModule,
         useCaseModule,
         networkModule,

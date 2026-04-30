@@ -37,10 +37,10 @@ class ApiClient(
             .readTimeout(60, TimeUnit.SECONDS).build()
 
         val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addCallAdapterFactory(networkAdapterFactory)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpClient).build()
+            .baseUrl(BASE_URL)
+            .addCallAdapterFactory(networkAdapterFactory)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient).build()
 
         return retrofit.create(I::class.java)
     }
